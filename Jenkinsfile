@@ -11,7 +11,7 @@ try {
 def dockerVersion = "${versionPrefix}.${env.BUILD_NUMBER}"
 def dockerRegistryURL = "docker.tools.stackator.com:443"
 
-toolsNode(toolsImage: 'stakater/pipeline-tools:1.4.0') {
+toolsNode(toolsImage: 'stakater/pipeline-tools:1.5.1') {
     container(name: 'tools') {
 
         stage('checkout'){
@@ -22,6 +22,7 @@ toolsNode(toolsImage: 'stakater/pipeline-tools:1.4.0') {
               def newImageName = "${dockerRegistryURL}/${env.JOB_NAME}:${dockerVersion}"
 
               newImageName = newImageName.toLowerCase()
+              sh "cd src; npm install"
               sh "docker build -t ${newImageName} ."
               sh "docker push ${newImageName}"
         }

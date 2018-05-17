@@ -1,17 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
     <title>Control Panel</title>
 </head>
+
 <body>
-    <h1>Control Panel | Pre-Alpha</h1>
-    <h3>Apps</h3>
-    <ul>
-        <li><a href="https://cp.stackator.com/kibana">Kibana</a></li>
-        <li><a href="https://cp.stackator.com/grafana">Grafana</a></li>
-    </ul>
+    <div class="navbar-fixed">
+        <nav class="blue-grey darken-1">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#!" class="brand-logo">Stakater Control Panel</a>
+                </div>
+            </div>
+
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div>
+                <h4 class="center-align">Apps</h4>
+            </div>
+        </div>
+        <div class="row appsList">
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 </body>
+
+<script id="app-template" type="text/template">
+    <div class="col s8 m4">
+            <a href="{{URL}}" target="_blank">
+                {{#ImageURL}}
+                <img class="responsive-img" src="{{ImageURL}}" />
+                {{/ImageURL}}
+                <div class="card blue-grey darken-1">
+                    <div class="card-content white-text">
+                        <span class="card-title center-align">{{Name}}</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+</script>
+
 </html>

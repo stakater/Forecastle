@@ -25,7 +25,6 @@ toolsWithCurrentKubeNode(toolsImage: 'stakater/pipeline-tools:1.6.1') {
 
               sh """
                 cd src
-                stk list ingresses --namespaces tools,cp --file public/apps.json
                 npm install
               """
               sh "docker build -t ${newImageName} ."

@@ -1,34 +1,13 @@
-window.onload = function() {
-    readTextFile("apps.json", function(data) {
-        apps = JSON.parse(data)
+$(document).ready(function() {
+    $.getJSON('apps.json', populateAppsListFromJson);
+});
 
-        appsListUl = document.getElementById('appsList')
-
-        for(var i = 0; i < apps.length; i++) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.setAttribute('href', apps[i].URL);
-            a.appendChild(document.createTextNode(apps[i].Name))
-            li.appendChild(a);
-            appsListUl.appendChild(li);
-        }
-    });
+function populateAppsListFromJson(data) {
+    $.each(data, renderApp);
 }
 
-function readTextFile(file, callback)
-{
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                callback(allText)
-            }
-        }
-    }
-    rawFile.send(null);
+function renderApp(key, app) {
+    var appTemplate = $("#app-template").html();
+    var html = Mustache.render(appTemplate, app)
+    $(".appsList").append(html);
 }

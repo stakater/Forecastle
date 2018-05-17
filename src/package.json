@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/stakater/control-panel#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "body-parser": "~1.0.1"
   }
 }

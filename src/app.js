@@ -10,9 +10,15 @@ app.use(bodyParser.json());
 
 var router = express.Router(); 
 router.get('/apps', function(req, res) {
-    var cmd = 'stk list ingresses --namespaces tools,cp --file /app/public/apps.json';
-    execSync(cmd)
-    res.send("")
+    fs = require('fs');
+    fs.readFile('/etc/cp-config/namespaces.conf', 'utf8', function (err,data) {
+        if (err) {
+            return console.log(err);
+        }     
+        var cmd = 'stk list ingresses --namespaces '+data+' --file /app/public/apps.json';
+        execSync(cmd)
+        res.send("")
+    });
 });
 
 app.use('/api', router);

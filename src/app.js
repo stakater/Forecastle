@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 
 var router = express.Router(); 
 router.get('/apps', function(req, res) {
-    namespaces = ""
     fs = require('fs');
     fs.readFile('etc/cp-config/namespaces.conf', 'utf8', function (err,data) {
         if (err) {

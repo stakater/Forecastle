@@ -11,11 +11,10 @@ app.use(bodyParser.json());
 var router = express.Router(); 
 router.get('/apps', function(req, res) {
     fs = require('fs');
-    fs.readFile('etc/cp-config/namespaces.conf', 'utf8', function (err,data) {
+    fs.readFile('/etc/cp-config/namespaces.conf', 'utf8', function (err,data) {
         if (err) {
             return console.log(err);
-        }
-        // console.log(data)
+        }     
         var cmd = 'stk list ingresses --namespaces '+data+' --file /app/public/apps.json';
         execSync(cmd)
         res.send("")

@@ -6,9 +6,9 @@ COPY ./src /app
 # so that install layer does not run everytime
 RUN apk update
 
-# Install ansible, boto, aws-cli, and some handy tools
+# Install curl unzip and some handy tools
 RUN echo "===> Installing Utilities from apk ..."  && \
-    apk -v --update --progress add sudo git bash wget openssh groff less python py-pip curl jq unzip nodejs=8.9.3-r1 coreutils python py-pip openssl ca-certificates make sshpass openssh-client
+    apk -v --update --progress add curl unzip
 
 
 ARG VERSION_URL=https://raw.githubusercontent.com/stakater/stk/add-jenkinsfile-to-stk/.

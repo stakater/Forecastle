@@ -11,7 +11,7 @@ RUN echo "===> Installing Utilities from apk ..."  && \
     apk -v --update --progress add curl unzip
 
 
-ARG VERSION_URL=https://raw.githubusercontent.com/stakater/stk/add-jenkinsfile-to-stk/.
+ARG VERSION_URL=https://raw.githubusercontent.com/stakater/stk/add-jenkinsfile-to-stk/.version
 
 COPY ./hub /hub
 RUN TOKEN=$(cat /hub) \

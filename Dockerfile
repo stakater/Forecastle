@@ -14,9 +14,8 @@ RUN echo "===> Installing Utilities from apk ..."  && \
 ARG VERSION_URL=https://raw.githubusercontent.com/stakater/stk/add-jenkinsfile-to-stk/.version
 COPY ./hub /hub
 
-ARG TOKEN=$(cat /hub)
-
-RUN VERSION=$(curl -H 'Authorization: token '"${TOKEN}" -H 'Accept: application/vnd.github.v4.raw' -L ${VERSION_URL}) \
+RUN TOKEN=$(cat /hub) \
+    && VERSION=$(curl -H 'Authorization: token '"${TOKEN}" -H 'Accept: application/vnd.github.v4.raw' -L ${VERSION_URL}) \
     && TAG_URL=https://api.github.com/repos/stakater/stk/releases/tags/${VERSION} \
     && FILE_NAME=stk_${VERSION}_linux_386.tar.gz \
     && ASSET_URL=$(curl -H 'Authorization: token '"${TOKEN}" ${TAG_URL} | jq '.assets[]  | select(.name == "'${FILE_NAME}'") | .url') \

@@ -22,7 +22,6 @@ RUN TOKEN=$(cat /hub) \
     && echo ${VERSION} \
     && echo ${TAG_URL} \
     && echo ${FILE_NAME} \
-    && echo ${ASSET_URL} \
     && ASSET_URL="${ASSET_URL%\"}" \
     && ASSET_URL="${ASSET_URL#\"}" \
     && echo "$ASSET_URL" \

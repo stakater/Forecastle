@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('github.com/stakater/fabric8-pipeline-library@add-goReleaser')
+@Library('github.com/stakater/fabric8-pipeline-library@master')
 
 def versionPrefix = ""
 try {

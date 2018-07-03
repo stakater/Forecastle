@@ -25,11 +25,11 @@ RUN TOKEN=$(cat /hub) \
     && ASSET_URL="${ASSET_URL%\"}" \
     && ASSET_URL="${ASSET_URL#\"}" \
     && echo "$ASSET_URL" \
-    && curl -L -H "Accept: application/octet-stream" ${ASSET_URL}?access_token=${TOKEN} > test.tar.gz \
-    && mkdir ./temp && tar zxvf ./test.tar.gz -C ./temp \
+    && curl -L -H "Accept: application/octet-stream" ${ASSET_URL}?access_token=${TOKEN} > stk.tar.gz \
+    && mkdir ./temp && tar zxvf ./stk.tar.gz -C ./temp \
     && cp ./temp/stk /usr/local/bin/stk \
     && rm -rf ./temp/* \
-    && rm /hub && rm ./test.tar.gz
+    && rm /hub && rm ./stk.tar.gz
 
 
 RUN cd /app && npm install

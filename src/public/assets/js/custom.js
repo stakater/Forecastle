@@ -41,7 +41,7 @@ jQuery(document).ready(function($){
 
     function initSearch() {
         $('.apps .app').each(function(){
-            $(this).attr('data-search-term', $(this).find('button span').text().toLowerCase());
+            $(this).attr('data-search-term', $(this).find('button>span').text().toLowerCase());
         });
     }
 

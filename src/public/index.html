@@ -1,60 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Forecastle - Stakater</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <link rel="stylesheet" href="style.css" />
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/layout.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/components.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/colors.min.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<!-- Core JS files -->
+	<script src="assets/js/main/jquery.min.js"></script>
+	<script src="assets/js/main/bootstrap.bundle.min.js"></script>
+	<script src="assets/js/plugins/loaders/blockui.min.js"></script>
+	<script src="assets/js/plugins/ui/slinky.min.js"></script>
+    <script src="assets/js/plugins/ui/fab.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <script type="text/javascript" src="index.js"></script>
-    <title>Control Panel</title>
+	<!-- /core JS files -->
+
+	<!-- Theme JS files -->
+	<script src="assets/js/app.js"></script>
+	<script src="assets/js/custom.js"></script>
+	<!-- /theme JS files -->
+
+<style>
+.app>button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.img-container{
+    height: 70px;
+    padding: 0;
+    display:table;
+}
+
+.img-container img{
+    max-height:70px;
+}
+
+.img-container .img-cell{
+    display:table-cell;
+    vertical-align:middle;
+}
+
+.img-container + span {
+    text-transform: capitalize;
+}
+</style>
+
 </head>
 
 <body>
-    <div class="navbar-fixed">
-        <nav class="blue-grey darken-1">
-            <div class="container">
-                <div class="nav-wrapper">
-                    <a href="#!" class="brand-logo">Stakater Control Panel</a>
+
+	<!-- Page header -->
+	<div class="page-header page-header-dark">
+
+            <!-- Page header content -->
+            <div class="page-header-content header-elements-md-inline">
+                <div class="page-title d-flex">
+                    <h2>Forecastle - Stakater</h2>
+                    <a href="#" class="header-elements-toggle text-white d-md-none">
+                        <i class="icon-more"></i>
+                    </a>
+                </div>
+    
+                <div class="header-elements d-none bg-transparent py-0 border-0 mb-3 mb-md-0">
+                    <form action="#">
+                        <div class="form-group form-group-feedback form-group-feedback-right">
+                            <input type="search" class="form-control bg-light-alpha border-transparent wmin-md-200 search-box" placeholder="Search">
+                            <div class="form-control-feedback">
+                                <i class="icon-search4 font-size-sm"></i>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+            <!-- /page header content -->
+    
+        </div>
+        <!-- /page header -->
+    
+    
+        <!-- Page content -->
+        <div class="page-content">
+    
+            <!-- Main content -->
+            <div class="content-wrapper">
+    
+                <!-- Content area -->
+                <div class="content">
+    
+                    <div class="row apps">
+                    </div>
 
-        </nav>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <div>
-                <h4 class="center-align">Apps</h4>
+                </div>
+                <!-- /content area -->
+    
             </div>
+            <!-- /main content -->
+    
         </div>
-        <div class="row appsList">
+        <!-- /page content -->
+    
+    
+        <!-- Footer -->
+        <div class="navbar navbar-expand-lg navbar-light">
+            <span class="mx-auto navbar-text">
+                Made with 
+                <i class="icon-heart6"></i>
+                in Islamabad
+            </span>
         </div>
-
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+        <!-- /footer -->
+		
 </body>
 
 <script id="app-template" type="text/template">
-    <div class="col s8 m4">
-            <a href="{{URL}}" target="_blank">
-                {{#ImageURL}}
-                <img class="responsive-img" src="{{ImageURL}}" />
-                {{/ImageURL}}
-                <div class="card blue-grey darken-1">
-                    <div class="card-content white-text">
-                        <span class="card-title center-align">{{Name}}</span>
-                    </div>
-                </div>
-            </a>
-        </div>
+    <div class="col-3 app my-2">
+        <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('{{URL}}', '_blank')">    
+        {{#Icon}}
+            <div class="img-container">
+                <span class="img-cell">
+                    <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
+                </span>
+            </div>
+        {{/Icon}}
+            <span>{{Name}}</span>
+        </button>
+    </div>
 </script>
-
 </html>

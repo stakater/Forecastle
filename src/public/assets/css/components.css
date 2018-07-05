@@ -1,0 +1,1887 @@
+@charset "UTF-8";
+/* ------------------------------------------------------------------------------
+ *
+ *  # Components
+ *
+ *  Components import. Ordering matters. See _config.scss for more options
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Global configuration
+ *
+ *  Here you can change main theme, enable or disable certain components and
+ *  optional styles. This allows you to include only components that you need.
+ *
+ *  'true'  - enables component and includes it to main CSS file.
+ *  'false' - disables component and excludes it from main CSS file.
+ *
+ *  Layout helper: @if $layout == 'base' {...}
+ *  Theme helper: @if $theme == 'material' {...}
+ *  Component helper: @if $enable-* {...}
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Custom Limitless functions
+ *
+ *  Utility mixins and functions for evalutating source code across our variables, maps, and mixins.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Custom template mixins
+ *
+ *  All custom mixins are prefixed with "ll-" to avoid conflicts
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Main colors
+ *
+ *  List of the template main color palettes
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Default Bootstrap variable overrides
+ *
+ *  Variables should follow the `$component-state-property-size` formula for
+ *  consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+ *  Also includes custom variables, all marked with "!default" flag.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Additional variables
+ *
+ *  Mainly 3rd party libraries and additional variables for default
+ *  Bootstrap components.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Mixins
+ *
+ *  Import Bootstrap mixins with overrides
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Badge mixin
+ *
+ *  Override and extend default badge mixin.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Buttons mixin
+ *
+ *  Override and extend default buttons mixin.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Caret mixin
+ *
+ *  Override and extend default cared mixin.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Forms mixin
+ *
+ *  Override and extend default forms mixin.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Background mixin
+ *
+ *  Override and extend default background mixin.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Flash of unstyled content (FOUC)
+ *
+ *  CSS fix for FOUC issue, which pops up in latest jQuery version. These styles
+ *  are optional, but enabled by default. Feel free to turn them off in configuration.
+ *
+ * ---------------------------------------------------------------------------- */
+input[type=checkbox][data-fouc],
+input[type=radio][data-fouc] {
+  visibility: hidden;
+  width: 1.25rem;
+  height: 1.25rem; }
+  .form-check input[type=checkbox][data-fouc], .form-check
+  input[type=radio][data-fouc] {
+    position: absolute; }
+  .form-check-inline:not(.form-check-switchery) input[type=checkbox][data-fouc], .form-check-inline:not(.form-check-switchery)
+  input[type=radio][data-fouc] {
+    position: relative;
+    margin-top: 0.00002rem;
+    margin-right: 0.625rem; }
+    .form-check-inline.form-check-right .form-check-inline:not(.form-check-switchery) input[type=checkbox][data-fouc], .form-check-inline.form-check-right .form-check-inline:not(.form-check-switchery)
+    input[type=radio][data-fouc] {
+      margin-right: 0;
+      margin-left: 0.625rem; }
+
+.form-check-switchery input[data-fouc] {
+  width: 2.375rem;
+  height: 1.25rem; }
+
+.form-check-switchery-double.form-check input[data-fouc] {
+  position: static; }
+
+.form-check-switch input {
+  height: 2.25003rem;
+  visibility: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0; }
+  .form-check-switch input[data-size=large] {
+    height: 2.50002rem; }
+  .form-check-switch input[data-size=small] {
+    height: 2.00002rem; }
+
+input[type=text][data-fouc] {
+  height: 2.25003rem;
+  opacity: 0; }
+
+input[type=text].form-control-lg[data-fouc] {
+  height: 2.50002rem; }
+
+input[type=text].form-control-sm[data-fouc] {
+  height: 2.00002rem; }
+
+select[data-fouc]:not([aria-hidden=false]) {
+  height: 2.25003rem;
+  opacity: 0; }
+
+select.form-control-lg[data-fouc]:not([aria-hidden=false]) {
+  height: 2.50002rem; }
+
+select.form-control-sm[data-fouc]:not([aria-hidden=false]) {
+  height: 2.00002rem; }
+
+input[type=file][data-fouc] {
+  height: 2.25003rem;
+  opacity: 0; }
+
+input[type=file].form-control-lg[data-fouc] {
+  height: 2.50002rem; }
+
+input[type=file].form-control-sm[data-fouc] {
+  height: 2.00002rem; }
+
+.wizard-form[data-fouc] {
+  opacity: 0; }
+  .wizard-form[data-fouc].wizard {
+    opacity: 1; }
+  .wizard-form[data-fouc]:not(.wizard) {
+    padding-top: 6.75003rem;
+    padding-bottom: 3.50003rem; }
+    .wizard-form[data-fouc]:not(.wizard) fieldset:not(:first-of-type),
+    .wizard-form[data-fouc]:not(.wizard) h6 {
+      display: none; }
+
+input[type=text].colorpicker-flat-full[data-fouc] {
+  height: 285px; }
+
+pre[data-fouc]:not(.ace_editor) {
+  height: 450px; }
+
+pre[data-fouc].ace_editor {
+  visibility: visible; }
+
+.noui-pips-height-helper:not(.noUi-target)[data-fouc] {
+  height: 2.62503rem; }
+
+.noui-pips-height-helper.noui-slider-lg:not(.noUi-target)[data-fouc] {
+  height: 2.75003rem; }
+
+.noui-pips-height-helper.noui-slider-sm:not(.noUi-target)[data-fouc] {
+  height: 2.50003rem; }
+
+.noui-vertical-height-helper:not(.noUi-target)[data-fouc] {
+  display: inline-block;
+  height: 10rem; }
+
+input[type=text].ion-height-helper[data-fouc] {
+  height: 3.4375rem; }
+
+input[type=text].ion-pips-height-helper[data-fouc] {
+  height: 5.5625rem; }
+
+input[type=text].noui-height-helper:not(.noUi-target)[data-fouc] {
+  height: 0.375rem; }
+
+/* ------------------------------------------------------------------------------
+ *
+ *  # Pace. Default theme
+ *
+ *  Minimal preloader theme, used as a default theme
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Progress (loading) bars
+ *
+ *  Static demo of Pace themes. For demonstration purposes only. DO NOT use it in production
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Uniform.js
+ *
+ *  Styles for uniform.min.js - form components styling
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Switchery
+ *
+ *  Styles for switchery.min.js - toggle switches
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Bootstrap switches
+*
+*  Styles for switch.min.js - checkbox/radio toggle switches
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Select2 selects
+*
+*  Styles for select2.js - custom select plugin
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Bootstrap multiselect
+*
+*  Styles for multiselect.js - custom multiple select plugin
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Passy
+*
+*  Styles for passy.min.js - password length checker and password generator
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Twiter Typeahead
+*
+*  Styles for typeahead.bundle.min.js - input suggestion engine
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Form Validation
+*
+*  Styles for validate.min.js - jQuery plugin for simple clientside form validation
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Floating labels
+*
+*  Styles for custom Floating Labels extensions
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Alpaca forms
+*
+*  Styles for alpaca.min.js - the easiest way to generate interactive HTML5 forms for web applications
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Tokenfield for Bootstrap
+*
+*  Styles for tokenfield.js - Advanced tagging/tokenizing plugin for Bootstrap
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Bootstrap tags input
+*
+*  Styles for tagsinput.js - tags input for Bootstrap
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Touchspin spinners
+*
+*  Styles for touchspin.min.js - spinner form control library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Bootstrap Duallistbox
+*
+*  Styles for listbox.js - A responsive dual listbox widget optimized for Bootstrap
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Steps wizard
+*
+*  Styles for steps.min.js - An all-in-one wizard plugin that is extremely flexible, compact and feature-rich
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Summernote editor
+*
+*  Styles for summernote.min.js - super simple WYSIWYG Editor for Bootstrap framework
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Trumbowyg editor
+*
+*  Styles for trumbowyg.min.js - a lightweight WYSIWYG editor
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Ace code editor
+*
+*  Styles Ace - an embeddable code editor written in JavaScript
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Daterange picker
+*
+*  Date range picker component for Bootstrap
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Pick-a-date - Picker base
+*
+*  The mobile-friendly, responsive, and lightweight jQuery date & time input picker
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Pick-a-date - Date picker
+*
+*  The mobile-friendly, responsive, and lightweight jQuery date & time input picker
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Pick-a-date - Time picker
+*
+*  The mobile-friendly, responsive, and lightweight jQuery date & time input picker
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Anytime picker
+*
+*  jQuery datepicker/timepicker and a Date/String parse/format utility
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Spectrum color picker
+*
+*  Flexible and powerful jQuery colorpicker library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Plupload multiple file uploader
+ *
+ *  Styles for plupload.min.js - multi runtime single and multiple file uploader
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Bootstrap file input
+ *
+ *  Styles for fileinput.min.js - an enhanced HTML 5 file input for Bootstrap
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Dropzone file uploader
+ *
+ *  Styles for dropzone.min.js - open source library that provides drag’n’drop file uploads with image previews
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Noty notifications
+*
+*  Styles for noty.min.js - A dependency-free notification library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # PNotify notifications
+*
+*  Styles for pnotify.min.js - a flexible JavaScript notification plugin
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # jGrowl notifications
+*
+*  Styles for jgrowl.min.js - an unobtrusive notification system for web applications
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Sweet Alerts component
+*
+*  Styles for sweet_alert.min.js - notification library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # jQuery UI slider pips
+ *
+ *  Styles for jQuery UI slider pips extension
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # NoUI slider
+ *
+ *  Styles for nouislider.min.js - range slider plugin
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # ION Range Slider
+*
+*  Styles for ion_rangeslider.min.js - range slider plugin
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # jQuery UI Interactions
+ *
+ *  Separate styles for jQuery UI library. Component's interactions
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # jQuery UI Widgets
+ *
+ *  Styles for jQuery UI widgets
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Prism
+ *
+ *  Styles for prism.min.js - lightweight, extensible syntax highlighter
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Slinky
+ *
+ *  Styles for slinky.min.js - animated multi level navigation
+ *
+ * ---------------------------------------------------------------------------- */
+.slinky-menu {
+  position: relative;
+  overflow: hidden;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0); }
+  .slinky-menu > ul {
+    /*rtl:ignore*/
+    left: 0;
+    position: relative;
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0); }
+  .slinky-menu ul {
+    width: 100%; }
+    .slinky-menu ul.active {
+      max-height: 340px;
+      overflow-y: auto; }
+  .slinky-menu li + li:not(.dropdown-item):not(.dropdown-divider) {
+    margin-top: 1px; }
+  .slinky-menu li ul {
+    display: none;
+    /*rtl:ignore*/
+    left: 100%;
+    position: absolute;
+    top: 0; }
+  .slinky-menu .header {
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    color: #2196F3;
+    transition: all ease-in-out 0.15s; }
+    @media screen and (prefers-reduced-motion: reduce) {
+      .slinky-menu .header {
+        transition: none; } }
+    .slinky-menu .header:hover, .slinky-menu .header:focus {
+      color: #0a6ebd; }
+    .slinky-menu .header .title {
+      -ms-flex: 1;
+          flex: 1;
+      padding: 0.5rem 1rem;
+      padding-left: 3rem; }
+  .slinky-menu .next:after, .slinky-menu .next:before,
+  .slinky-menu .back:after,
+  .slinky-menu .back:before {
+    font-family: "icomoon";
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5rem;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.75;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale; }
+  .slinky-menu .next {
+    padding-right: 2.5rem; }
+    .slinky-menu .next:after {
+      content: '\e9c7';
+      right: 1rem; }
+  .slinky-menu .back {
+    position: absolute;
+    padding: 0.5rem 1rem;
+    color: inherit;
+    width: 100%;
+    height: 100%; }
+    .slinky-menu .back:before {
+      content: '\ede7';
+      left: 1rem; }
+
+/* ------------------------------------------------------------------------------
+ *
+ *  # Sticky kit
+ *
+ *  Styles for sticky.min.js - extension that makes elements sticky
+ *
+ * ---------------------------------------------------------------------------- */
+.is_stuck {
+  z-index: 1030 !important; }
+
+.navbar-top .navbar.is_stuck {
+  margin-top: 3.12503rem; }
+
+/* ------------------------------------------------------------------------------
+ *
+ *  # Headroom
+ *
+ *  Styles for headroom.min.js - hides BS navbar component on page scroll
+ *
+ * ---------------------------------------------------------------------------- */
+.headroom {
+  transition: box-shadow ease-in-out 0.2s, -webkit-transform ease-in-out 0.2s;
+  transition: transform ease-in-out 0.2s, box-shadow ease-in-out 0.2s;
+  transition: transform ease-in-out 0.2s, box-shadow ease-in-out 0.2s, -webkit-transform ease-in-out 0.2s;
+  will-change: transform; }
+
+.navbar-slide-top.headroom--pinned {
+  -webkit-transform: translateY(0);
+          transform: translateY(0); }
+
+.navbar-slide-top.headroom--unpinned {
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+  box-shadow: none; }
+
+.navbar-slide-bottom.headroom--pinned {
+  -webkit-transform: translateY(100%);
+          transform: translateY(100%);
+  box-shadow: none; }
+
+.navbar-slide-bottom.headroom--unpinned {
+  -webkit-transform: translateY(0);
+          transform: translateY(0); }
+
+/* ------------------------------------------------------------------------------
+ *
+ *  # Dragula - drag and drop library
+ *
+ *  Styles for Dragula Drag and drop plugin
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Perfect Scrollbar
+ *
+ *  Styles for perfect_scrollbar.min.js - custom scrollbar extension
+ *
+ * ---------------------------------------------------------------------------- */
+.ps {
+  overflow: hidden !important;
+  overflow-anchor: none;
+  -ms-touch-action: auto;
+      touch-action: auto; }
+
+.ps__rail-y,
+.ps__rail-x {
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.15s linear; }
+  @media screen and (prefers-reduced-motion: reduce) {
+    .ps__rail-y,
+    .ps__rail-x {
+      transition: none; } }
+
+.ps__rail-x {
+  bottom: 0; }
+
+.ps__rail-y {
+  /*rtl:ignore*/
+  right: 0; }
+
+.ps:hover > .ps__rail-x,
+.ps:hover > .ps__rail-y,
+.ps--focus > .ps__rail-x,
+.ps--focus > .ps__rail-y,
+.ps--scrolling-x > .ps__rail-x,
+.ps--scrolling-y > .ps__rail-y {
+  opacity: 0.75; }
+
+.ps__thumb-y,
+.ps__thumb-x {
+  background-color: #999;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 100px; }
+
+.ps__thumb-y {
+  width: 0.25rem;
+  right: 0.125rem; }
+
+.ps__thumb-x {
+  height: 0.25rem;
+  bottom: 0.125rem; }
+
+@supports (-ms-overflow-style: none) {
+  .ps {
+    overflow: auto !important; } }
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .ps {
+    overflow: auto !important; } }
+
+/* ------------------------------------------------------------------------------
+*
+*  # Floating action buttons
+*
+*  Styles for fab.min.js - material design floating action button with menu
+*
+* ---------------------------------------------------------------------------- */
+.fab-menu {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  z-index: 1029;
+  -webkit-transform: scale(0.85);
+          transform: scale(0.85); }
+  .page-header > .fab-menu {
+    position: absolute;
+    bottom: -1.625rem; }
+  @media (min-width: 768px) {
+    .fab-menu {
+      -webkit-transform: scale(1);
+              transform: scale(1); } }
+
+.fab-menu-absolute {
+  position: absolute; }
+
+.fab-menu-fixed {
+  position: fixed;
+  z-index: 1030; }
+
+.content-wrapper > .fab-menu-top-left, .content-wrapper >
+.fab-menu-top-right {
+  top: -1.625rem; }
+
+.fab-menu-bottom-left,
+.fab-menu-bottom-right {
+  bottom: 1.25rem;
+  transition: bottom ease-in-out 0.15s; }
+  .fab-menu-bottom-left.reached-bottom,
+  .fab-menu-bottom-right.reached-bottom {
+    bottom: 5.62503rem; }
+
+.fab-menu-top-right,
+.fab-menu-bottom-right {
+  right: 1.25rem; }
+
+.fab-menu-inner {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+  .fab-menu-inner > li {
+    display: block;
+    position: absolute;
+    top: 0.125rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding-top: 1.25rem;
+    margin-top: -1.25rem; }
+    .fab-menu-inner > li .btn {
+      border-width: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+      .fab-menu-inner > li .btn:hover, .fab-menu-inner > li .btn:focus, .fab-menu-inner > li .btn.focus, .fab-menu-inner > li .btn:not(:disabled):not(.disabled):active, .fab-menu-inner > li .btn:not(:disabled):not(.disabled).active {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23) !important; }
+    .fab-menu-inner > li .btn-float {
+      padding: 0;
+      width: 3rem;
+      height: 3rem; }
+      .fab-menu-inner > li .btn-float > i {
+        margin: 1rem; }
+    .fab-menu-inner > li .show > .btn-float.dropdown-toggle {
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+    .fab-menu-inner > li .dropleft .btn:before,
+    .fab-menu-inner > li .dropleft .btn:after,
+    .fab-menu-inner > li .dropright .btn:before,
+    .fab-menu-inner > li .dropright .btn:after {
+      content: none; }
+    .fab-menu-inner > li .badge {
+      position: absolute;
+      top: 0.75rem;
+      right: -0.25rem; }
+    .fab-menu-inner > li .badge-mark {
+      top: 1.25rem;
+      right: 0rem; }
+    .fab-menu-bottom-left .fab-menu-inner > li,
+    .fab-menu-bottom-right .fab-menu-inner > li {
+      padding-top: 0;
+      margin-top: 0;
+      padding-bottom: 1.25rem;
+      margin-bottom: -1.25rem; }
+      .fab-menu-bottom-left .fab-menu-inner > li .badge,
+      .fab-menu-bottom-right .fab-menu-inner > li .badge {
+        top: -0.5rem; }
+      .fab-menu-bottom-left .fab-menu-inner > li .badge-mark,
+      .fab-menu-bottom-right .fab-menu-inner > li .badge-mark {
+        top: 0rem; }
+
+.fab-menu-btn {
+  z-index: 1031;
+  border-width: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+  .fab-menu-btn.btn-float {
+    padding: 1.625rem; }
+    .fab-menu-btn.btn-float > i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -0.5rem;
+      margin-left: -0.5rem; }
+  .fab-menu-btn:hover, .fab-menu-btn:focus, .fab-menu-btn:not(:disabled):not(.disabled):active, .fab-menu-btn:not(:disabled):not(.disabled).active, .fab-menu-btn:not(:disabled):not(.disabled):active:focus,
+  .fab-menu[data-fab-toggle="hover"]:hover .fab-menu-btn,
+  .fab-menu[data-fab-state="open"] .fab-menu-btn {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+  .fab-menu-btn:disabled, .fab-menu-btn.disabled {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+
+.fab-icon-close,
+.fab-icon-open {
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+  transition: all ease-in-out 0.3s; }
+  .fab-menu[data-fab-toggle="hover"]:hover .fab-icon-close,
+  .fab-menu[data-fab-state="open"] .fab-icon-close, .fab-menu[data-fab-toggle="hover"]:hover
+  .fab-icon-open,
+  .fab-menu[data-fab-state="open"]
+  .fab-icon-open {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+
+.fab-menu[data-fab-toggle="hover"]:hover .fab-icon-open,
+.fab-menu[data-fab-state="open"] .fab-icon-open {
+  opacity: 0; }
+
+.fab-icon-close {
+  opacity: 0; }
+  .fab-menu[data-fab-toggle="hover"]:hover .fab-icon-close,
+  .fab-menu[data-fab-state="open"] .fab-icon-close {
+    opacity: 1; }
+
+.fab-menu .fab-menu-inner > li {
+  visibility: hidden;
+  opacity: 0;
+  transition: all ease-in-out 0.3s; }
+  .fab-menu .fab-menu-inner > li:nth-child(1) {
+    transition-delay: 0.05s; }
+  .fab-menu .fab-menu-inner > li:nth-child(2) {
+    transition-delay: 0.1s; }
+  .fab-menu .fab-menu-inner > li:nth-child(3) {
+    transition-delay: 0.15s; }
+  .fab-menu .fab-menu-inner > li:nth-child(4) {
+    transition-delay: 0.2s; }
+  .fab-menu .fab-menu-inner > li:nth-child(5) {
+    transition-delay: 0.25s; }
+
+.fab-menu[data-fab-toggle="hover"]:hover .fab-menu-inner > li, .fab-menu[data-fab-state="open"] .fab-menu-inner > li {
+  visibility: visible;
+  opacity: 1; }
+
+.fab-menu-top[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1), .fab-menu-top[data-fab-state="open"] .fab-menu-inner > li:nth-child(1),
+.fab-menu-top-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1),
+.fab-menu-top-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(1),
+.fab-menu-top-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1),
+.fab-menu-top-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(1) {
+  top: 4.5rem; }
+
+.fab-menu-top[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2), .fab-menu-top[data-fab-state="open"] .fab-menu-inner > li:nth-child(2),
+.fab-menu-top-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2),
+.fab-menu-top-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(2),
+.fab-menu-top-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2),
+.fab-menu-top-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(2) {
+  top: 8.75rem; }
+
+.fab-menu-top[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3), .fab-menu-top[data-fab-state="open"] .fab-menu-inner > li:nth-child(3),
+.fab-menu-top-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3),
+.fab-menu-top-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(3),
+.fab-menu-top-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3),
+.fab-menu-top-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(3) {
+  top: 13rem; }
+
+.fab-menu-top[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4), .fab-menu-top[data-fab-state="open"] .fab-menu-inner > li:nth-child(4),
+.fab-menu-top-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4),
+.fab-menu-top-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(4),
+.fab-menu-top-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4),
+.fab-menu-top-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(4) {
+  top: 17.25rem; }
+
+.fab-menu-top[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5), .fab-menu-top[data-fab-state="open"] .fab-menu-inner > li:nth-child(5),
+.fab-menu-top-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5),
+.fab-menu-top-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(5),
+.fab-menu-top-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5),
+.fab-menu-top-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(5) {
+  top: 21.5rem; }
+
+.fab-menu-bottom[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1), .fab-menu-bottom[data-fab-state="open"] .fab-menu-inner > li:nth-child(1),
+.fab-menu-bottom-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1),
+.fab-menu-bottom-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(1),
+.fab-menu-bottom-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(1),
+.fab-menu-bottom-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(1) {
+  top: -4rem; }
+
+.fab-menu-bottom[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2), .fab-menu-bottom[data-fab-state="open"] .fab-menu-inner > li:nth-child(2),
+.fab-menu-bottom-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2),
+.fab-menu-bottom-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(2),
+.fab-menu-bottom-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(2),
+.fab-menu-bottom-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(2) {
+  top: -8.25rem; }
+
+.fab-menu-bottom[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3), .fab-menu-bottom[data-fab-state="open"] .fab-menu-inner > li:nth-child(3),
+.fab-menu-bottom-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3),
+.fab-menu-bottom-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(3),
+.fab-menu-bottom-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(3),
+.fab-menu-bottom-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(3) {
+  top: -12.5rem; }
+
+.fab-menu-bottom[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4), .fab-menu-bottom[data-fab-state="open"] .fab-menu-inner > li:nth-child(4),
+.fab-menu-bottom-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4),
+.fab-menu-bottom-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(4),
+.fab-menu-bottom-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(4),
+.fab-menu-bottom-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(4) {
+  top: -16.75rem; }
+
+.fab-menu-bottom[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5), .fab-menu-bottom[data-fab-state="open"] .fab-menu-inner > li:nth-child(5),
+.fab-menu-bottom-left[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5),
+.fab-menu-bottom-left[data-fab-state="open"] .fab-menu-inner > li:nth-child(5),
+.fab-menu-bottom-right[data-fab-toggle="hover"]:hover .fab-menu-inner > li:nth-child(5),
+.fab-menu-bottom-right[data-fab-state="open"] .fab-menu-inner > li:nth-child(5) {
+  top: -21rem; }
+
+.fab-menu-inner div[data-fab-label]:after {
+  content: attr(data-fab-label);
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  right: 4.375rem;
+  color: #fff;
+  background-color: #000;
+  padding: 0.5rem 0.75rem;
+  visibility: hidden;
+  opacity: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all ease-in-out 0.3s;
+  border-radius: 0.1875rem; }
+  .fab-menu-bottom-left .fab-menu-inner div[data-fab-label]:after,
+  .fab-menu-bottom-right .fab-menu-inner div[data-fab-label]:after {
+    margin-top: -1.75rem; }
+
+.fab-menu-top-left .fab-menu-inner div[data-fab-label]:after,
+.fab-menu-bottom-left .fab-menu-inner div[data-fab-label]:after, .fab-menu-inner div[data-fab-label].fab-label-right:after {
+  right: auto;
+  left: 4.375rem; }
+
+.fab-menu[data-fab-toggle="hover"] .fab-menu-inner div[data-fab-label]:hover:after,
+.fab-menu[data-fab-state="open"] .fab-menu-inner div[data-fab-label]:hover:after {
+  visibility: visible;
+  opacity: 1; }
+
+.fab-menu-inner div[data-fab-label].fab-label-light:after {
+  background-color: #fff;
+  color: #333; }
+
+.fab-menu-inner div[data-fab-label].fab-label-visible:after {
+  visibility: visible;
+  opacity: 1; }
+
+.fab-menu-top-left,
+.fab-menu-bottom-left {
+  left: 1.25rem; }
+  @media (min-width: 768px) {
+    .fab-menu-top-left,
+    .fab-menu-bottom-left {
+      left: 1.1875rem; } }
+  @media (min-width: 1200px) {
+    .fab-menu-top-left,
+    .fab-menu-bottom-left {
+      left: 3.375rem; } }
+
+@media (min-width: 768px) {
+  .fab-menu-top-right,
+  .fab-menu-bottom-right {
+    right: 1.1875rem; } }
+
+@media (min-width: 1200px) {
+  .fab-menu-top-right,
+  .fab-menu-bottom-right {
+    right: 3.375rem; } }
+
+/* ------------------------------------------------------------------------------
+*
+*  # Fancytree
+*
+*  Styles for fancytree_all.min.js - tree plugin for jQuery
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Ladda progress buttons
+ *
+ *  Styles for ladda.min.js - buttons with built-in loading indicators
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # FullCalendar
+ *
+ *  Styles for fullcalendar.min.js - JavaScript event calendar
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Image cropper
+ *
+ *  Styles for cropper.min.js - a simple jQuery image cropping plugin
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Fancybox lightbox
+ *
+ *  Styles for fancybox.min.js - Mac-style "lightbox" plugin
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Footable
+ *
+ *  jQuery plugin that aims to make HTML tables on smaller devices look awesome.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Handsontable
+ *
+ *  Styles for handsontable.min.js - JavaScript Spreadsheet library
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Datatables library
+ *
+ *  Add advanced interaction controls to any HTML table
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Columns reorder
+ *
+ *  Easily modify the column order of a table through drop-and-drag of column headers
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Row Reorder extension
+ *
+ *  RowReorder adds the ability for rows in a DataTable to be reordered through
+ *  user interaction with the table.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Fixed columns
+ *
+ *  Extension that "freezes" in place the left most columns in a scrolling DataTable
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Fixed Header extension
+ *
+ *  This extension lets your users quickly determine what each column refers to
+ *  rather than needing to scroll back to the top of the table.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Autofill extension
+ *
+ *  Spreadsheets such as Excel and Google Docs have a very handy data duplication
+ *  option of an auto fill tool
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Select extension
+ *
+ *  Adds item selection capabilities to a DataTable
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Buttons extension
+ *
+ *  The Buttons extension for DataTables provides a common set of options, API
+ *  methods and styling to display buttons that will interact with a DataTable
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Key Table extension
+ *
+ *  KeyTable provides Excel like cell navigation on any table. Events (focus, blur,
+ *  action etc) can be assigned to individual cells, columns, rows or all cells.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Datatables Scroller
+ *
+ *  Drawing the rows required for the current display only, for fast operation
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Responsive extension
+ *
+ *  Optimise the table's layout for different screen sizes through the dynamic 
+ *  insertion and removal of columns from the table
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Google Maps overrides
+*
+*  Override Google Maps default styles
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Vector maps
+*
+*  Vector map container, tooltip and zooming
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Chart styling
+*
+*  Charts base - container and sizing setup
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # C3 charts
+*
+*  Styles for C3.js visualization library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # D3.js library
+*
+*  Basic styles for D3.js visualization library
+*
+* ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Ecommerce stuff
+ *
+ *  Styles for Ecommerce set of pages
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Blog layouts
+ *
+ *  Blog layouts with various blog layouts
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Task manager
+ *
+ *  Styles related to task manager - detailed task, list and grid
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Mail list
+ *
+ *  Inbox page - list, read and write
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # User profile
+ *
+ *  Styles for all user profile layouts
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Login and related forms
+ *
+ *  Styles related to user login - logins, registration, password revovery, unlock etc.
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Timeline
+ *
+ *  Styles for timeline in 3 layouts: left, right and centered
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Chat layouts
+ *
+ *  Conversation chat styles - layouts, chat elements, colors, options
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Error pages
+ *
+ *  Styles for error and offline pages
+ *
+ * ---------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------
+*
+*  # Header elements
+*
+*  Display default and custom components in page header, card header and breadcrumbs
+*
+* ---------------------------------------------------------------------------- */
+.card-header .header-elements {
+  padding-top: 0.9375rem; }
+
+.page-header-content .header-elements {
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  padding: 1.25rem 1.25rem;
+  border-top: 1px solid #cfcfcf;
+  border-bottom: 1px solid #cfcfcf;
+  background-color: #efefef; }
+
+.page-header-light .header-elements {
+  background-color: #fafafa;
+  border-color: #ddd;
+  border-bottom: 0; }
+
+.page-header-dark .header-elements {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-bottom: 0; }
+
+.breadcrumb-line .header-elements {
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  padding: 0 1.25rem;
+  border-top: 1px solid transparent; }
+
+.breadcrumb-line-light .header-elements {
+  background-color: transparent;
+  border-color: #ddd; }
+
+.breadcrumb-line-dark .header-elements {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.25); }
+
+.header-elements .form-group:last-child {
+  margin-bottom: 0; }
+
+.header-elements-toggle,
+.footer-elements-toggle {
+  margin-left: auto;
+  -ms-flex-item-align: center;
+      align-self: center; }
+
+.header-elements-inline {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+      align-items: center;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap; }
+  .header-elements-inline .header-elements {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    margin-left: 0;
+    margin-right: 0; }
+  .header-elements-inline .card-header-tabs .nav-link {
+    padding-top: 1rem;
+    padding-bottom: 1rem; }
+
+@media (min-width: 576px) {
+  .header-elements-sm-inline {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap; }
+    .header-elements-sm-inline .header-elements {
+      display: -ms-flexbox !important;
+      display: flex !important;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      margin-left: 0;
+      margin-right: 0; }
+    .header-elements-sm-inline .card-header-tabs .nav-link {
+      padding-top: 1rem;
+      padding-bottom: 1rem; } }
+
+@media (min-width: 768px) {
+  .header-elements-md-inline {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap; }
+    .header-elements-md-inline .header-elements {
+      display: -ms-flexbox !important;
+      display: flex !important;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      margin-left: 0;
+      margin-right: 0; }
+    .header-elements-md-inline .card-header-tabs .nav-link {
+      padding-top: 1rem;
+      padding-bottom: 1rem; } }
+
+@media (min-width: 992px) {
+  .header-elements-lg-inline {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap; }
+    .header-elements-lg-inline .header-elements {
+      display: -ms-flexbox !important;
+      display: flex !important;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      margin-left: 0;
+      margin-right: 0; }
+    .header-elements-lg-inline .card-header-tabs .nav-link {
+      padding-top: 1rem;
+      padding-bottom: 1rem; } }
+
+@media (min-width: 1200px) {
+  .header-elements-xl-inline {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap; }
+    .header-elements-xl-inline .header-elements {
+      display: -ms-flexbox !important;
+      display: flex !important;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      margin-left: 0;
+      margin-right: 0; }
+    .header-elements-xl-inline .card-header-tabs .nav-link {
+      padding-top: 1rem;
+      padding-bottom: 1rem; } }
+
+/* ------------------------------------------------------------------------------
+ *
+ *  # Helper classes
+ *
+ *  Custom helper classes used in the template.
+ *
+ * ---------------------------------------------------------------------------- */
+.font-size-lg {
+  font-size: 0.875rem; }
+
+.font-size-base {
+  font-size: 0.8125rem; }
+
+.font-size-sm {
+  font-size: 0.75rem; }
+
+.font-size-xs {
+  font-size: 0.6875rem; }
+
+.line-height-lg {
+  line-height: 1.4286; }
+
+.line-height-base {
+  line-height: 1.5385; }
+
+.line-height-sm {
+  line-height: 1.6667; }
+
+.line-height-xs {
+  line-height: 1.82; }
+
+.line-height-1 {
+  line-height: 1; }
+
+.opacity-75 {
+  opacity: 0.75; }
+
+.opacity-50 {
+  opacity: 0.5; }
+
+.opacity-25 {
+  opacity: 0.25; }
+
+.opacity-0 {
+  opacity: 0; }
+
+.top-0 {
+  top: 0; }
+
+.top-auto {
+  top: auto; }
+
+.bottom-0 {
+  bottom: 0; }
+
+.bottom-auto {
+  bottom: auto; }
+
+.left-0 {
+  left: 0; }
+
+.left-auto {
+  left: auto; }
+
+.right-0 {
+  right: 0; }
+
+.right-auto {
+  right: auto; }
+
+.cursor-pointer {
+  cursor: pointer; }
+
+.cursor-move {
+  cursor: move; }
+
+.cursor-default {
+  cursor: default; }
+
+.cursor-disabled {
+  cursor: default; }
+
+.overflow-hidden {
+  overflow: hidden; }
+
+.overflow-visible {
+  overflow: visible; }
+
+.overflow-auto {
+  overflow: auto; }
+
+.border-width-0 {
+  border-width: 0; }
+
+.border-y-0 {
+  border-top: 0 !important;
+  border-bottom: 0 !important; }
+
+.border-x-0 {
+  border-left: 0 !important;
+  border-right: 0 !important; }
+
+.border-1 {
+  border: 1px solid; }
+
+.border-top-1 {
+  border-top: 1px solid; }
+
+.border-bottom-1 {
+  border-bottom: 1px solid; }
+
+.border-left-1 {
+  border-left: 1px solid; }
+
+.border-right-1 {
+  border-right: 1px solid; }
+
+.border-y-1 {
+  border-top: 1px solid;
+  border-bottom: 1px solid; }
+
+.border-x-1 {
+  border-left: 1px solid;
+  border-right: 1px solid; }
+
+.border-2 {
+  border: 2px solid; }
+
+.border-top-2 {
+  border-top: 2px solid; }
+
+.border-bottom-2 {
+  border-bottom: 2px solid; }
+
+.border-left-2 {
+  border-left: 2px solid; }
+
+.border-right-2 {
+  border-right: 2px solid; }
+
+.border-y-2 {
+  border-top: 2px solid;
+  border-bottom: 2px solid; }
+
+.border-x-2 {
+  border-left: 2px solid;
+  border-right: 2px solid; }
+
+.border-3 {
+  border: 3px solid; }
+
+.border-top-3 {
+  border-top: 3px solid; }
+
+.border-bottom-3 {
+  border-bottom: 3px solid; }
+
+.border-left-3 {
+  border-left: 3px solid; }
+
+.border-right-3 {
+  border-right: 3px solid; }
+
+.border-y-3 {
+  border-top: 3px solid;
+  border-bottom: 3px solid; }
+
+.border-x-3 {
+  border-left: 3px solid;
+  border-right: 3px solid; }
+
+.border-dashed {
+  border-style: dashed; }
+
+.border-top-dashed {
+  border-top-style: dashed; }
+
+.border-bottom-dashed {
+  border-bottom-style: dashed; }
+
+.border-left-dashed {
+  border-left-style: dashed; }
+
+.border-right-dashed {
+  border-right-style: dashed; }
+
+.border-dotted {
+  border-style: dotted; }
+
+.rounded-round {
+  border-radius: 100px !important; }
+
+.rounded-top-round {
+  border-top-left-radius: 100px !important;
+  border-top-right-radius: 100px !important; }
+
+.rounded-bottom-round {
+  border-bottom-right-radius: 100px !important;
+  border-bottom-left-radius: 100px !important; }
+
+.rounded-left-round {
+  border-top-left-radius: 100px !important;
+  border-bottom-left-radius: 100px !important; }
+
+.rounded-right-round {
+  border-top-right-radius: 100px !important;
+  border-bottom-right-radius: 100px !important; }
+
+.rounded-top-0 {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important; }
+
+.rounded-bottom-0 {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important; }
+
+.rounded-left-0 {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important; }
+
+.rounded-right-0 {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important; }
+
+.rotate-45 {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg); }
+
+.rotate-90 {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg); }
+
+.rotate-180 {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg); }
+
+.rotate-45-inverse {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg); }
+
+.rotate-90-inverse {
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg); }
+
+.rotate-180-inverse {
+  -webkit-transform: rotate(-180deg);
+          transform: rotate(-180deg); }
+
+.spinner {
+  display: inline-block;
+  -webkit-animation: rotation 1s linear infinite;
+          animation: rotation 1s linear infinite; }
+
+.spinner-reverse {
+  display: inline-block;
+  -webkit-animation: rotation 1s linear infinite;
+          animation: rotation 1s linear infinite; }
+
+@-webkit-keyframes rotation {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes rotation {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@-webkit-keyframes rotation_reverse {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(-360deg); } }
+
+@keyframes rotation_reverse {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(-360deg);
+            transform: rotate(-360deg); } }
+
+.h-auto {
+  height: auto; }
+
+.w-auto {
+  width: auto !important; }
+
+.w-25 {
+  width: 25% !important; }
+
+.w-50 {
+  width: 50% !important; }
+
+.w-75 {
+  width: 75% !important; }
+
+.w-100 {
+  width: 100% !important; }
+
+.wmin-0 {
+  min-width: 0 !important; }
+
+.wmin-200 {
+  min-width: 200px !important; }
+
+.wmin-250 {
+  min-width: 250px !important; }
+
+.wmin-300 {
+  min-width: 300px !important; }
+
+.wmin-350 {
+  min-width: 350px !important; }
+
+.wmin-400 {
+  min-width: 400px !important; }
+
+.wmin-450 {
+  min-width: 450px !important; }
+
+.wmin-500 {
+  min-width: 500px !important; }
+
+.wmin-550 {
+  min-width: 550px !important; }
+
+.wmin-600 {
+  min-width: 600px !important; }
+
+.flex-1 {
+  -ms-flex: 1;
+      flex: 1; }
+
+@media (min-width: 576px) {
+  .w-sm-auto {
+    width: auto !important; }
+  .w-sm-25 {
+    width: 25% !important; }
+  .w-sm-50 {
+    width: 50% !important; }
+  .w-sm-75 {
+    width: 75% !important; }
+  .w-sm-100 {
+    width: 100% !important; }
+  .wmin-sm-0 {
+    min-width: 0 !important; }
+  .wmin-sm-200 {
+    min-width: 200px !important; }
+  .wmin-sm-250 {
+    min-width: 250px !important; }
+  .wmin-sm-300 {
+    min-width: 300px !important; }
+  .wmin-sm-350 {
+    min-width: 350px !important; }
+  .wmin-sm-400 {
+    min-width: 400px !important; }
+  .wmin-sm-450 {
+    min-width: 450px !important; }
+  .wmin-sm-500 {
+    min-width: 500px !important; }
+  .wmin-sm-550 {
+    min-width: 550px !important; }
+  .wmin-sm-600 {
+    min-width: 600px !important; }
+  .flex-sm-1 {
+    -ms-flex: 1;
+        flex: 1; } }
+
+@media (min-width: 768px) {
+  .w-md-auto {
+    width: auto !important; }
+  .w-md-25 {
+    width: 25% !important; }
+  .w-md-50 {
+    width: 50% !important; }
+  .w-md-75 {
+    width: 75% !important; }
+  .w-md-100 {
+    width: 100% !important; }
+  .wmin-md-0 {
+    min-width: 0 !important; }
+  .wmin-md-200 {
+    min-width: 200px !important; }
+  .wmin-md-250 {
+    min-width: 250px !important; }
+  .wmin-md-300 {
+    min-width: 300px !important; }
+  .wmin-md-350 {
+    min-width: 350px !important; }
+  .wmin-md-400 {
+    min-width: 400px !important; }
+  .wmin-md-450 {
+    min-width: 450px !important; }
+  .wmin-md-500 {
+    min-width: 500px !important; }
+  .wmin-md-550 {
+    min-width: 550px !important; }
+  .wmin-md-600 {
+    min-width: 600px !important; }
+  .flex-md-1 {
+    -ms-flex: 1;
+        flex: 1; } }
+
+@media (min-width: 992px) {
+  .w-lg-auto {
+    width: auto !important; }
+  .w-lg-25 {
+    width: 25% !important; }
+  .w-lg-50 {
+    width: 50% !important; }
+  .w-lg-75 {
+    width: 75% !important; }
+  .w-lg-100 {
+    width: 100% !important; }
+  .wmin-lg-0 {
+    min-width: 0 !important; }
+  .wmin-lg-200 {
+    min-width: 200px !important; }
+  .wmin-lg-250 {
+    min-width: 250px !important; }
+  .wmin-lg-300 {
+    min-width: 300px !important; }
+  .wmin-lg-350 {
+    min-width: 350px !important; }
+  .wmin-lg-400 {
+    min-width: 400px !important; }
+  .wmin-lg-450 {
+    min-width: 450px !important; }
+  .wmin-lg-500 {
+    min-width: 500px !important; }
+  .wmin-lg-550 {
+    min-width: 550px !important; }
+  .wmin-lg-600 {
+    min-width: 600px !important; }
+  .flex-lg-1 {
+    -ms-flex: 1;
+        flex: 1; } }
+
+@media (min-width: 1200px) {
+  .w-xl-auto {
+    width: auto !important; }
+  .w-xl-25 {
+    width: 25% !important; }
+  .w-xl-50 {
+    width: 50% !important; }
+  .w-xl-75 {
+    width: 75% !important; }
+  .w-xl-100 {
+    width: 100% !important; }
+  .wmin-xl-0 {
+    min-width: 0 !important; }
+  .wmin-xl-200 {
+    min-width: 200px !important; }
+  .wmin-xl-250 {
+    min-width: 250px !important; }
+  .wmin-xl-300 {
+    min-width: 300px !important; }
+  .wmin-xl-350 {
+    min-width: 350px !important; }
+  .wmin-xl-400 {
+    min-width: 400px !important; }
+  .wmin-xl-450 {
+    min-width: 450px !important; }
+  .wmin-xl-500 {
+    min-width: 500px !important; }
+  .wmin-xl-550 {
+    min-width: 550px !important; }
+  .wmin-xl-600 {
+    min-width: 600px !important; }
+  .flex-xl-1 {
+    -ms-flex: 1;
+        flex: 1; } }
+
+.no-transitions *, .no-transitions *:before, .no-transitions *:after {
+  transition: none !important; }
+  @media screen and (prefers-reduced-motion: reduce) {
+    .no-transitions *, .no-transitions *:before, .no-transitions *:after {
+      transition: none; } }
+
+.caret-0::before, .caret-0::after {
+  content: none; }
+
+.shadow-0 {
+  box-shadow: none !important; }
+
+.outline-0, .outline-0:hover, .outline-0:focus {
+  outline: 0; }
+
+.text-shadow-dark {
+  text-shadow: 0 0 0.1875rem rgba(0, 0, 0, 0.5); }
+
+.text-shadow-light {
+  text-shadow: 0 0 0.1875rem rgba(255, 255, 255, 0.5); }
+
+/* ------------------------------
+ *
+ *  Theme specific styles
+ *
+ * ------------------------------ */
+/* ------------------------------------------------------------------------------
+ *
+ *  # Demo styles
+ *
+ *  Styles used for demostration purposes only
+ *
+ * ---------------------------------------------------------------------------- */

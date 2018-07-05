@@ -14,8 +14,10 @@ router.get('/apps', function(req, res) {
     fs.readFile('/etc/cp-config/namespaces.conf', 'utf8', function (err,data) {
         if (err) {
             return console.log(err);
-        }     
-        var cmd = 'stk list ingresses --namespaces '+data+' --file /app/public/apps.json';
+        }
+        var annotationKey = 'forecastle.stakater.com/expose'
+        var annotationValue = 'true'
+        var cmd = 'stk list ingresses --annotationKey ' + annotationKey + ' --annotationValue ' + annotationValue +' --namespaces '+data+' --file /app/public/apps.json';
         execSync(cmd)
         res.send("")
     });

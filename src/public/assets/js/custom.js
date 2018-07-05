@@ -7,17 +7,13 @@
  * ---------------------------------------------------------------------------- */
 
 jQuery(document).ready(function($){
-
-    $('.apps .app').each(function(){
-        $(this).attr('data-search-term', $(this).find('button span').text().toLowerCase());
-    });
     
     $('.search-box').on('keyup', function(){
     
     var searchTerm = $(this).val().toLowerCase();
     
         $('.apps .app').each(function(){
-    
+            
             if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) {
                 $(this).show();
             } else {
@@ -31,13 +27,21 @@ jQuery(document).ready(function($){
     var fileName = "apps.json"
     if(FileExists(fileName)) {
         $.getJSON(fileName, populateAppsListFromJson);
+        initSearch();
     } else {
         $.ajax({
             url: "/api/apps",
             type: 'GET',
             success: function(res) {
                 $.getJSON(fileName, populateAppsListFromJson);
+                initSearch();
             }
+        });
+    }
+
+    function initSearch() {
+        $('.apps .app').each(function(){
+            $(this).attr('data-search-term', $(this).find('button span').text().toLowerCase());
         });
     }
 

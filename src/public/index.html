@@ -102,58 +102,8 @@
                 <div class="content">
     
                     <div class="row apps">
-                                        
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('https://chartmuseum.tools.stackator.com', '_blank')">
-                            <div class="img-container">
-                               <span class="img-cell"> <img class="img-fluid mx-auto d-block" src="https://cdn-images-1.medium.com/max/521/0*D__TQ7qMdoq3Y7kP.png"></span>
-                              </div>
-                                <span>chartmuseum</span>
-                            </button>
-                        </div>
-
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('https://jenkins.tools.stackator.com', '_blank')">
-                            <div class="img-container">
-                             <span class="img-cell">
-                                <img class="img-fluid mx-auto d-block" src="https://png.icons8.com/color/1600/jenkins.png">
-                                </span></div><span>jenkins</span>
-                            </button>
-                        </div>
-
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('https://keycloak.tools.stackator.com', '_blank')">
-                            <div class="img-container">
-                            <span class="img-cell">
-                                <img class="img-fluid mx-auto d-block" src="https://www.keycloak.org/docs/3.2/authorization_services/images/keycloak_logo.png">
-                                </span></div><span>keycloak</span>
-                            </button>
-                        </div>
-
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('https://nexus.tools.stackator.com', '_blank')">
-                            <div class="img-container">
-                            <span class="img-cell">
-                                <img class="img-fluid mx-auto d-block" src="https://raw.githubusercontent.com/frekele/docker-nexus/master/nexus-logo.png">
-                              </span>  </div><span>nexus</span>
-                            </button>
-                        </div>
-
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('http://cp.stackator.com/grafana', '_blank')">
-                                <img class="img-fluid mx-auto d-block" src="http://www.neteye-blog.com/wp-content/uploads/2017/12/Grafana.png">
-                                <span>grafana</span>
-                            </button>
-                        </div>
-
-                        <div class="col-3 app my-2" style="">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('http://cp.stackator.com/kibana', '_blank')">
-                                <img class="img-fluid mx-auto d-block" src="https://cdn.freebiesupply.com/logos/large/2x/elastic-kibana-logo-png-transparent.png">
-                                <span>kibana</span>
-                            </button>
-                        </div>
                     </div>
-    
+
                 </div>
                 <!-- /content area -->
     
@@ -182,10 +132,10 @@
         {{#Icon}}
             <div class="img-container">
                 <span class="img-cell">
-                    <img class="img-fluid mx-auto d-block" src="https://cdn-images-1.medium.com/max/521/0*D__TQ7qMdoq3Y7kP.png">
+                    <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
                 </span>
             </div>
-        {{#/Icon}}
+        {{/Icon}}
             <span>{{Name}}</span>
         </button>
     </div>

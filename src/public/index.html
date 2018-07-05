@@ -73,32 +73,7 @@
                 <div class="content">
     
                     <div class="row apps">
-                        <div class="col-3 app">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0">
-                                <img class="img-fluid mx-auto d-block" src="https://image.flaticon.com/icons/svg/25/25231.svg">
-                                <span>Github</span>
-                            </button>
-                        </div>
-                        <div class="col-3 app">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0">
-                                <i class="icon-dropbox text-blue-400 icon-2x"></i>
-                                <span>Dropbox</span>
-                            </button>
-                        </div>
-                        <div class="col-3 app">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0">
-                                <i class="icon-dribbble3 text-pink-400 icon-2x"></i>
-                                <span>Dribbble</span>
-                            </button>
-                        </div>
-                        <div class="col-3 app">
-                            <button type="button" class="btn btn-light btn-block btn-float m-0">
-                                <i class="icon-google-drive text-success-400 icon-2x"></i>
-                                <span>Google Drive</span>
-                            </button>
-                        </div>
                     </div>
-    
     
                 </div>
                 <!-- /content area -->
@@ -124,11 +99,10 @@
 
 <script id="app-template" type="text/template">
     <div class="col-3 app">
-        <button type="button" class="btn btn-light btn-block btn-float m-0" onclick="location.href='{{URL}}'">
-            {{#ImageURL}}
-            <img class="img-fluid mx-auto d-block" src="{{ImageURL}}" />
-            {{/ImageURL}}
-            <i class="icon-dropbox text-blue-400 icon-2x"></i>
+        <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('{{URL}}', '_blank')">
+            {{#Icon}}
+            <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
+            {{/Icon}}
             <span>{{Name}}</span>
         </button>
     </div>

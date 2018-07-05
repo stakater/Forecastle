@@ -17,7 +17,7 @@ router.get('/apps', function(req, res) {
         }
         var annotationKey = 'forecastle.stakater.com/expose'
         var annotationValue = 'true'
-        var cmd = 'stk list ingresses --annotationKey ' + annotationKey + '--annotationValue ' + annotationValue +' --namespaces '+data+' --file /app/public/apps.json';
+        var cmd = 'stk list ingresses --annotationKey ' + annotationKey + ' --annotationValue ' + annotationValue +' --namespaces '+data+' --file /app/public/apps.json';
         execSync(cmd)
         res.send("")
     });

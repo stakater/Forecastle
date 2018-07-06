@@ -1,0 +1,29 @@
+forecastle:
+  labels:
+    group: com.stakater.platform
+    provider: stakater
+    version: "{{ getenv "VERSION" }}"
+  namespace: dev
+  image:
+    name: {{ getenv "DOCKER_IMAGE" }}
+    tag: "{{ getenv "VERSION" }}"
+  deployment:
+    replicas: 1
+    revisionHistoryLimit: 2
+  config:
+    namespaces: "stakater"
+  proxy:
+    enabled: false
+    image:
+      name: quay.io/gambol99/keycloak-proxy
+      tag: v2.1.1
+    args:
+      config: /etc/config/config.yml
+      upstreamUrl: http://100.1.0.0:1234
+  service:
+    ingressPath: /
+    rewriteTarget: /
+    forceSslRedirect: "false"
+    ingressClass: internal-ingress
+    annotations:
+    expose: "true"

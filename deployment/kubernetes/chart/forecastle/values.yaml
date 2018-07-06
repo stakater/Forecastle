@@ -1,0 +1,29 @@
+forecastle:
+  labels:
+    group: com.stakater.platform
+    provider: stakater
+    version: "1.0.1"
+  namespace: dev
+  image:
+    name: docker.io/stakater/forecastle:1.0.5
+    tag: 1.0.1
+  deployment:
+    replicas: 1
+    revisionHistoryLimit: 2
+  config:
+    namespaces: "stakater"
+  proxy:
+    enabled: false
+    image:
+      name: quay.io/gambol99/keycloak-proxy
+      tag: v2.1.1
+    args:
+      config: /etc/config/config.yml
+      upstreamUrl: http://100.1.0.0:1234
+  service:
+    ingressPath: /
+    rewriteTarget: /
+    forceSslRedirect: "false"
+    ingressClass: internal-ingress
+    annotations:
+    expose: "true"

@@ -1,5 +1,5 @@
 {
-  "name": "control-panel",
+  "name": "forecastle",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stakater/control-panel.git"
+    "url": "git+https://github.com/stakater/forecastle.git"
   },
   "author": "Stakater",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/stakater/control-panel/issues"
+    "url": "https://github.com/stakater/forecastle/issues"
   },
-  "homepage": "https://github.com/stakater/control-panel#readme",
+  "homepage": "https://github.com/stakater/forecastle#readme",
   "dependencies": {
     "express": "^4.16.3",
     "body-parser": "~1.0.1"

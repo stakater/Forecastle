@@ -14,6 +14,8 @@ We would like to have a central place where we can easily look for and use our a
 
 Forecastle gives you access to a control panel where you can see your running applications and access them.
 
+![Screenshot](https://raw.githubusercontent.com/stakater/Forecastle/master/assets/forecastle.png)
+
 ## Configuration
 
 Forecastle looks for a specific annotations on ingresses.

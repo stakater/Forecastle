@@ -25,9 +25,10 @@ jQuery(document).ready(function($){
     });
     
     var fileName = "apps.json"
-    if(FileExists(fileName)) {
+
+    PerformActionOnFile(fileName, function() {
         $.getJSON(fileName, populateAppsListFromJson);
-    } else {
+    }, function() {
         $.ajax({
             url: "/api/apps",
             type: 'GET',
@@ -35,7 +36,7 @@ jQuery(document).ready(function($){
                 $.getJSON(fileName, populateAppsListFromJson);
             }
         });
-    }
+    });
 
     function initSearch() {
         $('.apps .app').each(function(){
@@ -54,11 +55,14 @@ jQuery(document).ready(function($){
         $(".apps").append(html);
     }
     
-    function FileExists(file)
+    function PerformActionOnFile(fileName, onSuccess, onFailure)
     {
-        var http = new XMLHttpRequest();
-        http.open('HEAD', file, false);
-        http.send();
-        return http.status!=404;
+        $.get(fileName).done(function() {
+                console.log("Success")
+                onSuccess();
+            }).fail(function() {
+                console.log("Failure")
+                onFailure();
+            });
     }
 });

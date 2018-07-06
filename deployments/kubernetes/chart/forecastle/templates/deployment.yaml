@@ -1,8 +1,10 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+{{- if .Values.forecastle.proxy.enabled }}
   annotations:
     configmap.fabric8.io/update-on-change: "keycloak-proxy"
+{{- end }}
   labels:
 {{ include "labels.stakater" . | indent 4 }}
 {{ include "labels.chart" . | indent 4 }}

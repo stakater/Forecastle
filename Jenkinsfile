@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-@Library('github.com/stakater/fabric8-pipeline-library@master')
+@Library('github.com/stakater/fabric8-pipeline-library@add-buildandrelease')
 
 def versionPrefix = ""
 try {
@@ -8,7 +8,11 @@ try {
     versionPrefix = "1.0"
 }
 
-pushDockerImage {
-    versionPrefix = versionPrefix
-    dockerRegistryURL = "docker.io"
+// pushDockerImage {
+//     versionPrefix = versionPrefix
+//     dockerRegistryURL = "docker.io"
+// }
+
+buildAndRelease {
+
 }

@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/ingress.path: {{ .Values.forecastle.service.ingressPath }}
+      fabric8.io/ingress.annotations: |-
+        ingress.kubernetes.io/rewrite-target: {{ .Values.forecastle.service.rewriteTarget }}
+        ingress.kubernetes.io/force-ssl-redirect: {{ .Values.forecastle.service.forceSslRedirect }}
+        kubernetes.io/ingress.class: {{ .Values.forecastle.service.ingressClass }}
+        {{- with .Values.forecastle.service.annotations }}
+        {{- range $key, $value := . }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+        {{- end }}
+    labels:
+{{ include "labels.stakater" . | indent 6 }}
+{{ include "labels.chart" . | indent 6 }}
+      expose: "{{ .Values.forecastle.service.expose }}"
+    name: {{ template "name" . }}
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+{{- if .Values.forecastle.proxy.enabled }}
+      targetPort: 80
+{{- else }}
+      targetPort: 3000
+{{- end }}
+    selector:
+{{ include "labels.selector" . | indent 6 }}

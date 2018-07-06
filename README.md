@@ -25,7 +25,7 @@ Forecastle looks for a specific annotations on ingresses.
 | `forecastle.stakater.com/expose` | **[Required]** Add this with value `true` to the ingress of the app you want to show in Forecastle  |
 | `forecastle.stakater.com/icon`   | **[Optional]** Icon/Image URL of the application                                                    |
 
-- Once you have added these annotations, you n eed to specify namespaces to look for the ingresses in configmap of Forecastle. Modify the `namespaces.conf` key with a comma separated list of namespaces.
+- Once you have added these annotations, you need to specify namespaces to look for the ingresses in configmap of Forecastle. Modify the `namespaces.conf` key with a comma separated list of namespaces, in the manifest file.
 
 ## Deploying to Kubernetes
 

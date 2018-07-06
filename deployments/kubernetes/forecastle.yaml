@@ -454,3 +454,155 @@ metadata:
     heritage: "Tiller"
 data:
   namespaces.conf: stakater
+---
+# Source: forecastle/templates/deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    configmap.fabric8.io/update-on-change: "keycloak-proxy"
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.9"
+    chart: "forecastle-0.0.9"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+  name: forecastle
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: forecastle
+      group: com.stakater.platform
+      provider: stakater
+  template:
+    metadata:
+      labels:
+        app: forecastle
+        group: com.stakater.platform
+        provider: stakater
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        image: "stakater/forecastle:0.0.9"
+        name: forecastle
+        volumeMounts:
+        - name: forecastle-config
+          mountPath: /etc/cp-config      
+      volumes:      
+      - name: forecastle-config
+        configMap: 
+          name: forecastle
+      serviceAccountName: forecastle      
+
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.9"
+    chart: "forecastle-0.0.9"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+  name: forecastle
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: forecastle-cluster-ingress-role
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.9"
+    chart: "forecastle-0.0.9"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+rules:
+- apiGroups: ["", "extensions"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: forecastle-cluster-ingress-role-binding
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.9"
+    chart: "forecastle-0.0.9"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: forecastle-cluster-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: forecastle
+  namespace: dev
+---
+# Source: forecastle/templates/service.yaml
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/ingress.path: /
+      fabric8.io/ingress.annotations: |-
+        ingress.kubernetes.io/rewrite-target: /
+        ingress.kubernetes.io/force-ssl-redirect: false
+        kubernetes.io/ingress.class: internal-ingress
+    labels:
+      app: forecastle
+      group: com.stakater.platform
+      provider: stakater
+      version: "0.0.9"
+      chart: "forecastle-0.0.9"
+      release: "RELEASE-NAME"
+      heritage: "Tiller"
+      expose: "true"
+    name: forecastle
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: forecastle
+      group: com.stakater.platform
+      provider: stakater
+
+---
+# Source: forecastle/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forecastle
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.9"
+    chart: "forecastle-0.0.9"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+data:
+  namespaces.conf: stakater

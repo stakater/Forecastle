@@ -14,7 +14,7 @@ test:
 build:
 
 binary-image:
-	docker build --network host -t ${REPOSITORY} .
+	docker build --network host -t ${REPOSITORY} -f build/package/Dockerfile .
 
 push:
 	docker push $(REPOSITORY)

@@ -12,6 +12,7 @@ RUN echo "===> Installing Utilities from apk ..."  && \
 
 
 ARG VERSION_URL=https://raw.githubusercontent.com/stakater/stk/master/.version
+COPY ./asd /asd
 COPY ./hub /hub
 
 RUN TOKEN=$(cat /hub) \

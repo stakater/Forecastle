@@ -57,12 +57,6 @@ jQuery(document).ready(function($){
     
     function PerformActionOnFile(fileName, onSuccess, onFailure)
     {
-        $.get(fileName).done(function() {
-                console.log("Success")
-                onSuccess();
-            }).fail(function() {
-                console.log("Failure")
-                onFailure();
-            });
+        $.get(fileName).done(onSuccess).fail(onFailure);
     }
 });

@@ -1,0 +1,52 @@
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.1"
+    chart: "forecastle-0.0.1"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+  name: forecastle
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: forecastle-cluster-ingress-role
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.1"
+    chart: "forecastle-0.0.1"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+rules:
+- apiGroups: ["", "extensions"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: forecastle-cluster-ingress-role-binding
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.1"
+    chart: "forecastle-0.0.1"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: forecastle-cluster-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: forecastle
+  namespace: dev

@@ -1,0 +1,16 @@
+---
+# Source: forecastle/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forecastle
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "0.0.1"
+    chart: "forecastle-0.0.1"
+    release: "RELEASE-NAME"
+    heritage: "Tiller"
+data:
+  namespaces.conf: stakater

@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.1"
+    version: "0.0.1"
   namespace: dev
   image:
-    name: docker.io/stakater/forecastle:1.0.5
-    tag: 1.0.1
+    name: stakater/forecastle
+    tag: "0.0.1"
   deployment:
     replicas: 1
     revisionHistoryLimit: 2

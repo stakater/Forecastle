@@ -1,0 +1,36 @@
+---
+# Source: forecastle/templates/service.yaml
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      fabric8.io/ingress.path: /
+      fabric8.io/ingress.annotations: |-
+        ingress.kubernetes.io/rewrite-target: /
+        ingress.kubernetes.io/force-ssl-redirect: false
+        kubernetes.io/ingress.class: internal-ingress
+    labels:
+      app: forecastle
+      group: com.stakater.platform
+      provider: stakater
+      version: "0.0.1"
+      chart: "forecastle-0.0.1"
+      release: "RELEASE-NAME"
+      heritage: "Tiller"
+      expose: "true"
+    name: forecastle
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: forecastle
+      group: com.stakater.platform
+      provider: stakater
+

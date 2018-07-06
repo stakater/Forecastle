@@ -27,14 +27,12 @@ jQuery(document).ready(function($){
     var fileName = "apps.json"
     if(FileExists(fileName)) {
         $.getJSON(fileName, populateAppsListFromJson);
-        initSearch();
     } else {
         $.ajax({
             url: "/api/apps",
             type: 'GET',
             success: function(res) {
                 $.getJSON(fileName, populateAppsListFromJson);
-                initSearch();
             }
         });
     }
@@ -47,6 +45,7 @@ jQuery(document).ready(function($){
 
     function populateAppsListFromJson(data) {
         $.each(data, renderApp);
+        initSearch();
     }
     
     function renderApp(key, app) {

@@ -1,7 +1,5 @@
 FROM node:9.8-alpine
 
-COPY ./src /app
-
 # Update apk repository list in separate layer
 # so that install layer does not run everytime
 RUN apk update
@@ -31,6 +29,7 @@ RUN TOKEN=$(cat /hub) \
     && rm -rf ./temp/* \
     && rm /hub && rm ./stk.tar.gz
 
+COPY ./src /app
 
 RUN cd /app && npm install
 

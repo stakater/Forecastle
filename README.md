@@ -4,11 +4,11 @@
 
 ## Why name Forecastle?
 
-Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications.
+Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications having a particular annotation.
 
 ## Problem
 
-We would like to have a central place where we can easily look for and use our applications running in a cluster.
+We would like to have a central place where we can easily look for and access our applications with user interfaces running in a cluster.
 
 ## Solution
 
@@ -20,7 +20,7 @@ Forecastle gives you access to a control panel where you can see your running ap
 
 Forecastle looks for a specific annotations on ingresses.
 
-- Add the following annotations to your ingresses in order to be used by forecastle:
+- Add the following annotations to your ingresses in order to be discovered by forecastle:
 
 |           Annotation           |                                           Description                                           |
 |:------------------------------:|:-----------------------------------------------------------------------------------------------:|

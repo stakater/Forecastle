@@ -4,15 +4,16 @@
 
 ## Why name Forecastle?
 
-Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications having a particular annotation.
+Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications having a particular annotation in Kubernetes cluster.
 
-## Problem
+## Problem(s)
 
-We would like to have a central place where we can easily look for and access our applications with user interfaces running in a cluster.
+- We would like to have a central place where we can easily look for and access our applications running on Kubernetes.
+- We would like to have a tool which can dynamically discover and list the apps running on Kubernetes. 
 
 ## Solution
 
-Forecastle gives you access to a control panel where you can see your running applications and access them.
+Forecastle gives you access to a control panel where you can see your running applications and access them on Kubernetes.
 
 ![Screenshot](https://raw.githubusercontent.com/stakater/Forecastle/master/assets/forecastle.png)
 
@@ -31,17 +32,30 @@ Forecastle looks for a specific annotations on ingresses.
 
 ## Deploying to Kubernetes
 
+You can deploy Forecastle both using vanilla k8s manifests or helm charts.
+
 ### Vanilla Manifests
 
-You can apply vanilla manifests by running the following command:
+#### Step 1: You can apply vanilla manifests by running the following command
 
 ```bash
 kubecl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
 ```
 
+#### Step 2: Update configmap
+
+In the forecastle configmap modify the `namespaces.conf` key with a comma separated list of namespaces.
+
+And enjoy!
+
 ### Helm Charts
 
 If you configured `helm` on your cluster, you can deploy Forecastle via helm chart located under `deployments/kubernetes/chart/Forecastle` folder.
+
+## Features
+
+- List apps found in all namespaces listed in the configmap
+- Search apps
 
 ## Help
 

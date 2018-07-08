@@ -4,7 +4,7 @@
 
 ## Why name Forecastle?
 
-Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications having a particular annotation in Kubernetes cluster.
+Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications on Kubernetes having a particular annotation.
 
 ## Problem(s)
 

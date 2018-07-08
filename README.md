@@ -44,7 +44,7 @@ kubecl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/dep
 
 #### Step 2: Update configmap
 
-In the forecastle configmap modify the `namespaces.conf` key with a comma separated list of namespaces.
+In the Forecastle configmap modify the `namespaces.conf` key with a comma separated list of namespaces which you want Forecastle to watch.
 
 And enjoy!
 

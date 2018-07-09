@@ -102,4 +102,4 @@ See [our other projects][community]
 or contact us in case of professional services and queries on <hello@stakater.com>
 
   [website]: http://stakater.com/
-  [community]: https://github.com/stakater/
+  [community]: https://www.stakater.com/projects-overview.html

@@ -24,18 +24,14 @@ jQuery(document).ready(function($){
     
     });
     
-    var fileName = "apps.json"
-
-    PerformActionOnFile(fileName, function() {
-        $.getJSON(fileName, populateAppsListFromJson);
-    }, function() {
-        $.ajax({
-            url: "/api/apps",
-            type: 'GET',
-            success: function(res) {
-                $.getJSON(fileName, populateAppsListFromJson);
-            }
-        });
+    var fileName = "apps.json";
+    
+    $.ajax({
+        url: "/api/apps",
+        type: 'GET',
+        success: function(res) {
+            $.getJSON(fileName, populateAppsListFromJson);
+        }
     });
 
     function initSearch() {
@@ -53,10 +49,5 @@ jQuery(document).ready(function($){
         var appTemplate = $("#app-template").html();
         var html = Mustache.render(appTemplate, app)
         $(".apps").append(html);
-    }
-    
-    function PerformActionOnFile(fileName, onSuccess, onFailure)
-    {
-        $.get(fileName).done(onSuccess).fail(onFailure);
     }
 });

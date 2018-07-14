@@ -3,7 +3,7 @@ forecastle:
     group: com.stakater.platform
     provider: stakater
     version: "{{ getenv "VERSION" }}"
-  namespace: dev
+  namespace: default
   image:
     name: {{ getenv "DOCKER_IMAGE" }}
     tag: "{{ getenv "VERSION" }}"

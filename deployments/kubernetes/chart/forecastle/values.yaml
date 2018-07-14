@@ -3,7 +3,7 @@ forecastle:
     group: com.stakater.platform
     provider: stakater
     version: "0.0.18"
-  namespace: dev
+  namespace: default
   image:
     name: stakater/forecastle
     tag: "0.0.18"

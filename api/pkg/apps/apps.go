@@ -31,7 +31,6 @@ func NewList(kubeClient kubernetes.Interface) *List {
 
 // Populate function that populates a list of forecastle apps in selected namespaces
 func (al *List) Populate(namespaces ...string) *List {
-
 	ingresses, err := ingresses.NewList(al.kubeClient).
 		Populate(namespaces...).
 		Filter(byIngressClassAnnotation).

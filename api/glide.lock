@@ -1,5 +1,5 @@
-hash: 844beb607046dda51af33196b0bcc73456b8e45c3861762113fbf92267d781b3
-updated: 2018-07-17T15:40:27.174675915+05:00
+hash: e4345605b1efed105d49a838f57ae09992ce3503acb086c54fb25f65d7b044d9
+updated: 2018-07-18T12:10:04.168844836+05:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 782f4967f2dc4564575ca782fe2d04090b5faca8
@@ -68,6 +68,10 @@ imports:
   - buffer
   - jlexer
   - jwriter
+- name: github.com/onrik/logrus
+  version: 00f4ddfaeb23824ce8b9ce969095a9b2529b9eca
+  subpackages:
+  - filename
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/PuerkitoBio/purell
@@ -85,8 +89,6 @@ imports:
 - name: golang.org/x/net
   version: 1c05540f6879653db88113bc4a2b70aec4bd491f
   subpackages:
-  - context
-  - context/ctxhttp
   - http2
   - http2/hpack
   - idna

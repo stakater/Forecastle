@@ -1,11 +1,9 @@
 package apps
 
 import (
-	"github.com/sirupsen/logrus"
-	"github.com/stakater/Forecastle/api/pkg/kube/listers"
+	"github.com/stakater/Forecastle/api/pkg/kube/lists/ingresses"
 	"github.com/stakater/Forecastle/api/pkg/kube/wrappers"
 	"k8s.io/api/extensions/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -17,32 +15,40 @@ type ForecastleApp struct {
 	URL       string
 }
 
-// AppsLister struct is used for listing forecastle apps
-type AppsLister struct {
+// List struct is used for listing forecastle apps
+type List struct {
 	kubeClient kubernetes.Interface
+	items      []ForecastleApp
+	err        error // Used for forwarding errors
 }
 
-// NewAppsLister func creates a new instance of apps lister
-func NewAppsLister(kubeClient kubernetes.Interface) *AppsLister {
-	return &AppsLister{
+// NewList func creates a new instance of apps lister
+func NewList(kubeClient kubernetes.Interface) *List {
+	return &List{
 		kubeClient: kubeClient,
 	}
 }
 
-// List function that returns a list of forecastle apps in selected namespaces
-func (al *AppsLister) List(namespaces ...string) ([]ForecastleApp, error) {
+// Populate function that populates a list of forecastle apps in selected namespaces
+func (al *List) Populate(namespaces ...string) *List {
 
-	ingresses, err := listers.NewIngressLister(al.kubeClient).
-		List(namespaces...).
+	ingresses, err := ingresses.NewList(al.kubeClient).
+		Populate(namespaces...).
 		Filter(byIngressClassAnnotation).
 		Filter(byForecastleExposeAnnotation).Get()
 
 	if err != nil {
-		logrus.Errorln("Error occured trying to list ingresses")
-		return nil, err
+		al.err = err
 	}
 
-	return convertIngressesToForecastleApps(ingresses), nil
+	al.items = convertIngressesToForecastleApps(ingresses)
+
+	return al
+}
+
+// Get function returns the apps currently present in List
+func (al *List) Get() ([]ForecastleApp, error) {
+	return al.items, al.err
 }
 
 func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []ForecastleApp) {
@@ -56,9 +62,4 @@ func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []Forec
 		})
 	}
 	return
-}
-
-// ListAll function that returns a list of all forecastle apps
-func (al *AppsLister) ListAll() ([]ForecastleApp, error) {
-	return al.List(metav1.NamespaceAll)
 }

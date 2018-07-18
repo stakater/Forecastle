@@ -7,6 +7,7 @@ import (
 
 	"github.com/stakater/Forecastle/api/pkg/apps"
 	"github.com/stakater/Forecastle/api/pkg/kube"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 const (
@@ -18,15 +19,15 @@ const (
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 	kubeClient := kube.GetClient()
-	appsLister := apps.NewAppsLister(kubeClient)
+	appsList := apps.NewList(kubeClient)
 
 	var forecastleApps []apps.ForecastleApp
 	var err error
 
 	if namespaces := request.FormValue("namespaces"); namespaces != "" {
-		forecastleApps, err = appsLister.List(strings.Split(namespaces, NamespaceSeparator)...)
+		forecastleApps, err = appsList.Populate(strings.Split(namespaces, NamespaceSeparator)...).Get()
 	} else {
-		forecastleApps, err = appsLister.ListAll()
+		forecastleApps, err = appsList.Populate(metav1.NamespaceAll).Get()
 	}
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)

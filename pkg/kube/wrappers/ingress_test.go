@@ -1,0 +1,457 @@
+package wrappers
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/stakater/Forecastle/pkg/testutil"
+	"k8s.io/api/extensions/v1beta1"
+)
+
+func TestNewIngressWrapper(t *testing.T) {
+	type args struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name string
+		args args
+		want *IngressWrapper
+	}{
+		{
+			name: "TestNewIngressWrapper",
+			args: args{
+				ingress: testutil.CreateIngress("test-ingress"),
+			},
+			want: &IngressWrapper{
+				ingress: testutil.CreateIngress("test-ingress"),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewIngressWrapper(tt.args.ingress); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewIngressWrapper() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetAnnotationValue(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	type args struct {
+		annotationKey string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+	}{
+		{
+			name: "TestGetAnnotationValueWithExistingAnnotation",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngress("test-ingress"), "someannotation", "hello"),
+			},
+			args: args{
+				annotationKey: "someannotation",
+			},
+			want: "hello",
+		},
+		{
+			name: "TestGetAnnotationValueWithInvalidAnnotation",
+			fields: fields{
+				ingress: testutil.CreateIngress("test-ingress"),
+			},
+			args: args{
+				annotationKey: "someannotation",
+			},
+			want: "",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetAnnotationValue(tt.args.annotationKey); got != tt.want {
+				t.Errorf("IngressWrapper.GetAnnotationValue() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetName(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "TestGetName",
+			fields: fields{
+				ingress: testutil.CreateIngress("test-ingress"),
+			},
+			want: "test-ingress",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetName(); got != tt.want {
+				t.Errorf("IngressWrapper.GetName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetNamespace(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "TestGetNamespace",
+			fields: fields{
+				ingress: testutil.CreateIngressWithNamespace("test-ingress", "test"),
+			},
+			want: "test",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetNamespace(); got != tt.want {
+				t.Errorf("IngressWrapper.GetNamespace() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetURL(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithNoURL",
+			fields: fields{
+				ingress: testutil.CreateIngress("someIngress"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithValidHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress1", "google.com"),
+			},
+			want: "http://google.com",
+		},
+		{
+			name: "IngressWithTLSHostButNoHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithTLSHost("someIngress2", "https://google.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithTLSHostAndNormalHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress2", "google.com", "google.com"),
+			},
+			want: "https://google.com",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetURL(); got != tt.want {
+				t.Errorf("IngressWrapper.GetURL() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_rulesExist(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{
+			name: "IngressWithNoRules",
+			fields: fields{
+				ingress: testutil.CreateIngress("someIngress"),
+			},
+			want: false,
+		},
+		{
+			name: "IngressWithRule",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "http://google.com"),
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.rulesExist(); got != tt.want {
+				t.Errorf("IngressWrapper.rulesExist() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+		want1  bool
+	}{
+		{
+			name: "IngressWithoutTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want:  "",
+			want1: false,
+		},
+		{
+			name: "IngressWithTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
+			},
+			want:  "https://google.com",
+			want1: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			got, got1 := iw.tryGetTLSHost()
+			if got != tt.want {
+				t.Errorf("IngressWrapper.tryGetTLSHost() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("IngressWrapper.tryGetTLSHost() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_supportsTLS(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   bool
+	}{
+		{
+			name: "IngressWithoutTLS",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want: false,
+		},
+		{
+			name: "IngressWithTLS",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
+			},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.supportsTLS(); got != tt.want {
+				t.Errorf("IngressWrapper.supportsTLS() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_getHost(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithEmptyHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", ""),
+			},
+			want: "http://",
+		},
+		{
+			name: "IngressWithCorrectHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want: "http://google.com",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.getHost(); got != tt.want {
+				t.Errorf("IngressWrapper.getHost() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_getIngressSubPathWithPort(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithoutSubPath",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithSubPathNoPort",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", ""),
+			},
+			want: "/test",
+		},
+		{
+			name: "IngressWithSubPathAndPort",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", "123"),
+			},
+			want: "123/test",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.getIngressSubPathWithPort(); got != tt.want {
+				t.Errorf("IngressWrapper.getIngressSubPathWithPort() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_getIngressPort(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithoutPort",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithPort",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "", "123"),
+			},
+			want: "123",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.getIngressPort(); got != tt.want {
+				t.Errorf("IngressWrapper.getIngressPort() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_getIngressSubPath(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithoutSubPath",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithSubPath",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", ""),
+			},
+			want: "/test",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.getIngressSubPath(); got != tt.want {
+				t.Errorf("IngressWrapper.getIngressSubPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

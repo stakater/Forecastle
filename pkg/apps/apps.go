@@ -7,14 +7,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-// ForecastleApp struct that contains information about an app that is exposed to forecastle
-type ForecastleApp struct {
-	Name      string
-	Icon      string
-	Namespace string
-	URL       string
-}
-
 // List struct is used for listing forecastle apps
 type List struct {
 	kubeClient kubernetes.Interface

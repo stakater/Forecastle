@@ -22,6 +22,9 @@ func main() {
 	router.Path("/apps").Queries("namespaces", "{namespaces}").HandlerFunc(handlers.AppsHandler)
 	router.Path("/apps/").Queries("namespaces", "{namespaces}").HandlerFunc(handlers.AppsHandler)
 
+	router.Path("/file").Queries("path", "{path}").HandlerFunc(handlers.FileHandler)
+	router.Path("/file/").Queries("path", "{path}").HandlerFunc(handlers.FileHandler)
+
 	// Serve static files using packr
 	box := packr.NewBox("./static")
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(box)))

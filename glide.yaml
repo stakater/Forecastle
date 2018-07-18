@@ -1,4 +1,4 @@
-package: github.com/stakater/Forecastle/api
+package: github.com/stakater/Forecastle
 import:
 - package: github.com/gorilla/mux
   version: v1.6.2

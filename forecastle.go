@@ -29,8 +29,8 @@ func main() {
 	box := packr.NewBox("./static")
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(box)))
 
-	logger.Info("Listening at port 8000")
-	if err := http.ListenAndServe(":8000", router); err != nil {
+	logger.Info("Listening at port 3000")
+	if err := http.ListenAndServe(":3000", router); err != nil {
 		logger.Error(err)
 	}
 }

@@ -45,13 +45,37 @@ jQuery(document).ready(function($){
     }
 
     function populateAppsListFromJson(data) {
+        data = groupByKeys(data, "Namespace", "Apps");
         $.each(data, renderApp);
         initSearch();
     }
     
     function renderApp(key, app) {
         var appTemplate = $("#app-template").html();
-        var html = Mustache.render(appTemplate, app)
+        var template = Handlebars.compile(appTemplate)
+        var html = template(app)
         $(".apps").append(html);
     }
+
+    var groupByKeys = function(data, key, valuesKey) {
+        var map = new Map();
+
+        data.forEach(item => {
+            if(!map.has(item[key])) {
+                map.set(item[key], [])
+            }
+            map.get(item[key]).push(item)
+        });
+
+        var result = [];
+
+        map.forEach((mValue, mKey) => {
+            result.push({
+                [key]: mKey,
+                [valuesKey]: mValue
+            })
+        })
+
+        return result
+    };
 });

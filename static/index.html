@@ -25,7 +25,7 @@
 	<script src="assets/js/plugins/loaders/blockui.min.js"></script>
 	<script src="assets/js/plugins/ui/slinky.min.js"></script>
     <script src="assets/js/plugins/ui/fab.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handlebars@4.0.5/dist/handlebars.min.js"></script>
 	<!-- /core JS files -->
 
 	<!-- Theme JS files -->
@@ -104,7 +104,7 @@
                 <!-- Content area -->
                 <div class="content">
     
-                    <div class="row apps">
+                    <div class="apps">
                     </div>
 
                 </div>
@@ -130,18 +130,27 @@
 		
 </body>
 
-<script id="app-template" type="text/template">
+<script id="app-template" type="text/x-handlebars-template">
+<div>
+<h2 class="mt-4 text-capitalize">{{Namespace}}</h2>
+<hr class="mt-0" />
+<div class="row">
+{{#each Apps}}
+
     <div class="col-3 app my-2">
         <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('{{URL}}', '_blank')">    
-        {{#Icon}}
+        {{#if Icon}}
             <div class="img-container">
                 <span class="img-cell">
                     <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
                 </span>
             </div>
-        {{/Icon}}
+        {{/if}}
             <span>{{Name}}</span>
         </button>
     </div>
+{{/each}}
+</div>
+</div>
 </script>
 </html>

@@ -23,14 +23,18 @@ jQuery(document).ready(function($){
         });
     
     });
-    
-    var fileName = "apps.json";
-    
+
+    var namespacesFilePath = "/etc/cp-config/namespaces.conf";
+
     $.ajax({
-        url: "/api/apps",
-        type: 'GET',
-        success: function(res) {
-            $.getJSON(fileName, populateAppsListFromJson);
+        url: "/file?path=" + namespacesFilePath,
+        type: "GET",
+        success: function(namespaces) {
+            $.ajax({
+                url: "/apps?namespaces=" + namespaces,
+                type: "GET",
+                success: populateAppsListFromJson
+            });
         }
     });
 

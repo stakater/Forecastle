@@ -7,6 +7,9 @@ DOCKER_IMAGE ?= stakater/forecastle
 DOCKER_TAG ?= dev
 REPOSITORY = ${DOCKER_IMAGE}:${DOCKER_TAG}
 
+GOCMD = go
+GLIDECMD = glide
+
 install:
 	"$(GLIDECMD)" install
 

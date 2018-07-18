@@ -1,8 +1,12 @@
 package wrappers
 
 import (
-	log "github.com/sirupsen/logrus"
+	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/api/extensions/v1beta1"
+)
+
+var (
+	logger = log.New()
 )
 
 // IngressWrapper struct wraps a kubernetes ingress object
@@ -39,7 +43,7 @@ func (iw *IngressWrapper) GetNamespace() string {
 func (iw *IngressWrapper) GetURL() string {
 
 	if !iw.rulesExist() {
-		log.Warn("No rules exist in ingress: ", iw.ingress.GetName())
+		logger.Warn("No rules exist in ingress: ", iw.ingress.GetName())
 		return ""
 	}
 

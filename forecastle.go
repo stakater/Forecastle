@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/stakater/Forecastle/api/pkg/handlers"
-	"github.com/stakater/Forecastle/api/pkg/log"
+	"github.com/stakater/Forecastle/pkg/handlers"
+	"github.com/stakater/Forecastle/pkg/log"
 )
 
 var (

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/stakater/Forecastle/api/pkg/apps"
-	"github.com/stakater/Forecastle/api/pkg/kube"
-	"github.com/stakater/Forecastle/api/pkg/log"
+	"github.com/stakater/Forecastle/pkg/apps"
+	"github.com/stakater/Forecastle/pkg/kube"
+	"github.com/stakater/Forecastle/pkg/log"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

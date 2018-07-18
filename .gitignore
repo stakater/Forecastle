@@ -1,3 +1,4 @@
 src/node_modules
 .idea
 api/vendor
+vendor

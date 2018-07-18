@@ -1,8 +1,8 @@
 package apps
 
 import (
-	"github.com/stakater/Forecastle/api/pkg/kube/lists/ingresses"
-	"github.com/stakater/Forecastle/api/pkg/kube/wrappers"
+	"github.com/stakater/Forecastle/pkg/kube/lists/ingresses"
+	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	"k8s.io/api/extensions/v1beta1"
 	"k8s.io/client-go/kubernetes"
 )

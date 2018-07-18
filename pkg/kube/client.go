@@ -3,10 +3,14 @@ package kube
 import (
 	"os"
 
-	"github.com/sirupsen/logrus"
+	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+)
+
+var (
+	logger = log.New()
 )
 
 // GetClient returns a k8s clientset
@@ -26,12 +30,12 @@ func GetClient() kubernetes.Interface {
 func getClientInCluster() kubernetes.Interface {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		logrus.Fatalf("Can not get kubernetes config: %v", err)
+		logger.Fatalf("Can not get kubernetes config: %v", err)
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		logrus.Fatalf("Can not create kubernetes client: %v", err)
+		logger.Fatalf("Can not create kubernetes client: %v", err)
 	}
 
 	return clientset
@@ -49,7 +53,7 @@ func buildOutOfClusterConfig() (*rest.Config, error) {
 func getClientOutOfCluster() kubernetes.Interface {
 	config, err := buildOutOfClusterConfig()
 	if err != nil {
-		logrus.Fatalf("Can not get kubernetes config: %v", err)
+		logger.Fatalf("Can not get kubernetes config: %v", err)
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)

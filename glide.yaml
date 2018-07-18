@@ -13,3 +13,7 @@ import:
 - package: github.com/onrik/logrus
   subpackages:
   - filename
+- package: github.com/gobuffalo/packr
+  version: v1.11.1
+- package: github.com/pkg/errors
+  version: v0.8.0

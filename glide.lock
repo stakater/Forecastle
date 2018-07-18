@@ -1,5 +1,5 @@
-hash: e4345605b1efed105d49a838f57ae09992ce3503acb086c54fb25f65d7b044d9
-updated: 2018-07-18T12:10:04.168844836+05:00
+hash: c4f899da0a72122b6c3bdbf1960514df9728279f2e1ca99660b7e4323e682b56
+updated: 2018-07-18T12:38:10.94194275+05:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 782f4967f2dc4564575ca782fe2d04090b5faca8
@@ -21,6 +21,8 @@ imports:
   version: 6aced65f8501fe1217321abf0749d354824ba2ff
 - name: github.com/go-openapi/swag
   version: 1d0bd113de87027671077d3c71eb3ac5d7dbba72
+- name: github.com/gobuffalo/packr
+  version: bd47f2894846e32edcf9aa37290fef76c327883f
 - name: github.com/gogo/protobuf
   version: c0656edd0d9eab7c66d1eb0c568f9039345796f7
   subpackages:
@@ -74,6 +76,8 @@ imports:
   - filename
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/PuerkitoBio/purell
   version: 8a290539e2e8629dbc4e6bad948158f790ec31f4
 - name: github.com/PuerkitoBio/urlesc

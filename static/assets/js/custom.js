@@ -12,7 +12,7 @@ jQuery(document).ready(function($){
     
     var searchTerm = $(this).val().toLowerCase();
     
-        $('.apps .app').each(function(){
+        $('.apps .app').each(function() {
             
             if ($(this).filter('[data-search-term *= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) {
                 $(this).show();
@@ -20,6 +20,14 @@ jQuery(document).ready(function($){
                 $(this).hide();
             }
     
+        });
+
+        $('.namespace').each(function() {
+            if ($(this).find(".app").filter(":visible").length == 0) {
+                $(this).find(".namespace-header").hide();
+            } else {
+                $(this).find(".namespace-header").show();
+            }
         });
     
     });

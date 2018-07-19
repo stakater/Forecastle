@@ -131,26 +131,29 @@
 </body>
 
 <script id="app-template" type="text/x-handlebars-template">
-<div>
-<h2 class="mt-4 text-capitalize">{{Namespace}}</h2>
-<hr class="mt-0" />
-<div class="row">
-{{#each Apps}}
-
-    <div class="col-3 app my-2">
-        <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('{{URL}}', '_blank')">    
-        {{#if Icon}}
-            <div class="img-container">
-                <span class="img-cell">
-                    <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
-                </span>
-            </div>
-        {{/if}}
-            <span>{{Name}}</span>
-        </button>
+<div class="namespace">
+    <div class="namespace-header">
+        <h2 class="mt-3 text-capitalize">{{Namespace}}</h2>
+        <hr class="mt-0" />
     </div>
-{{/each}}
-</div>
+    <div class="namespace-content">
+        <div class="row">
+        {{#each Apps}}
+            <div class="col-3 app my-2">
+                <button type="button" class="btn btn-light btn-block btn-float m-0 p-5" onclick="window.open('{{URL}}', '_blank')">    
+                {{#if Icon}}
+                    <div class="img-container">
+                        <span class="img-cell">
+                            <img class="img-fluid mx-auto d-block" src="{{Icon}}" />
+                        </span>
+                    </div>
+                {{/if}}
+                    <span>{{Name}}</span>
+                </button>
+            </div>
+        {{/each}}
+        </div>
+    </div>
 </div>
 </script>
 </html>

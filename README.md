@@ -53,6 +53,7 @@ Forecastle looks for a specific annotations on ingresses.
 
 - List apps found in all namespaces listed in the configmap
 - Search apps
+- Grouped apps per namespace
 
 ## Help
 
@@ -60,6 +61,7 @@ Forecastle looks for a specific annotations on ingresses.
 File a GitHub [issue](https://github.com/stakater/Forecastle/issues), or send us an [email](mailto:stakater@gmail.com).
 
 ### Talk to us on Slack
+
 Join and talk to us on the #tools-imc channel for discussing Forecastle
 
 [![Join Slack](https://stakater.github.io/README/stakater-join-slack-btn.png)](https://stakater-slack.herokuapp.com/)
@@ -95,8 +97,7 @@ Apache2 © [Stakater](http://stakater.com)
 
 ### Why name Forecastle?
 
-Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will 
-act as a control panel and show all your running applications on Kubernetes having a particular annotation.
+Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications on Kubernetes having a particular annotation.
 
 `Forecastle` is maintained by [Stakater][website]. Like it? Please let us know at <hello@stakater.com>
 

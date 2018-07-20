@@ -55,7 +55,7 @@ func TestList_Populate(t *testing.T) {
 
 	ingress := testutil.CreateIngressWithHost("test-ingress", "google.com")
 
-	kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
+	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
 	ingressDefault, _ := kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
 	ingressTesting, _ := kubeClient.ExtensionsV1beta1().Ingresses("testing").Create(ingress)
 
@@ -134,9 +134,9 @@ func TestList_Populate(t *testing.T) {
 		})
 	}
 
-	kubeClient.CoreV1().Namespaces().Delete("testing", &metav1.DeleteOptions{})
-	kubeClient.ExtensionsV1beta1().Ingresses("default").Delete("test-ingress", &metav1.DeleteOptions{})
-	kubeClient.ExtensionsV1beta1().Ingresses("testing").Delete("test-ingress", &metav1.DeleteOptions{})
+	_ = kubeClient.CoreV1().Namespaces().Delete("testing", &metav1.DeleteOptions{})
+	_ = kubeClient.ExtensionsV1beta1().Ingresses("default").Delete("test-ingress", &metav1.DeleteOptions{})
+	_ = kubeClient.ExtensionsV1beta1().Ingresses("testing").Delete("test-ingress", &metav1.DeleteOptions{})
 }
 
 func TestList_Filter(t *testing.T) {

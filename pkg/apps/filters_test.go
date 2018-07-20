@@ -26,7 +26,8 @@ func Test_byIngressClassAnnotation(t *testing.T) {
 		{
 			name: "TestByIngressClassAnnotationWithAnnotation",
 			args: args{
-				ingress: *testutil.AddAnnotationToIngress(testutil.CreateIngress("test-ingress"), IngressClassAnnotation, "internal-ingress"),
+				ingress: *testutil.AddAnnotationToIngress(
+					testutil.CreateIngress("test-ingress"), IngressClassAnnotation, "internal-ingress"),
 			},
 			want: true,
 		},
@@ -59,14 +60,16 @@ func Test_byForecastleExposeAnnotation(t *testing.T) {
 		{
 			name: "TestByForecastleExposeAnnotationWithAnnotationsFalseValue",
 			args: args{
-				ingress: *testutil.AddAnnotationToIngress(testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "false"),
+				ingress: *testutil.AddAnnotationToIngress(
+					testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "false"),
 			},
 			want: false,
 		},
 		{
-			name: "TestByForecastleExposeAnnotationWithAnnotationsTrueValue",
+			name: "TestByForecastleExposeAnnotationWithTrueValue",
 			args: args{
-				ingress: *testutil.AddAnnotationToIngress(testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "true"),
+				ingress: *testutil.AddAnnotationToIngress(
+					testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "true"),
 			},
 			want: true,
 		},

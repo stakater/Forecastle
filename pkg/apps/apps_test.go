@@ -68,7 +68,7 @@ func TestList_Get(t *testing.T) {
 			fields: fields{
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
-					ForecastleApp{
+					{
 						Name:      "app",
 						Icon:      "https://google.com/icon.png",
 						Namespace: "test",
@@ -77,7 +77,7 @@ func TestList_Get(t *testing.T) {
 				},
 			},
 			want: []ForecastleApp{
-				ForecastleApp{
+				{
 					Name:      "app",
 					Icon:      "https://google.com/icon.png",
 					Namespace: "test",
@@ -140,7 +140,7 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 				},
 			},
 			wantApps: []ForecastleApp{
-				ForecastleApp{
+				{
 					Name:      "test-ingress",
 					Namespace: "",
 					Icon:      "https://google.com/icon.png",
@@ -166,9 +166,9 @@ func TestList_Populate(t *testing.T) {
 			testutil.CreateIngressWithHost("test-ingress", "google.com"), ForecastleExposeAnnotation, "true"),
 		IngressClassAnnotation, "ingress")
 
-	kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
-	kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
-	kubeClient.ExtensionsV1beta1().Ingresses("testing").Create(ingress)
+	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
+	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
+	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("testing").Create(ingress)
 
 	type fields struct {
 		kubeClient kubernetes.Interface
@@ -195,12 +195,12 @@ func TestList_Populate(t *testing.T) {
 			want: &List{
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
-					ForecastleApp{
+					{
 						Name:      "test-ingress",
 						Namespace: "default",
 						URL:       "http://google.com",
 					},
-					ForecastleApp{
+					{
 						Name:      "test-ingress",
 						Namespace: "testing",
 						URL:       "http://google.com",
@@ -219,12 +219,12 @@ func TestList_Populate(t *testing.T) {
 			want: &List{
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
-					ForecastleApp{
+					{
 						Name:      "test-ingress",
 						Namespace: "default",
 						URL:       "http://google.com",
 					},
-					ForecastleApp{
+					{
 						Name:      "test-ingress",
 						Namespace: "testing",
 						URL:       "http://google.com",
@@ -243,7 +243,7 @@ func TestList_Populate(t *testing.T) {
 			want: &List{
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
-					ForecastleApp{
+					{
 						Name:      "test-ingress",
 						Namespace: "testing",
 						URL:       "http://google.com",
@@ -265,7 +265,7 @@ func TestList_Populate(t *testing.T) {
 		})
 	}
 
-	kubeClient.CoreV1().Namespaces().Delete("testing", &metav1.DeleteOptions{})
-	kubeClient.ExtensionsV1beta1().Ingresses("default").Delete("test-ingress", &metav1.DeleteOptions{})
-	kubeClient.ExtensionsV1beta1().Ingresses("testing").Delete("test-ingress", &metav1.DeleteOptions{})
+	_ = kubeClient.CoreV1().Namespaces().Delete("testing", &metav1.DeleteOptions{})
+	_ = kubeClient.ExtensionsV1beta1().Ingresses("default").Delete("test-ingress", &metav1.DeleteOptions{})
+	_ = kubeClient.ExtensionsV1beta1().Ingresses("testing").Delete("test-ingress", &metav1.DeleteOptions{})
 }

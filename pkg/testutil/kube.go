@@ -24,7 +24,7 @@ func CreateIngressWithNamespace(name string, namespace string) *v1beta1.Ingress 
 func CreateIngressWithHost(name string, url string) *v1beta1.Ingress {
 	ingress := CreateIngress(name)
 	ingress.Spec.Rules = []v1beta1.IngressRule{
-		v1beta1.IngressRule{
+		{
 			Host: url,
 		},
 	}
@@ -46,7 +46,7 @@ func CreateIngressWithHostAndSubPath(name string, url string, subpath string, po
 	ingress := CreateIngressWithHost(name, url)
 	ingress.Spec.Rules[0].HTTP = &v1beta1.HTTPIngressRuleValue{
 		Paths: []v1beta1.HTTPIngressPath{
-			v1beta1.HTTPIngressPath{
+			{
 				Backend: v1beta1.IngressBackend{
 					ServicePort: intstr.FromString(port),
 				},
@@ -61,7 +61,7 @@ func CreateIngressWithHostAndSubPath(name string, url string, subpath string, po
 func CreateIngressWithTLSHost(name string, tlsurl string) *v1beta1.Ingress {
 	ingress := CreateIngress(name)
 	ingress.Spec.TLS = []v1beta1.IngressTLS{
-		v1beta1.IngressTLS{
+		{
 			Hosts: []string{
 				tlsurl,
 			},
@@ -74,7 +74,7 @@ func CreateIngressWithTLSHost(name string, tlsurl string) *v1beta1.Ingress {
 func CreateIngressWithHostAndTLSHost(name string, host string, tlsurl string) *v1beta1.Ingress {
 	ingress := CreateIngressWithHost(name, host)
 	ingress.Spec.TLS = []v1beta1.IngressTLS{
-		v1beta1.IngressTLS{
+		{
 			Hosts: []string{
 				tlsurl,
 			},

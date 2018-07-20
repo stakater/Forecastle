@@ -17,7 +17,11 @@ func FileHandler(responseWriter http.ResponseWriter, request *http.Request) {
 			return
 		}
 
-		responseWriter.Write([]byte(fileContents))
+		_, err = responseWriter.Write(fileContents)
+		if err != nil {
+			logger.Error("An error occurred while rendering contents to output: ", err)
+			http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		}
 	} else {
 		errorString := "No file path specified"
 

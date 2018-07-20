@@ -48,5 +48,9 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 	responseWriter.Header().Set("Content-Type", "application/json")
-	responseWriter.Write(js)
+	_, err = responseWriter.Write(js)
+	if err != nil {
+		logger.Error("An error occurred while rendering json to output: ", err)
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+	}
 }

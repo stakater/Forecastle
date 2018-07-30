@@ -23,7 +23,7 @@ You can deploy Forecastle both using vanilla k8s manifests or helm charts.
 #### Step 1: You can apply vanilla manifests by running the following command
 
 ```bash
-kubecl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
+kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
 ```
 
 #### Step 2: Update configmap

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
 {{- if .Values.forecastle.proxy.enabled }}
   annotations:
-    configmap.fabric8.io/update-on-change: "keycloak-proxy"
+    configmap.reloader.stakater.com/reload: "keycloak-proxy"
 {{- end }}
   labels:
 {{ include "labels.stakater" . | indent 4 }}

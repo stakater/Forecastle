@@ -1,4 +1,4 @@
-# Forecastle
+# ![](assets/web/forecastle-round-100px.png) Forecastle
 
 [![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](http://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 

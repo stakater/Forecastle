@@ -43,6 +43,13 @@ jQuery(document).ready(function($){
                 type: "GET",
                 success: populateAppsListFromJson
             });
+        },
+        failure: function() {
+            $.ajax({
+                url: "/apps?namespaces=",
+                type: "GET",
+                success: populateAppsListFromJson
+            })
         }
     });
 

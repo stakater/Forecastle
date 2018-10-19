@@ -5,17 +5,10 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+{{- if .Values.forecastle.service.annotations }}
     annotations:
-      fabric8.io/ingress.path: {{ .Values.forecastle.service.ingressPath }}
-      fabric8.io/ingress.annotations: |-
-        ingress.kubernetes.io/rewrite-target: {{ .Values.forecastle.service.rewriteTarget }}
-        ingress.kubernetes.io/force-ssl-redirect: {{ .Values.forecastle.service.forceSslRedirect }}
-        kubernetes.io/ingress.class: {{ .Values.forecastle.service.ingressClass }}
-        {{- with .Values.forecastle.service.annotations }}
-        {{- range $key, $value := . }}
-        {{ $key }}: {{ $value }}
-        {{- end }}
-        {{- end }}
+{{ toYaml .Values.forecastle.service.annotations | indent 6 }}
+{{- end }}
     labels:
 {{ include "labels.stakater" . | indent 6 }}
 {{ include "labels.chart" . | indent 6 }}

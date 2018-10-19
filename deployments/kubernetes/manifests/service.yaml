@@ -8,17 +8,23 @@ items:
   kind: Service
   metadata:
     annotations:
-      fabric8.io/ingress.path: /
-      fabric8.io/ingress.annotations: |-
+      config.xposer.stakater.com/Domain: stackator.com
+      config.xposer.stakater.com/IngressNameTemplate: -
+      config.xposer.stakater.com/IngressURLPath: /
+      config.xposer.stakater.com/IngressURLTemplate: ..
+      config.xposer.stakater.com/TLS: "true"
+      xposer.stakater.com/annotations: |-
+        kubernetes.io/ingress.class: internal-ingress
         ingress.kubernetes.io/rewrite-target: /
         ingress.kubernetes.io/force-ssl-redirect: false
-        kubernetes.io/ingress.class: internal-ingress
+        certmanager.k8s.io/cluster-issuer: letsencrypt-production
+      
     labels:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "1.0.5"
-      chart: "forecastle-1.0.5"
+      version: "1.0.6"
+      chart: "forecastle-1.0.6"
       release: "RELEASE-NAME"
       heritage: "Tiller"
       expose: "true"

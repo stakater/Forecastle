@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.5"
+    version: "1.0.6"
   namespace: default
   image:
     name: stakater/forecastle
-    tag: "1.0.5"
+    tag: "1.0.6"
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
@@ -24,8 +24,8 @@ forecastle:
     annotations:
       config.xposer.stakater.com/IngressURLPath: /
       config.xposer.stakater.com/Domain: stackator.com
-      config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
-      config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
+      config.xposer.stakater.com/IngressNameTemplate: '<no value>-<no value>'
+      config.xposer.stakater.com/IngressURLTemplate: '<no value>.<no value>.<no value>'
       config.xposer.stakater.com/TLS: "true"
       xposer.stakater.com/annotations: |-
         kubernetes.io/ingress.class: internal-ingress

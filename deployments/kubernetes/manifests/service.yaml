@@ -9,9 +9,9 @@ items:
   metadata:
     annotations:
       config.xposer.stakater.com/Domain: stackator.com
-      config.xposer.stakater.com/IngressNameTemplate: -
+      config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
       config.xposer.stakater.com/IngressURLPath: /
-      config.xposer.stakater.com/IngressURLTemplate: ..
+      config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
       config.xposer.stakater.com/TLS: "true"
       xposer.stakater.com/annotations: |-
         kubernetes.io/ingress.class: internal-ingress
@@ -23,8 +23,8 @@ items:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "1.0.8"
-      chart: "forecastle-1.0.8"
+      version: "1.0.9"
+      chart: "forecastle-1.0.9"
       release: "RELEASE-NAME"
       heritage: "Tiller"
       expose: "true"

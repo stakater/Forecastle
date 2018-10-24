@@ -24,8 +24,8 @@ forecastle:
     annotations:
       config.xposer.stakater.com/IngressURLPath: /
       config.xposer.stakater.com/Domain: stackator.com
-      config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
-      config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
+      config.xposer.stakater.com/IngressNameTemplate: {{ `{{.Service}}-{{.Namespace}}` }}
+      config.xposer.stakater.com/IngressURLTemplate: {{ `{{.Service}}.{{.Namespace}}.{{.Domain}}` }}
       config.xposer.stakater.com/TLS: "true"
       xposer.stakater.com/annotations: |-
         kubernetes.io/ingress.class: internal-ingress

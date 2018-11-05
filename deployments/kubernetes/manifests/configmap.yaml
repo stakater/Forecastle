@@ -8,14 +8,12 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.9"
-    chart: "forecastle-1.0.9"
+    version: "1.0.10"
+    chart: "forecastle-1.0.10"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 data:
   config.yaml: |-
     namespaces:
-    - tools
-    - cp
-    - cicd-tools
-    - ocp-supporting-services
+    - stakater
+    

@@ -44,7 +44,7 @@ func (al *List) Get() ([]ForecastleApp, error) {
 
 func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []ForecastleApp) {
 	for _, ingress := range ingresses {
-		wrapper := wrappers.NewIngressWrapper(&ingress)
+		wrapper := wrappers.NewIngressWrapper(&ingress, ForecastleAppNameAnnotation)
 		apps = append(apps, ForecastleApp{
 			Name:      wrapper.GetName(),
 			Namespace: wrapper.GetNamespace(),

@@ -7,4 +7,6 @@ const (
 	ForecastleIconAnnotation = "forecastle.stakater.com/icon"
 	// ForecastleExposeAnnotation const used for checking whether an ingress is exposed to forecastle
 	ForecastleExposeAnnotation = "forecastle.stakater.com/expose"
+	// ForecastleAppNameAnnotation const used for overriding the name of the app
+	ForecastleAppNameAnnotation = "forecastle.stakater.com/appName"
 )

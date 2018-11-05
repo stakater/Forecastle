@@ -32,25 +32,10 @@ jQuery(document).ready(function($){
     
     });
 
-    var namespacesFilePath = "/etc/cp-config/namespaces.conf";
-
     $.ajax({
-        url: "/file?path=" + namespacesFilePath,
+        url: "/apps",
         type: "GET",
-        success: function(namespaces) {
-            $.ajax({
-                url: "/apps?namespaces=" + namespaces,
-                type: "GET",
-                success: populateAppsListFromJson
-            });
-        },
-        failure: function() {
-            $.ajax({
-                url: "/apps?namespaces=",
-                type: "GET",
-                success: populateAppsListFromJson
-            })
-        }
+        success: populateAppsListFromJson
     });
 
     function initSearch() {

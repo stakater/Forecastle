@@ -3,11 +3,11 @@ import:
 - package: github.com/gorilla/mux
   version: v1.6.2
 - package: k8s.io/api
-  version: kubernetes-1.8.0
+  version: kubernetes-1.9.1
 - package: k8s.io/apimachinery
-  version: kubernetes-1.8.0
+  version: kubernetes-1.9.1
 - package: k8s.io/client-go
-  version: 5.0.0
+  version: kubernetes-1.9.1
 - package: github.com/sirupsen/logrus
   version: v1.0.5
 - package: github.com/onrik/logrus
@@ -17,3 +17,5 @@ import:
   version: v1.11.1
 - package: github.com/pkg/errors
   version: v0.8.0
+- package: github.com/spf13/viper
+  version: v1.2.1

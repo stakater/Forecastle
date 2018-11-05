@@ -30,7 +30,7 @@ spec:
         name: {{ template "name" . }}
         volumeMounts:
         - name: {{ template "name" . }}-config
-          mountPath: /etc/cp-config
+          mountPath: /etc/forecastle
     {{- if .Values.forecastle.proxy.enabled }}
       - name: proxy
         image: "{{ .Values.forecastle.proxy.image.name }}:{{ .Values.forecastle.proxy.image.tag }}"

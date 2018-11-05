@@ -13,4 +13,9 @@ metadata:
     release: "RELEASE-NAME"
     heritage: "Tiller"
 data:
-  namespaces.conf: stakater
+  config.yaml: |-
+    namespaces:
+    - tools
+    - cp
+    - cicd-tools
+    - ocp-supporting-services

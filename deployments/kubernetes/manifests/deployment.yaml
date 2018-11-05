@@ -37,7 +37,7 @@ spec:
         name: forecastle
         volumeMounts:
         - name: forecastle-config
-          mountPath: /etc/cp-config      
+          mountPath: /etc/forecastle
       volumes:      
       - name: forecastle-config
         configMap: 

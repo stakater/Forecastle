@@ -6,4 +6,5 @@ metadata:
 {{ include "labels.stakater" . | indent 4 }}
 {{ include "labels.chart" . | indent 4 }}
 data:
-  namespaces.conf: {{ .Values.forecastle.config.namespaces }}
+  config.yaml: |-
+{{ toYaml .Values.forecastle.config | indent 4 }}

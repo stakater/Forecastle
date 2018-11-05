@@ -11,13 +11,15 @@ var (
 
 // IngressWrapper struct wraps a kubernetes ingress object
 type IngressWrapper struct {
-	ingress *v1beta1.Ingress
+	ingress           *v1beta1.Ingress
+	appNameAnnotation string
 }
 
 // NewIngressWrapper func creates an instance of IngressWrapper
-func NewIngressWrapper(ingress *v1beta1.Ingress) *IngressWrapper {
+func NewIngressWrapper(ingress *v1beta1.Ingress, appNameAnnotation string) *IngressWrapper {
 	return &IngressWrapper{
-		ingress: ingress,
+		ingress:           ingress,
+		appNameAnnotation: appNameAnnotation,
 	}
 }
 
@@ -31,6 +33,9 @@ func (iw *IngressWrapper) GetAnnotationValue(annotationKey string) string {
 
 // GetName func extracts name of the ingress wrapped by the object
 func (iw *IngressWrapper) GetName() string {
+	if nameFromAnnotation := iw.GetAnnotationValue(iw.appNameAnnotation); nameFromAnnotation != "" {
+		return nameFromAnnotation
+	}
 	return iw.ingress.ObjectMeta.Name
 }
 

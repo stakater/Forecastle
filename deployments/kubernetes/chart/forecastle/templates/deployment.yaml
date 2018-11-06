@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-{{- if .Values.forecastle.proxy.enabled }}
+{{- if .Values.forecastle.deployment.annotations }}
   annotations:
-    configmap.reloader.stakater.com/reload: "keycloak-proxy"
+{{ toYaml .Values.forecastle.deployment.annotations | indent 4 }}
 {{- end }}
   labels:
 {{ include "labels.stakater" . | indent 4 }}

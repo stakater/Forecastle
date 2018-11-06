@@ -31,26 +31,10 @@ spec:
         volumeMounts:
         - name: {{ template "name" . }}-config
           mountPath: /etc/forecastle
-    {{- if .Values.forecastle.proxy.enabled }}
-      - name: proxy
-        image: "{{ .Values.forecastle.proxy.image.name }}:{{ .Values.forecastle.proxy.image.tag }}"
-        args:
-        - --config={{ .Values.forecastle.proxy.args.config }}
-        - --upstream-url={{ .Values.forecastle.proxy.args.upstreamUrl }}        
-        volumeMounts:
-        - name: keycloak-proxy-config
-          mountPath: /etc/config
+    {{- if not .Values.forecastle.proxy.enabled }}
       volumes:
-      - name: keycloak-proxy-config
-        configMap:
-          name: keycloak-proxy
-      - name: {{ template "name" . }}-config
-        configMap: 
-          name: {{ template "name" . }}
-    {{- else }}      
-      volumes:      
       - name: {{ template "name" . }}-config
         configMap: 
           name: {{ template "name" . }}
     {{- end }}
-      serviceAccountName: {{ template "name" . }}      
+      serviceAccountName: {{ template "name" . }}

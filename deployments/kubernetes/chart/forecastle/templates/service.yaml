@@ -19,10 +19,6 @@ items:
     - name: http
       port: 80
       protocol: TCP
-{{- if .Values.forecastle.proxy.enabled }}
-      targetPort: 80
-{{- else }}
       targetPort: 3000
-{{- end }}
     selector:
 {{ include "labels.selector" . | indent 6 }}

@@ -10,17 +10,17 @@ forecastle:
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
+    annotations:
+      authproxy.stakater.com/enabled: "{{ .Values.forecastle.proxy.enabled }}"
+      authproxy.stakater.com/upstream-url: "http://127.0.0.1:3000"
+      authproxy.stakater.com/source-service-name: '{{.Service}}'
+      authproxy.stakater.com/redirection-url: 'https://{{.Service}}.{{.Domain}}'
+      authproxy.stakater.com/listen: "0.0.0.0:80"
   config:
     namespaces:
     - stakater
   proxy:
     enabled: false
-    image:
-      name: quay.io/gambol99/keycloak-proxy
-      tag: v2.1.1
-    args:
-      config: /etc/config/config.yml
-      upstreamUrl: http://100.1.0.0:1234
   service:
     annotations:
       config.xposer.stakater.com/IngressURLPath: "/"

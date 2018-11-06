@@ -11,6 +11,8 @@ forecastle:
     replicas: 1
     revisionHistoryLimit: 2
     annotations:
+      authproxy.stakater.com/image-name: quay.io/gambol99/keycloak-proxy
+      authproxy.stakater.com/image-tag: v2.1.1
       authproxy.stakater.com/enabled: "{{ .Values.forecastle.proxy.enabled }}"
       authproxy.stakater.com/upstream-url: "http://127.0.0.1:3000"
       authproxy.stakater.com/source-service-name: '{{.Service}}'

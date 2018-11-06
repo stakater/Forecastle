@@ -3,12 +3,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  annotations:
+    authproxy.stakater.com/enabled: "true"
+    authproxy.stakater.com/listen: 0.0.0.0:80
+    authproxy.stakater.com/redirection-url: https://.
+    authproxy.stakater.com/source-service-name: 
+    authproxy.stakater.com/upstream-url: http://127.0.0.1:3000
+    
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
-    chart: "forecastle-1.0.11"
+    version: "1.0.12"
+    chart: "forecastle-1.0.12"
     release: "RELEASE-NAME"
     heritage: "Tiller"
   name: forecastle
@@ -33,16 +40,16 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:1.0.11"
+        image: "stakater/forecastle:1.0.12"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
-          mountPath: /etc/forecastle      
-      volumes:      
+          mountPath: /etc/forecastle
+      volumes:
       - name: forecastle-config
         configMap: 
           name: forecastle
-      serviceAccountName: forecastle      
+      serviceAccountName: forecastle
 
 ---
 # Source: forecastle/templates/rbac.yaml
@@ -53,8 +60,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
-    chart: "forecastle-1.0.11"
+    version: "1.0.12"
+    chart: "forecastle-1.0.12"
     release: "RELEASE-NAME"
     heritage: "Tiller"
   name: forecastle
@@ -67,8 +74,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
-    chart: "forecastle-1.0.11"
+    version: "1.0.12"
+    chart: "forecastle-1.0.12"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 rules:
@@ -84,8 +91,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
-    chart: "forecastle-1.0.11"
+    version: "1.0.12"
+    chart: "forecastle-1.0.12"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 roleRef:
@@ -121,8 +128,8 @@ items:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "1.0.11"
-      chart: "forecastle-1.0.11"
+      version: "1.0.12"
+      chart: "forecastle-1.0.12"
       release: "RELEASE-NAME"
       heritage: "Tiller"
       expose: "true"
@@ -148,8 +155,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
-    chart: "forecastle-1.0.11"
+    version: "1.0.12"
+    chart: "forecastle-1.0.12"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 data:

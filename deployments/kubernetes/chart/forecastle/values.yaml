@@ -2,21 +2,19 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.11"
+    version: "1.0.12"
   namespace: default
   image:
     name: stakater/forecastle
-    tag: "1.0.11"
+    tag: "1.0.12"
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
     annotations:
-      authproxy.stakater.com/image-name: quay.io/gambol99/keycloak-proxy
-      authproxy.stakater.com/image-tag: v2.1.1
-      authproxy.stakater.com/enabled: "{{ .Values.forecastle.proxy.enabled }}"
+      authproxy.stakater.com/enabled: "true"
       authproxy.stakater.com/upstream-url: "http://127.0.0.1:3000"
-      authproxy.stakater.com/source-service-name: '{{.Service}}'
-      authproxy.stakater.com/redirection-url: 'https://{{.Service}}.{{.Domain}}'
+      authproxy.stakater.com/source-service-name: '<no value>'
+      authproxy.stakater.com/redirection-url: 'https://<no value>.<no value>'
       authproxy.stakater.com/listen: "0.0.0.0:80"
   config:
     namespaces:

@@ -31,10 +31,8 @@ spec:
         volumeMounts:
         - name: {{ template "name" . }}-config
           mountPath: /etc/forecastle
-    {{- if not .Values.forecastle.proxy.enabled }}
       volumes:
       - name: {{ template "name" . }}-config
         configMap: 
           name: {{ template "name" . }}
-    {{- end }}
       serviceAccountName: {{ template "name" . }}

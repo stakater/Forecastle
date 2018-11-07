@@ -23,8 +23,8 @@ items:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "1.0.13"
-      chart: "forecastle-1.0.13"
+      version: "1.0.14"
+      chart: "forecastle-1.0.14"
       release: "RELEASE-NAME"
       heritage: "Tiller"
       expose: "true"

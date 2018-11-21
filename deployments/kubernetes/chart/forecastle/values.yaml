@@ -31,6 +31,6 @@ forecastle:
       xposer.stakater.com/annotations: |-
         kubernetes.io/ingress.class: internal-ingress
         ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: false
+        ingress.kubernetes.io/force-ssl-redirect: true
         certmanager.k8s.io/cluster-issuer: letsencrypt-production
     expose: "true"

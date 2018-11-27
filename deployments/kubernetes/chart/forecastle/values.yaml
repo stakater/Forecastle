@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "1.0.14"
+    version: "1.0.15"
   namespace: default
   image:
     name: stakater/forecastle
-    tag: "1.0.14"
+    tag: "1.0.15"
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
@@ -31,6 +31,6 @@ forecastle:
       xposer.stakater.com/annotations: |-
         kubernetes.io/ingress.class: internal-ingress
         ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: true
+        ingress.kubernetes.io/force-ssl-redirect: false
         certmanager.k8s.io/cluster-issuer: letsencrypt-production
     expose: "true"

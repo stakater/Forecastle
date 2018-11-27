@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "name" . }}
+  name: {{ template "forecastle.name" . }}
   labels:
-{{ include "labels.stakater" . | indent 4 }}
-{{ include "labels.chart" . | indent 4 }}
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
 data:
   config.yaml: |-
 {{ toYaml .Values.forecastle.config | indent 4 }}

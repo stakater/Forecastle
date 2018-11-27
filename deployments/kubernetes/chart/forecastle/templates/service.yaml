@@ -10,10 +10,10 @@ items:
 {{ toYaml .Values.forecastle.service.annotations | indent 6 }}
 {{- end }}
     labels:
-{{ include "labels.stakater" . | indent 6 }}
-{{ include "labels.chart" . | indent 6 }}
+{{ include "forecastle.labels.stakater" . | indent 6 }}
+{{ include "forecastle.labels.chart" . | indent 6 }}
       expose: "{{ .Values.forecastle.service.expose }}"
-    name: {{ template "name" . }}
+    name: {{ template "forecastle.name" . }}
   spec:
     ports:
     - name: http
@@ -21,4 +21,4 @@ items:
       protocol: TCP
       targetPort: 3000
     selector:
-{{ include "labels.selector" . | indent 6 }}
+{{ include "forecastle.labels.selector" . | indent 6 }}

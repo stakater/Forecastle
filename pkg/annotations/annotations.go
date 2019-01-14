@@ -1,4 +1,4 @@
-package apps
+package annotations
 
 const (
 	// IngressClassAnnotation const used for checking ingress class

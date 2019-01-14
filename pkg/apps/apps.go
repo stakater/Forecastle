@@ -1,6 +1,7 @@
 package apps
 
 import (
+	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/kube/lists/ingresses"
 	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	"k8s.io/api/extensions/v1beta1"
@@ -44,12 +45,12 @@ func (al *List) Get() ([]ForecastleApp, error) {
 
 func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []ForecastleApp) {
 	for _, ingress := range ingresses {
-		wrapper := wrappers.NewIngressWrapper(&ingress, ForecastleAppNameAnnotation)
+		wrapper := wrappers.NewIngressWrapper(&ingress)
 		apps = append(apps, ForecastleApp{
-			Name:      wrapper.GetName(),
-			Namespace: wrapper.GetNamespace(),
-			Icon:      wrapper.GetAnnotationValue(ForecastleIconAnnotation),
-			URL:       wrapper.GetURL(),
+			Name:  wrapper.GetName(),
+			Group: wrapper.GetNamespace(),
+			Icon:  wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
+			URL:   wrapper.GetURL(),
 		})
 	}
 	return

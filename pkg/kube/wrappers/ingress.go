@@ -1,6 +1,7 @@
 package wrappers
 
 import (
+	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -16,10 +17,9 @@ type IngressWrapper struct {
 }
 
 // NewIngressWrapper func creates an instance of IngressWrapper
-func NewIngressWrapper(ingress *v1beta1.Ingress, appNameAnnotation string) *IngressWrapper {
+func NewIngressWrapper(ingress *v1beta1.Ingress) *IngressWrapper {
 	return &IngressWrapper{
-		ingress:           ingress,
-		appNameAnnotation: appNameAnnotation,
+		ingress: ingress,
 	}
 }
 
@@ -33,7 +33,7 @@ func (iw *IngressWrapper) GetAnnotationValue(annotationKey string) string {
 
 // GetName func extracts name of the ingress wrapped by the object
 func (iw *IngressWrapper) GetName() string {
-	if nameFromAnnotation := iw.GetAnnotationValue(iw.appNameAnnotation); nameFromAnnotation != "" {
+	if nameFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleAppNameAnnotation); nameFromAnnotation != "" {
 		return nameFromAnnotation
 	}
 	return iw.ingress.ObjectMeta.Name

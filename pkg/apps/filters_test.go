@@ -3,6 +3,7 @@ package apps
 import (
 	"testing"
 
+	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -27,7 +28,7 @@ func Test_byIngressClassAnnotation(t *testing.T) {
 			name: "TestByIngressClassAnnotationWithAnnotation",
 			args: args{
 				ingress: *testutil.AddAnnotationToIngress(
-					testutil.CreateIngress("test-ingress"), IngressClassAnnotation, "internal-ingress"),
+					testutil.CreateIngress("test-ingress"), annotations.IngressClassAnnotation, "internal-ingress"),
 			},
 			want: true,
 		},
@@ -61,7 +62,7 @@ func Test_byForecastleExposeAnnotation(t *testing.T) {
 			name: "TestByForecastleExposeAnnotationWithAnnotationsFalseValue",
 			args: args{
 				ingress: *testutil.AddAnnotationToIngress(
-					testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "false"),
+					testutil.CreateIngress("test-ingress"), annotations.ForecastleExposeAnnotation, "false"),
 			},
 			want: false,
 		},
@@ -69,7 +70,7 @@ func Test_byForecastleExposeAnnotation(t *testing.T) {
 			name: "TestByForecastleExposeAnnotationWithTrueValue",
 			args: args{
 				ingress: *testutil.AddAnnotationToIngress(
-					testutil.CreateIngress("test-ingress"), ForecastleExposeAnnotation, "true"),
+					testutil.CreateIngress("test-ingress"), annotations.ForecastleExposeAnnotation, "true"),
 			},
 			want: true,
 		},

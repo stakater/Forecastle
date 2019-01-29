@@ -97,8 +97,10 @@ func (iw *IngressWrapper) getHost() string {
 func (iw *IngressWrapper) getIngressSubPathWithPort() string {
 	port := iw.getIngressPort()
 	subPath := iw.getIngressSubPath()
+	logrus.Infof("Port: %v", port)
+	logrus.Infof("subPath: %v", subPath)
 
-	return port + subPath
+	return subPath
 }
 
 func (iw *IngressWrapper) getIngressPort() string {

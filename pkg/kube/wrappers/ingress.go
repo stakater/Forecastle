@@ -104,6 +104,8 @@ func (iw *IngressWrapper) getIngressPort() string {
 	rule := iw.ingress.Spec.Rules[0]
 	if rule.HTTP != nil {
 		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
+			logger.Info("In IngressPort()")
+			logger.Info("Port Str value: %v", rule.HTTP.Paths[0].Backend.ServicePort.StrVal)
 			return rule.HTTP.Paths[0].Backend.ServicePort.StrVal
 		}
 	}

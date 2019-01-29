@@ -1,6 +1,7 @@
 package wrappers
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -104,8 +105,8 @@ func (iw *IngressWrapper) getIngressPort() string {
 	rule := iw.ingress.Spec.Rules[0]
 	if rule.HTTP != nil {
 		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
-			logger.Infof("In IngressPort()")
-			logger.Infof("Port Str value: %v", rule.HTTP.Paths[0].Backend.ServicePort.StrVal)
+			logrus.Infof("In IngressPort()")
+			logrus.Infof("Port Str value: %v", rule.HTTP.Paths[0].Backend.ServicePort.StrVal)
 			return rule.HTTP.Paths[0].Backend.ServicePort.StrVal
 		}
 	}

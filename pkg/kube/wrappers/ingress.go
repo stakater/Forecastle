@@ -94,20 +94,11 @@ func (iw *IngressWrapper) getHost() string {
 }
 
 func (iw *IngressWrapper) getIngressSubPathWithPort() string {
-	port := iw.getIngressPort()
 	subPath := iw.getIngressSubPath()
-
-	return port + subPath
-}
-
-func (iw *IngressWrapper) getIngressPort() string {
-	rule := iw.ingress.Spec.Rules[0]
-	if rule.HTTP != nil {
-		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
-			return rule.HTTP.Paths[0].Backend.ServicePort.StrVal
-		}
-	}
-	return ""
+	name := iw.GetName()
+	namespace := iw.GetNamespace()
+	logger.Infof("Adding ingress with Name %v in Namespace %v and SubPath: %v", name, namespace, subPath)
+	return subPath
 }
 
 func (iw *IngressWrapper) getIngressSubPath() string {

@@ -369,7 +369,7 @@ func TestIngressWrapper_getIngressSubPathWithPort(t *testing.T) {
 			fields: fields{
 				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", "123"),
 			},
-			want: "123/test",
+			want: "/test",
 		},
 	}
 	for _, tt := range tests {
@@ -379,42 +379,6 @@ func TestIngressWrapper_getIngressSubPathWithPort(t *testing.T) {
 			}
 			if got := iw.getIngressSubPathWithPort(); got != tt.want {
 				t.Errorf("IngressWrapper.getIngressSubPathWithPort() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIngressWrapper_getIngressPort(t *testing.T) {
-	type fields struct {
-		ingress *v1beta1.Ingress
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		{
-			name: "IngressWithoutPort",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
-			},
-			want: "",
-		},
-		{
-			name: "IngressWithPort",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "", "123"),
-			},
-			want: "123",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			iw := &IngressWrapper{
-				ingress: tt.fields.ingress,
-			}
-			if got := iw.getIngressPort(); got != tt.want {
-				t.Errorf("IngressWrapper.getIngressPort() = %v, want %v", got, tt.want)
 			}
 		})
 	}

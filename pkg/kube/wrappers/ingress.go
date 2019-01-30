@@ -1,7 +1,6 @@
 package wrappers
 
 import (
-	"github.com/sirupsen/logrus"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -95,24 +94,11 @@ func (iw *IngressWrapper) getHost() string {
 }
 
 func (iw *IngressWrapper) getIngressSubPathWithPort() string {
-	port := iw.getIngressPort()
 	subPath := iw.getIngressSubPath()
-	logrus.Infof("Port: %v", port)
-	logrus.Infof("subPath: %v", subPath)
-
+	name := iw.GetName()
+	namespace := iw.GetNamespace()
+	logger.Infof("Adding ingress with Name %v in Namespace %v and SubPath: %v", name, namespace, subPath)
 	return subPath
-}
-
-func (iw *IngressWrapper) getIngressPort() string {
-	rule := iw.ingress.Spec.Rules[0]
-	if rule.HTTP != nil {
-		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
-			logrus.Infof("In IngressPort()")
-			logrus.Infof("Port Str value: %v", rule.HTTP.Paths[0].Backend.ServicePort.StrVal)
-			return rule.HTTP.Paths[0].Backend.ServicePort.StrVal
-		}
-	}
-	return ""
 }
 
 func (iw *IngressWrapper) getIngressSubPath() string {

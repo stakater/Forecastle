@@ -1,5 +1,5 @@
 hash: 17329f7f85fc6a7a3029086b63b50437f1ef75fc7f5453043d24c6ed1307ac4f
-updated: 2018-10-24T11:37:52.581859412+05:00
+updated: 2019-01-30T19:50:20.266282+01:00
 imports:
 - name: github.com/emicklei/go-restful
   version: ff4f55a206334ef123e4f79bbf348980da81ca46
@@ -73,7 +73,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 5b9ff866471762aa2ab2dced63c9fb6f53921342
 - name: github.com/magiconair/properties
-  version: c2353362d570a7bfa228149c62842019201cfb71
+  version: 7757cc9fdb852f7579b24170bcacda2c7471bb6a
 - name: github.com/mailru/easyjson
   version: 2f5df55504ebc322e4d52d34df6a1f5b503bf26d
   subpackages:
@@ -81,13 +81,13 @@ imports:
   - jlexer
   - jwriter
 - name: github.com/mitchellh/mapstructure
-  version: 3536a929edddb9a5b34bd6861dc4a9647cb459fe
+  version: bb74f1db0675b241733089d5a1faa5dd8b0ef57b
 - name: github.com/onrik/logrus
-  version: c9849815bc7c2abf20d58e4bc06c242198ebb741
+  version: 05335c5abaa99d4c7a3f36df162b483106ef38a8
   subpackages:
   - filename
 - name: github.com/pelletier/go-toml
-  version: 81a861c69d25a841d0c4394f0e6f84bc8c5afae0
+  version: 27c6b39a135b7dc87a14afb068809132fb7a9a8f
 - name: github.com/peterbourgon/diskv
   version: 5f041e8faa004a95c88a202771f4cc3e991971e6
 - name: github.com/pkg/errors
@@ -99,15 +99,15 @@ imports:
 - name: github.com/sirupsen/logrus
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
 - name: github.com/spf13/afero
-  version: d40851caa0d747393da1ffb28f7f9d8b4eeffebd
+  version: f4711e4db9e9a1d3887343acb72b2bbfc2f686f5
   subpackages:
   - mem
 - name: github.com/spf13/cast
-  version: efb632f0f61348654b631fd11da5ff457a5ca2ef
+  version: 8c9545af88b134710ab1cd196795e7f2388358d7
 - name: github.com/spf13/jwalterweatherman
-  version: 103a6da826d08544f49833dabd4f1cdf8a1038bb
+  version: 94f6ae3ed3bceceafa716478c5fbf8d29ca601a1
 - name: github.com/spf13/pflag
-  version: 9ff6c6923cfffbcd502984b8e0c80539a94968b7
+  version: 583c0c0531f06d5278b7d917446061adc344b5cd
 - name: github.com/spf13/viper
   version: 2c12c60302a5a0e62ee102ca9bc996277c2f64f5
 - name: golang.org/x/crypto
@@ -143,7 +143,7 @@ imports:
 - name: gopkg.in/inf.v0
   version: 3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4
 - name: gopkg.in/yaml.v2
-  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 - name: k8s.io/api
   version: 006a217681ae70cbacdd66a5e2fca1a61a8ff28e
   subpackages:

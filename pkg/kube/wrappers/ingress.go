@@ -12,8 +12,7 @@ var (
 
 // IngressWrapper struct wraps a kubernetes ingress object
 type IngressWrapper struct {
-	ingress           *v1beta1.Ingress
-	appNameAnnotation string
+	ingress *v1beta1.Ingress
 }
 
 // NewIngressWrapper func creates an instance of IngressWrapper
@@ -42,6 +41,14 @@ func (iw *IngressWrapper) GetName() string {
 // GetNamespace func extracts namespace of the ingress wrapped by the object
 func (iw *IngressWrapper) GetNamespace() string {
 	return iw.ingress.ObjectMeta.Namespace
+}
+
+// GetGroup func extracts group name from the ingress
+func (iw *IngressWrapper) GetGroup() string {
+	if groupFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleGroupAnnotation); groupFromAnnotation != "" {
+		return groupFromAnnotation
+	}
+	return iw.GetNamespace()
 }
 
 // GetURL func extracts url of the ingress wrapped by the object

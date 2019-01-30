@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stakater/Forecastle/pkg/annotations"
+
 	"github.com/stakater/Forecastle/pkg/testutil"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -29,7 +31,7 @@ func TestNewIngressWrapper(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewIngressWrapper(tt.args.ingress, ""); !reflect.DeepEqual(got, tt.want) {
+			if got := NewIngressWrapper(tt.args.ingress); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewIngressWrapper() = %v, want %v", got, tt.want)
 			}
 		})
@@ -451,6 +453,42 @@ func TestIngressWrapper_getIngressSubPath(t *testing.T) {
 			}
 			if got := iw.getIngressSubPath(); got != tt.want {
 				t.Errorf("IngressWrapper.getIngressSubPath() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetGroup(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+	}{
+		{
+			name: "IngressWithoutGroup",
+			fields: fields{
+				ingress: testutil.CreateIngressWithNamespace("someIngress", "test"),
+			},
+			want: "test",
+		},
+		{
+			name: "IngressWithGroup",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithNamespace("someIngress", "test"), annotations.ForecastleGroupAnnotation, "My Group"),
+			},
+			want: "My Group",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetGroup(); got != tt.want {
+				t.Errorf("IngressWrapper.GetGroup() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -9,4 +9,6 @@ const (
 	ForecastleExposeAnnotation = "forecastle.stakater.com/expose"
 	// ForecastleAppNameAnnotation const used for overriding the name of the app
 	ForecastleAppNameAnnotation = "forecastle.stakater.com/appName"
+	// ForecastleGroupAnnotation const used for overriding group
+	ForecastleGroupAnnotation = "forecastle.stakater.com/group"
 )

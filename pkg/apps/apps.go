@@ -48,7 +48,7 @@ func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []Forec
 		wrapper := wrappers.NewIngressWrapper(&ingress)
 		apps = append(apps, ForecastleApp{
 			Name:  wrapper.GetName(),
-			Group: wrapper.GetNamespace(),
+			Group: wrapper.GetGroup(),
 			Icon:  wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
 			URL:   wrapper.GetURL(),
 		})

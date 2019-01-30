@@ -22,11 +22,11 @@ jQuery(document).ready(function($){
     
         });
 
-        $('.namespace').each(function() {
+        $('.group').each(function() {
             if ($(this).find(".app").filter(":visible").length == 0) {
-                $(this).find(".namespace-header").hide();
+                $(this).find(".group-header").hide();
             } else {
-                $(this).find(".namespace-header").show();
+                $(this).find(".group-header").show();
             }
         });
     
@@ -45,7 +45,7 @@ jQuery(document).ready(function($){
     }
 
     function populateAppsListFromJson(data) {
-        data = groupByKeys(data, "Namespace", "Apps");
+        data = groupByKeys(data, "Group", "Apps");
         $.each(data, renderApp);
         initSearch();
     }

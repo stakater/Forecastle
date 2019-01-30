@@ -14,7 +14,7 @@ install:
 	"$(GLIDECMD)" install
 
 test:
-	#"$(GOCMD)" test -v ./...
+	"$(GOCMD)" test -v ./...
 
 build:
 

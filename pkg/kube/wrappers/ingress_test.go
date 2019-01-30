@@ -369,7 +369,7 @@ func TestIngressWrapper_getIngressSubPathWithPort(t *testing.T) {
 			fields: fields{
 				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", "123"),
 			},
-			want: "123/test",
+			want: "/test",
 		},
 	}
 	for _, tt := range tests {

@@ -4,8 +4,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/testutil"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -69,19 +70,19 @@ func TestList_Get(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
 					{
-						Name:      "app",
-						Icon:      "https://google.com/icon.png",
-						Namespace: "test",
-						URL:       "https://google.com",
+						Name:  "app",
+						Icon:  "https://google.com/icon.png",
+						Group: "test",
+						URL:   "https://google.com",
 					},
 				},
 			},
 			want: []ForecastleApp{
 				{
-					Name:      "app",
-					Icon:      "https://google.com/icon.png",
-					Namespace: "test",
-					URL:       "https://google.com",
+					Name:  "app",
+					Icon:  "https://google.com/icon.png",
+					Group: "test",
+					URL:   "https://google.com",
 				},
 			},
 			wantErr: false,
@@ -136,15 +137,15 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 			args: args{
 				ingresses: []v1beta1.Ingress{
 					*testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("test-ingress", "google.com"),
-						ForecastleIconAnnotation, "https://google.com/icon.png"),
+						annotations.ForecastleIconAnnotation, "https://google.com/icon.png"),
 				},
 			},
 			wantApps: []ForecastleApp{
 				{
-					Name:      "test-ingress",
-					Namespace: "",
-					Icon:      "https://google.com/icon.png",
-					URL:       "http://google.com",
+					Name:  "test-ingress",
+					Group: "",
+					Icon:  "https://google.com/icon.png",
+					URL:   "http://google.com",
 				},
 			},
 		},
@@ -163,8 +164,8 @@ func TestList_Populate(t *testing.T) {
 
 	ingress := testutil.AddAnnotationToIngress(
 		testutil.AddAnnotationToIngress(
-			testutil.CreateIngressWithHost("test-ingress", "google.com"), ForecastleExposeAnnotation, "true"),
-		IngressClassAnnotation, "ingress")
+			testutil.CreateIngressWithHost("test-ingress", "google.com"), annotations.ForecastleExposeAnnotation, "true"),
+		annotations.IngressClassAnnotation, "ingress")
 
 	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
 	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
@@ -196,14 +197,14 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
 					{
-						Name:      "test-ingress",
-						Namespace: "default",
-						URL:       "http://google.com",
+						Name:  "test-ingress",
+						Group: "default",
+						URL:   "http://google.com",
 					},
 					{
-						Name:      "test-ingress",
-						Namespace: "testing",
-						URL:       "http://google.com",
+						Name:  "test-ingress",
+						Group: "testing",
+						URL:   "http://google.com",
 					},
 				},
 			},
@@ -220,14 +221,14 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
 					{
-						Name:      "test-ingress",
-						Namespace: "default",
-						URL:       "http://google.com",
+						Name:  "test-ingress",
+						Group: "default",
+						URL:   "http://google.com",
 					},
 					{
-						Name:      "test-ingress",
-						Namespace: "testing",
-						URL:       "http://google.com",
+						Name:  "test-ingress",
+						Group: "testing",
+						URL:   "http://google.com",
 					},
 				},
 			},
@@ -244,9 +245,9 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []ForecastleApp{
 					{
-						Name:      "test-ingress",
-						Namespace: "testing",
-						URL:       "http://google.com",
+						Name:  "test-ingress",
+						Group: "testing",
+						URL:   "http://google.com",
 					},
 				},
 			},

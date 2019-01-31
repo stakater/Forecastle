@@ -1,7 +1,7 @@
 apiVersion: v1
 name: forecastle
 description: forecastle chart that runs on kubernetes
-version: v1.0.18
+version: v1.0.19
 keywords:
   - forecastle
   - kubernetes

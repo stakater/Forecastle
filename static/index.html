@@ -61,12 +61,34 @@
     text-transform: capitalize;
     font-size: 13px;
 }
+
+.loader {
+    background: white;
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.loader img {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+}
+
 </style>
 
 </head>
 
 <body>
-
+    <div class="loader">
+        <img src="assets/img/ajax-loader.gif" />
+    </div>
 	<!-- Page header -->
 	<div class="page-header page-header-dark">
 

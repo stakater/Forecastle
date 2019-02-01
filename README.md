@@ -38,6 +38,8 @@ If you configured `helm` on your cluster, you can deploy Forecastle via helm cha
 
 ## Configuration
 
+### Ingresses
+
 Forecastle looks for a specific annotations on ingresses.
 
 - Add the following annotations to your ingresses in order to be discovered by forecastle:
@@ -47,13 +49,23 @@ Forecastle looks for a specific annotations on ingresses.
 | `forecastle.stakater.com/expose` | **[Required]** Add this with value `true` to the ingress of the app you want to show in Forecastle  |
 | `forecastle.stakater.com/icon`   | **[Optional]** Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons) |
 
-- Once you have added these annotations, you need to specify namespaces to look for the ingresses in configmap of Forecastle. Modify the `namespaces.conf` key with a comma separated list of namespaces, in the manifest file.
+### Forecastle
+
+Forecastle supports the following configuration options that can be modified by either ConfigMap or `values.yaml` if you are using helm
+
+| Configuration Key |                           Description                           |         Default         |
+|:-----------------:|:---------------------------------------------------------------:|:-----------------------:|
+| namespaces        | A list of namespaces that forecastle uses to look for ingresses | ["stakater"]            |
+| headerBackground  | Background color of the header (Specified in the CSS way)       | ""                      |
+| headerForeground  | Foreground color of the header (Specified in the CSS way)       | ""                      |
+| title             | Title for the forecastle dashboard                              | "Forecastle - Stakater" |
 
 ## Features
 
 - List apps found in all namespaces listed in the configmap
 - Search apps
 - Grouped apps per namespace
+- Configurable header (Title and colors)
 
 ## Help
 

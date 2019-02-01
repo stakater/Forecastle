@@ -7,12 +7,7 @@ import (
 	"github.com/stakater/Forecastle/pkg/apps"
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/kube"
-	"github.com/stakater/Forecastle/pkg/log"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-)
-
-var (
-	logger = log.New()
 )
 
 // AppsHandler func responsible for serving apps at /apps

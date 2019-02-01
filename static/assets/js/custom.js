@@ -63,13 +63,13 @@ jQuery(document).ready(function($){
     }
 
     function renderConfigProperties(config) {
-        if(config.HeaderBackground !== null) {
+        if(config.HeaderBackground !== "") {
             $(".page-header").css("background-color", config.HeaderBackground);
         }
-        if(config.HeaderForeground !== null) {
+        if(config.HeaderForeground !== "") {
             $(".page-header").css("color", config.HeaderForeground);
         }
-        if(config.Title !== null) {
+        if(config.Title !== "") {
             $(".page-title h2").html(config.Title);
         }
     }

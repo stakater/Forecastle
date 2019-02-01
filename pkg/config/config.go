@@ -6,7 +6,10 @@ import (
 
 // Config struct for forecastle
 type Config struct {
-	Namespaces []string
+	Namespaces       []string
+	HeaderBackground string
+	HeaderForeground string
+	Title            string
 }
 
 // GetConfig returns forecastle configuration

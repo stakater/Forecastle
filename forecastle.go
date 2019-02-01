@@ -31,6 +31,7 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/apps", handlers.AppsHandler)
+	router.HandleFunc("/config", handlers.ConfigHandler)
 
 	// Serve static files using packr
 	box := packr.NewBox("./static")

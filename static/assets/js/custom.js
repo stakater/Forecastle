@@ -35,7 +35,8 @@ jQuery(document).ready(function($){
     $.ajax({
         url: "/apps",
         type: "GET",
-        success: populateAppsListFromJson
+        success: populateAppsListFromJson,
+        complete: getConfigProperties
     });
 
     function initSearch() {
@@ -48,6 +49,29 @@ jQuery(document).ready(function($){
         data = groupByKeys(data, "Group", "Apps");
         $.each(data, renderApp);
         initSearch();
+    }
+
+    function getConfigProperties() {
+        $.ajax({
+            url: "/config",
+            type: "GET",
+            success: renderConfigProperties,
+            complete: function() {
+                $(".loader").fadeOut(500);
+            }
+        });
+    }
+
+    function renderConfigProperties(config) {
+        if(config.HeaderBackground !== null) {
+            $(".page-header").css("background-color", config.HeaderBackground);
+        }
+        if(config.HeaderForeground !== null) {
+            $(".page-header").css("color", config.HeaderForeground);
+        }
+        if(config.Title !== null) {
+            $(".page-title h2").html(config.Title);
+        }
     }
     
     function renderApp(key, app) {

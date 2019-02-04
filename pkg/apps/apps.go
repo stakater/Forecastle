@@ -16,14 +16,14 @@ var (
 
 // List struct is used for listing forecastle apps
 type List struct {
-	appConfig  *config.Config
+	appConfig  config.Config
 	err        error // Used for forwarding errors
 	items      []ForecastleApp
 	kubeClient kubernetes.Interface
 }
 
 // NewList func creates a new instance of apps lister
-func NewList(kubeClient kubernetes.Interface, appConfig *config.Config) *List {
+func NewList(kubeClient kubernetes.Interface, appConfig config.Config) *List {
 	return &List{
 		appConfig:  appConfig,
 		kubeClient: kubeClient,

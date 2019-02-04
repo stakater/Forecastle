@@ -24,7 +24,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	appsList := apps.NewList(kubeClient, appConfig)
+	appsList := apps.NewList(kubeClient, *appConfig)
 
 	if len(appConfig.Namespaces) != 0 {
 		logger.Info("Looking for forecastle apps in these namespaces: ", appConfig.Namespaces)

@@ -4,8 +4,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/testutil"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -16,6 +17,7 @@ func TestNewList(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 	type args struct {
 		kubeClient kubernetes.Interface
+		appConfig  config.Config
 	}
 	tests := []struct {
 		name string
@@ -43,7 +45,7 @@ func TestNewList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewList(tt.args.kubeClient); !reflect.DeepEqual(got, tt.want) {
+			if got := NewList(tt.args.kubeClient, tt.args.appConfig); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewList() = %v, want %v", got, tt.want)
 			}
 		})
@@ -148,7 +150,7 @@ func TestList_Filter(t *testing.T) {
 		kubeClient kubernetes.Interface
 	}
 	type args struct {
-		filterFunc func(v1beta1.Ingress) bool
+		filterFunc func(v1beta1.Ingress, config.Config) bool
 	}
 	tests := []struct {
 		name   string
@@ -165,7 +167,7 @@ func TestList_Filter(t *testing.T) {
 				kubeClient: kubeClient,
 			},
 			args: args{
-				filterFunc: func(v1beta1.Ingress) bool { return true },
+				filterFunc: func(ingress v1beta1.Ingress, appConfig config.Config) bool { return true },
 			},
 			want: &List{
 				kubeClient: kubeClient,

@@ -9,7 +9,7 @@ import (
 
 // List struct is used to list ingresses
 type List struct {
-	appConfig  *config.Config
+	appConfig  config.Config
 	err        error // Used for forwarding errors
 	items      []v1beta1.Ingress
 	kubeClient kubernetes.Interface
@@ -19,7 +19,7 @@ type List struct {
 type FilterFunc func(v1beta1.Ingress, config.Config) bool
 
 // NewList creates an List object that you can use to query ingresses
-func NewList(kubeClient kubernetes.Interface, appConfig *config.Config, items ...v1beta1.Ingress) *List {
+func NewList(kubeClient kubernetes.Interface, appConfig config.Config, items ...v1beta1.Ingress) *List {
 	return &List{
 		kubeClient: kubeClient,
 		appConfig:  appConfig,
@@ -47,7 +47,7 @@ func (il *List) Filter(filterFunc FilterFunc) *List {
 	var filtered []v1beta1.Ingress
 
 	for _, ingress := range il.items {
-		if filterFunc(ingress, *il.appConfig) {
+		if filterFunc(ingress, il.appConfig) {
 			filtered = append(filtered, ingress)
 		}
 	}

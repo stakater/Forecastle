@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stakater/Forecastle/pkg/annotations"
+	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
@@ -17,6 +18,7 @@ func TestNewList(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 	type args struct {
 		kubeClient kubernetes.Interface
+		appConfig  config.Config
 	}
 	tests := []struct {
 		name string
@@ -44,7 +46,7 @@ func TestNewList(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewList(tt.args.kubeClient); !reflect.DeepEqual(got, tt.want) {
+			if got := NewList(tt.args.kubeClient, tt.args.appConfig); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewList() = %v, want %v", got, tt.want)
 			}
 		})

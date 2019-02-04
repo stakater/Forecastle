@@ -12,19 +12,19 @@ import (
 
 // AppsHandler func responsible for serving apps at /apps
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
-
 	kubeClient := kube.GetClient()
-	appsList := apps.NewList(kubeClient)
 
 	var forecastleApps []apps.ForecastleApp
 	var err error
-	appConfig, err := config.GetConfig()
 
+	appConfig, err := config.GetConfig()
 	if err != nil {
 		logger.Error("Failed to read configuration for forecastle", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	appsList := apps.NewList(kubeClient, *appConfig)
 
 	if len(appConfig.Namespaces) != 0 {
 		logger.Info("Looking for forecastle apps in these namespaces: ", appConfig.Namespaces)
@@ -39,6 +39,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	js, err := json.Marshal(forecastleApps)
 	if err != nil {
 		logger.Error("An error occurred while marshalling apps to json", err)

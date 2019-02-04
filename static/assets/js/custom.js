@@ -46,9 +46,11 @@ jQuery(document).ready(function($){
     }
 
     function populateAppsListFromJson(data) {
-        data = groupByKeys(data, "Group", "Apps");
-        $.each(data, renderApp);
-        initSearch();
+        if (data != null) {
+            data = groupByKeys(data, "Group", "Apps");
+            $.each(data, renderApp);
+            initSearch();
+        }
     }
 
     function getConfigProperties() {

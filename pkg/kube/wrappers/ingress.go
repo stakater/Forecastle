@@ -68,7 +68,7 @@ func (iw *IngressWrapper) GetURL() string {
 	}
 
 	// Append port + ingressSubPath
-	url += iw.getIngressSubPathWithPort()
+	url += iw.getIngressSubPath()
 
 	return url
 
@@ -98,14 +98,6 @@ func (iw *IngressWrapper) supportsTLS() bool {
 
 func (iw *IngressWrapper) getHost() string {
 	return "http://" + iw.ingress.Spec.Rules[0].Host
-}
-
-func (iw *IngressWrapper) getIngressSubPathWithPort() string {
-	subPath := iw.getIngressSubPath()
-	name := iw.GetName()
-	namespace := iw.GetNamespace()
-	logger.Infof("Adding ingress with Name %v in Namespace %v and SubPath: %v", name, namespace, subPath)
-	return subPath
 }
 
 func (iw *IngressWrapper) getIngressSubPath() string {

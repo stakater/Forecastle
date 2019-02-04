@@ -11,4 +11,6 @@ const (
 	ForecastleAppNameAnnotation = "forecastle.stakater.com/appName"
 	// ForecastleGroupAnnotation const used for overriding group
 	ForecastleGroupAnnotation = "forecastle.stakater.com/group"
+	// ForecastleInstanceAnnotation const used for defining which instance of forecastle to use
+	ForecastleInstanceAnnotation = "forecastle.stakater.com/instance"
 )

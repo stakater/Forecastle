@@ -10,7 +10,7 @@ type Config struct {
 	HeaderBackground string
 	HeaderForeground string
 	Title            string
-	InstanceKey      string
+	InstanceName     string
 }
 
 // GetConfig returns forecastle configuration

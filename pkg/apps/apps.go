@@ -38,7 +38,7 @@ func (al *List) Populate(namespaces ...string) *List {
 		Filter(byForecastleExposeAnnotation).Get()
 
 	// Apply Instance filter
-	if len(al.appConfig.InstanceKey) != 0 {
+	if len(al.appConfig.InstanceName) != 0 {
 		ingressList, err = ingresses.NewList(al.kubeClient, al.appConfig, ingressList...).
 			Filter(byForecastleInstanceAnnotation).Get()
 	}

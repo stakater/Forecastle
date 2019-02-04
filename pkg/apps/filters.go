@@ -30,7 +30,7 @@ func byForecastleExposeAnnotation(ingress v1beta1.Ingress, appConfig config.Conf
 // For filtering ingresses by forecastle instance
 func byForecastleInstanceAnnotation(ingress v1beta1.Ingress, appConfig config.Config) bool {
 	if val, ok := ingress.Annotations[annotations.ForecastleInstanceAnnotation]; ok {
-		return isForCurrentInstance(val, appConfig.InstanceKey)
+		return isForCurrentInstance(val, appConfig.InstanceName)
 	}
 	return false
 }

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/gobuffalo/packr"
@@ -23,7 +23,7 @@ func init() {
 	viper.AutomaticEnv()
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s", err))
+		panic(errors.New("Fatal error config file: " + err.Error()))
 	}
 }
 

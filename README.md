@@ -62,6 +62,7 @@ Forecastle supports the following configuration options that can be modified by 
 | headerBackground  | Background color of the header (Specified in the CSS way)                                                  | null                    | string            |
 | headerForeground  | Foreground color of the header (Specified in the CSS way)                                                  | null                    | string            |
 | title             | Title for the forecastle dashboard                                                                         | "Forecastle - Stakater" | string            |
+| instanceName      | Name of the forecastle instance                                                                            | ""                      | string            |
 
 #### NamespaceSelector
 

@@ -56,13 +56,24 @@ Forecastle looks for a specific annotations on ingresses.
 
 Forecastle supports the following configuration options that can be modified by either ConfigMap or `values.yaml` if you are using helm
 
-| Configuration Key |                           Description                           |         Default         |
-|:-----------------:|:---------------------------------------------------------------:|:-----------------------:|
-| namespaces        | A list of namespaces that forecastle uses to look for ingresses | ["stakater"]            |
-| headerBackground  | Background color of the header (Specified in the CSS way)       | ""                      |
-| headerForeground  | Foreground color of the header (Specified in the CSS way)       | ""                      |
-| title             | Title for the forecastle dashboard                              | "Forecastle - Stakater" |
-| instanceName      | Name of the forecastle instance                                 | ""                      |
+| Field             |                                                 Description                                                |         Default         | Type              |
+|:-----------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------------:|-------------------|
+| namespaceSelector | A fine grained namespace selector which uses a combination of hardcoded namespaces well as label selectors | any: true               | NamespaceSelector |
+| headerBackground  | Background color of the header (Specified in the CSS way)                                                  | null                    | string            |
+| headerForeground  | Foreground color of the header (Specified in the CSS way)                                                  | null                    | string            |
+| title             | Title for the forecastle dashboard                                                                         | "Forecastle - Stakater" | string            |
+
+#### NamespaceSelector
+
+It is a selector for selecting namespaces either selecting all namespaces or a list of namespaces, or filtering namespaces through labels.
+
+|     Field     |                                          Description                                          | Default | Type                                                                                         |
+|:-------------:|:---------------------------------------------------------------------------------------------:|:-------:|----------------------------------------------------------------------------------------------|
+| any           | Boolean describing whether all namespaces are selected in contrast to a list restricting them | false   | bool                                                                                         |
+| labelSelector | Filter namespaces based on kubernetes metav1.LabelSelector type                               | null    | [metav1.LabelSelector](https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#LabelSelector) |
+| matchNames    | List of namespace names                                                                       | null    | []string                                                                                     |
+
+*Note:* If you specify both `labelSelector` and `matchNames`, forecastle will take a union of all namespaces matched and use them.
 
 ## Features
 

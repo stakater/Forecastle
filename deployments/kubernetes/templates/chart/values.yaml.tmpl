@@ -17,8 +17,9 @@ forecastle:
       authproxy.stakater.com/redirection-url: "https://cp.stackator.com"
       authproxy.stakater.com/listen: "0.0.0.0:80"
   config:
-    namespaces:
-    - stakater
+    namespaceSelector:
+      matchNames:
+      - stakater
     headerBackground:
     headerForeground:
     title:

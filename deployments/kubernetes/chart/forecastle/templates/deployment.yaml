@@ -27,6 +27,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         image: "{{ .Values.forecastle.image.name }}:{{ .Values.forecastle.image.tag }}"
+        imagePullPolicy: Always
         name: {{ template "forecastle.name" . }}
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config

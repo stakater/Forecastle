@@ -29,7 +29,6 @@ func NewList(kubeClient kubernetes.Interface, appConfig config.Config, items ...
 
 // Populate function returns a list of ingresses
 func (il *List) Populate(namespaces ...string) *List {
-
 	for _, namespace := range namespaces {
 		ingresses, err := il.kubeClient.ExtensionsV1beta1().Ingresses(namespace).List(metav1.ListOptions{})
 		if err != nil {

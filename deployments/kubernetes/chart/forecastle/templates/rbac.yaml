@@ -15,7 +15,7 @@ metadata:
 {{ include "forecastle.labels.chart" . | indent 4 }}
 rules:
 - apiGroups: ["", "extensions"]
-  resources: ["ingresses"]
+  resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

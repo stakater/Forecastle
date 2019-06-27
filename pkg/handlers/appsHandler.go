@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/stakater/Forecastle/pkg/kube/util"
+
 	"github.com/stakater/Forecastle/pkg/apps"
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/kube"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // AppsHandler func responsible for serving apps at /apps
@@ -26,13 +27,16 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 	appsList := apps.NewList(kubeClient, *appConfig)
 
-	if len(appConfig.Namespaces) != 0 {
-		logger.Info("Looking for forecastle apps in these namespaces: ", appConfig.Namespaces)
-		forecastleApps, err = appsList.Populate(appConfig.Namespaces...).Get()
-	} else {
-		logger.Info("Namespaces filter not found. Looking for forecastle apps in all namespaces")
-		forecastleApps, err = appsList.Populate(metav1.NamespaceAll).Get()
+	namespaces, err := util.PopulateNamespaceList(appConfig.NamespaceSelector)
+
+	if err != nil {
+		logger.Error("An error occurred while populating namespaces", err)
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+		return
 	}
+
+	logger.Info("Namespaces to look for forecastle apps: ", namespaces)
+	forecastleApps, err = appsList.Populate(namespaces...).Get()
 
 	if err != nil {
 		logger.Error("An error occurred while looking for forceastle apps", err)

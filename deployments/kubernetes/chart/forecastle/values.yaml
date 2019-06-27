@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
+    version: "v1.0.25"
   namespace: default
   image:
     name: stakater/forecastle
-    tag: "v1.0.24"
+    tag: "v1.0.25"
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
@@ -17,8 +17,9 @@ forecastle:
       authproxy.stakater.com/redirection-url: "https://cp.stackator.com"
       authproxy.stakater.com/listen: "0.0.0.0:80"
   config:
-    namespaces:
-    - stakater
+    namespaceSelector:
+      matchNames:
+      - stakater
     headerBackground:
     headerForeground:
     title:

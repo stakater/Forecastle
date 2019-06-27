@@ -14,8 +14,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
   name: forecastle
@@ -40,7 +40,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.24"
+        image: "stakater/forecastle:v1.0.25"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -60,8 +60,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
   name: forecastle
@@ -74,13 +74,13 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 rules:
 - apiGroups: ["", "extensions"]
-  resources: ["ingresses"]
+  resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -91,8 +91,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 roleRef:
@@ -128,8 +128,8 @@ items:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "v1.0.24"
-      chart: "forecastle-v1.0.24"
+      version: "v1.0.25"
+      chart: "forecastle-v1.0.25"
       release: "RELEASE-NAME"
       heritage: "Tiller"
       expose: "true"
@@ -155,8 +155,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 data:
@@ -164,7 +164,8 @@ data:
     headerBackground: null
     headerForeground: null
     instanceName: null
-    namespaces:
-    - stakater
+    namespaceSelector:
+      matchNames:
+      - stakater
     title: null
     

@@ -8,8 +8,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.24"
-    chart: "forecastle-v1.0.24"
+    version: "v1.0.25"
+    chart: "forecastle-v1.0.25"
     release: "RELEASE-NAME"
     heritage: "Tiller"
 data:
@@ -17,7 +17,8 @@ data:
     headerBackground: null
     headerForeground: null
     instanceName: null
-    namespaces:
-    - stakater
+    namespaceSelector:
+      matchNames:
+      - stakater
     title: null
     

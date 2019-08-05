@@ -70,8 +70,11 @@ func (iw *IngressWrapper) GetURL() string {
 	// Append port + ingressSubPath
 	url += iw.getIngressSubPath()
 
-	return url
+	return url + iw.getAppRoot()
+}
 
+func (iw *IngressWrapper) getAppRoot() string {
+	return iw.GetAnnotationValue(annotations.ForecastleAppRootAnnotation)
 }
 
 func (iw *IngressWrapper) rulesExist() bool {

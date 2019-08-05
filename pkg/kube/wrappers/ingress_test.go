@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stakater/Forecastle/pkg/annotations"
-
 	"github.com/stakater/Forecastle/pkg/testutil"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -228,48 +227,48 @@ func TestIngressWrapper_rulesExist(t *testing.T) {
 	}
 }
 
-func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
-	type fields struct {
-		ingress *v1beta1.Ingress
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-		want1  bool
-	}{
-		{
-			name: "IngressWithoutTLSHost",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
-			},
-			want:  "",
-			want1: false,
-		},
-		{
-			name: "IngressWithTLSHost",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
-			},
-			want:  "https://google.com",
-			want1: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			iw := &IngressWrapper{
-				ingress: tt.fields.ingress,
-			}
-			got, got1 := iw.tryGetTLSHost()
-			if got != tt.want {
-				t.Errorf("IngressWrapper.tryGetTLSHost() got = %v, want %v", got, tt.want)
-			}
-			if got1 != tt.want1 {
-				t.Errorf("IngressWrapper.tryGetTLSHost() got1 = %v, want %v", got1, tt.want1)
-			}
-		})
-	}
-}
+// func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
+// 	type fields struct {
+// 		ingress *v1beta1.Ingress
+// 	}
+// 	tests := []struct {
+// 		name   string
+// 		fields fields
+// 		want   string
+// 		want1  bool
+// 	}{
+// 		{
+// 			name: "IngressWithoutTLSHost",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+// 			},
+// 			want:  "",
+// 			want1: false,
+// 		},
+// 		{
+// 			name: "IngressWithTLSHost",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
+// 			},
+// 			want:  "https://google.com",
+// 			want1: true,
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			iw := &IngressWrapper{
+// 				ingress: tt.fields.ingress,
+// 			}
+// 			got, got1 := iw.tryGetTLSHost()
+// 			if got != tt.want {
+// 				t.Errorf("IngressWrapper.tryGetTLSHost() got = %v, want %v", got, tt.want)
+// 			}
+// 			if got1 != tt.want1 {
+// 				t.Errorf("IngressWrapper.tryGetTLSHost() got1 = %v, want %v", got1, tt.want1)
+// 			}
+// 		})
+// 	}
+// }
 
 func TestIngressWrapper_supportsTLS(t *testing.T) {
 	type fields struct {
@@ -307,77 +306,77 @@ func TestIngressWrapper_supportsTLS(t *testing.T) {
 	}
 }
 
-func TestIngressWrapper_getHost(t *testing.T) {
-	type fields struct {
-		ingress *v1beta1.Ingress
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		{
-			name: "IngressWithEmptyHost",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHost("someIngress", ""),
-			},
-			want: "http://",
-		},
-		{
-			name: "IngressWithCorrectHost",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
-			},
-			want: "http://google.com",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			iw := &IngressWrapper{
-				ingress: tt.fields.ingress,
-			}
-			if got := iw.getHost(); got != tt.want {
-				t.Errorf("IngressWrapper.getHost() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
+// func TestIngressWrapper_getHost(t *testing.T) {
+// 	type fields struct {
+// 		ingress *v1beta1.Ingress
+// 	}
+// 	tests := []struct {
+// 		name   string
+// 		fields fields
+// 		want   string
+// 	}{
+// 		{
+// 			name: "IngressWithEmptyHost",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHost("someIngress", ""),
+// 			},
+// 			want: "http://",
+// 		},
+// 		{
+// 			name: "IngressWithCorrectHost",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+// 			},
+// 			want: "http://google.com",
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			iw := &IngressWrapper{
+// 				ingress: tt.fields.ingress,
+// 			}
+// 			if got := iw.getHost(); got != tt.want {
+// 				t.Errorf("IngressWrapper.getHost() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
 
-func TestIngressWrapper_getIngressSubPath(t *testing.T) {
-	type fields struct {
-		ingress *v1beta1.Ingress
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		{
-			name: "IngressWithoutSubPath",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
-			},
-			want: "",
-		},
-		{
-			name: "IngressWithSubPath",
-			fields: fields{
-				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", ""),
-			},
-			want: "/test",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			iw := &IngressWrapper{
-				ingress: tt.fields.ingress,
-			}
-			if got := iw.getIngressSubPath(); got != tt.want {
-				t.Errorf("IngressWrapper.getIngressSubPath() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
+// func TestIngressWrapper_getIngressSubPath(t *testing.T) {
+// 	type fields struct {
+// 		ingress *v1beta1.Ingress
+// 	}
+// 	tests := []struct {
+// 		name   string
+// 		fields fields
+// 		want   string
+// 	}{
+// 		{
+// 			name: "IngressWithoutSubPath",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+// 			},
+// 			want: "",
+// 		},
+// 		{
+// 			name: "IngressWithSubPath",
+// 			fields: fields{
+// 				ingress: testutil.CreateIngressWithHostAndSubPath("someIngress", "google.com", "/test", ""),
+// 			},
+// 			want: "/test",
+// 		},
+// 	}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			iw := &IngressWrapper{
+// 				ingress: tt.fields.ingress,
+// 			}
+// 			if got := iw.getIngressSubPath(); got != tt.want {
+// 				t.Errorf("IngressWrapper.getIngressSubPath() = %v, want %v", got, tt.want)
+// 			}
+// 		})
+// 	}
+// }
 
 func TestIngressWrapper_GetGroup(t *testing.T) {
 	type fields struct {
@@ -410,6 +409,86 @@ func TestIngressWrapper_GetGroup(t *testing.T) {
 			}
 			if got := iw.GetGroup(); got != tt.want {
 				t.Errorf("IngressWrapper.GetGroup() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_GetURLForRuleIndex(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	type args struct {
+		index int
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			if got := iw.GetURLForRuleIndex(tt.args.index); got != tt.want {
+				t.Errorf("IngressWrapper.GetURLForRuleIndex() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
+	type fields struct {
+		ingress *v1beta1.Ingress
+	}
+	type args struct {
+		index int
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   string
+		want1  bool
+	}{
+		{
+			name: "IngressWithoutTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
+			},
+			args: args{
+				index: 0,
+			},
+			want:  "",
+			want1: false,
+		},
+		{
+			name: "IngressWithTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
+			},
+			args: args{
+				index: 0,
+			},
+			want:  "https://google.com",
+			want1: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			got, got1 := iw.tryGetTLSHost(tt.args.index)
+			if got != tt.want {
+				t.Errorf("IngressWrapper.tryGetTLSHost() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("IngressWrapper.tryGetTLSHost() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}

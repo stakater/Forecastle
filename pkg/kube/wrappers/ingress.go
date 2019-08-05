@@ -53,25 +53,38 @@ func (iw *IngressWrapper) GetGroup() string {
 
 // GetURL func extracts url of the ingress wrapped by the object
 func (iw *IngressWrapper) GetURL() string {
+	return iw.GetURLForRuleIndex(0)
+}
 
+// GetURLForRuleIndex extracts url of the ingress at a specific index
+func (iw *IngressWrapper) GetURLForRuleIndex(index int) string {
 	if !iw.rulesExist() {
 		logger.Warn("No rules exist in ingress: ", iw.ingress.GetName())
 		return ""
 	}
 
+	if index >= iw.RuleCount() {
+		logger.Warn("No rule exist at index ", index, " for ingress: ", iw.ingress.GetName())
+		return ""
+	}
+
 	var url string
 
-	if host, exists := iw.tryGetTLSHost(); exists { // Get TLS Host if it exists
+	if host, exists := iw.tryGetTLSHost(index); exists { // Get TLS Host if it exists
 		url = host
 	} else {
-		url = iw.getHost() // Fallback for normal Host
+		url = iw.getHost(index) // Fallback for normal Host
 	}
 
 	// Append port + ingressSubPath
-	url += iw.getIngressSubPath()
+	url += iw.getIngressSubPath(index)
 
 	return url
+}
 
+// RuleCount returns number of rules in an ingress
+func (iw *IngressWrapper) RuleCount() int {
+	return len(iw.ingress.Spec.Rules)
 }
 
 func (iw *IngressWrapper) rulesExist() bool {
@@ -81,9 +94,9 @@ func (iw *IngressWrapper) rulesExist() bool {
 	return false
 }
 
-func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
+func (iw *IngressWrapper) tryGetTLSHost(index int) (string, bool) {
 	if iw.supportsTLS() {
-		return "https://" + iw.ingress.Spec.TLS[0].Hosts[0], true
+		return "https://" + iw.ingress.Spec.TLS[index].Hosts[0], true
 	}
 
 	return "", false
@@ -96,12 +109,12 @@ func (iw *IngressWrapper) supportsTLS() bool {
 	return false
 }
 
-func (iw *IngressWrapper) getHost() string {
-	return "http://" + iw.ingress.Spec.Rules[0].Host
+func (iw *IngressWrapper) getHost(index int) string {
+	return "http://" + iw.ingress.Spec.Rules[index].Host
 }
 
-func (iw *IngressWrapper) getIngressSubPath() string {
-	rule := iw.ingress.Spec.Rules[0]
+func (iw *IngressWrapper) getIngressSubPath(index int) string {
+	rule := iw.ingress.Spec.Rules[index]
 	if rule.HTTP != nil {
 		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
 			return rule.HTTP.Paths[0].Path

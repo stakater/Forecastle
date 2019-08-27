@@ -64,6 +64,7 @@ Forecastle supports the following configuration options that can be modified by 
 | headerForeground  | Foreground color of the header (Specified in the CSS way)                                                  | null                    | string            |
 | title             | Title for the forecastle dashboard                                                                         | "Forecastle - Stakater" | string            |
 | instanceName      | Name of the forecastle instance                                                                            | ""                      | string            |
+| customApps        | A list of custom apps that you would like to add to the forecastle instance                                | {}                      | []CustomApp       |
 
 #### NamespaceSelector
 
@@ -77,6 +78,41 @@ It is a selector for selecting namespaces either selecting all namespaces or a l
 
 *Note:* If you specify both `labelSelector` and `matchNames`, forecastle will take a union of all namespaces matched and use them.
 
+#### Custom Apps
+
+If you want to add any apps that are not exposed through ingresses or are external to the cluster, you can use the custom apps feature. You can pass an array of custom apps inside the config.
+
+| Field | Description                        | Type   |
+|-------|------------------------------------|--------|
+| Name  | Name of the custom app             | String |
+| Icon  | URL of the icon for the custom app | String |
+| URL   | URL of the custom app              | String |
+| Group | Group for the custom app           | String |
+
+#### Example Config
+
+An example of a config can be seen below
+
+```yaml
+namespaceSelector:
+  labelSelector:
+    matchLabels:
+      component: redis
+    matchExpressions:
+      - {key: tier, operator: In, values: [cache]}
+  matchNames:
+  - test
+title:
+headerBackground:
+headerForeground: "#ffffff"
+instanceName: "Hello"
+customApps:
+- name: Hello
+  icon: http://hello
+  url: http://helloicon
+  group: Test
+```
+
 ## Features
 
 - List apps found in all namespaces listed in the configmap
@@ -84,6 +120,8 @@ It is a selector for selecting namespaces either selecting all namespaces or a l
 - Grouped apps per namespace
 - Configurable header (Title and colors)
 - Multiple instance support
+- Provide Custom apps
+- Custom groups and URLs for the apps
 
 ## Running multiple instances of forecastle
 

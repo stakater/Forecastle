@@ -47,7 +47,42 @@ func TestList_Populate(t *testing.T) {
 		fields fields
 		want   *List
 	}{
-		// TODO: Add test cases.
+		{
+			name: "TestListPopulate",
+			fields: fields{
+				appConfig: config.Config{
+					CustomApps: []config.CustomApp{
+						config.CustomApp{
+							Name:  "Test",
+							URL:   "http://google.com",
+							Icon:  "http://google.com",
+							Group: "My Group",
+						},
+					},
+				},
+			},
+			want: &List{
+				appConfig: config.Config{
+					CustomApps: []config.CustomApp{
+						config.CustomApp{
+							Name:  "Test",
+							URL:   "http://google.com",
+							Icon:  "http://google.com",
+							Group: "My Group",
+						},
+					},
+				},
+				items: []forecastle.App{
+					{
+						Name:     "Test",
+						URL:      "http://google.com",
+						Icon:     "http://google.com",
+						Group:    "My Group",
+						IsCustom: true,
+					},
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

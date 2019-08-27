@@ -44,13 +44,14 @@ Forecastle looks for a specific annotations on ingresses.
 
 - Add the following annotations to your ingresses in order to be discovered by forecastle:
 
-|           Annotation           |                                           Description                                           |
-|:------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| `forecastle.stakater.com/expose` | **[Required]** Add this with value `true` to the ingress of the app you want to show in Forecastle  |
-| `forecastle.stakater.com/icon`   | **[Optional]** Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons) |
-| `forecastle.stakater.com/appName` | **[Optional]** A custom name for your application. Use if you don't want to use name of the ingress |
-| `forecastle.stakater.com/group` | **[Optional]** A custom group name. Use if you want the application to show in a different group than the namespace it is running in |
-| `forecastle.stakater.com/instance` | | **[Optional]** A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards |
+| Annotation                         | Description                                                                                                                                               | Required |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| `forecastle.stakater.com/expose`   | Add this with value `true` to the ingress of the app you want to show in Forecastle                                                                       | `true`   |
+| `forecastle.stakater.com/icon`     | Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons)                             | `false`  |
+| `forecastle.stakater.com/appName`  | A custom name for your application. Use if you don't want to use name of the ingress                                                                      | `false`  |
+| `forecastle.stakater.com/group`    | A custom group name. Use if you want the application to show in a different group than the namespace it is running in                                     | `false`  |
+| `forecastle.stakater.com/instance` | A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards | `false`  |
+| `forecastle.stakater.com/url`  | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                                  | `false`  |
 
 ### Forecastle
 

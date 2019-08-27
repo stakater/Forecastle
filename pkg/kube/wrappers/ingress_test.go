@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stakater/Forecastle/pkg/annotations"
-
 	"github.com/stakater/Forecastle/pkg/testutil"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -178,6 +177,27 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress2", "google.com", "google.com"),
 			},
 			want: "https://google.com",
+		},
+		{
+			name: "IngressWithValidHostWithOverridenURLWithoutScheme",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithValidHostWithOverridenURLWithScheme",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "https://someotherurl.com"),
+			},
+			want: "https://someotherurl.com",
+		},
+		{
+			name: "IngressWithValidHostWithOverridenInvalidURL",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl42"),
+			},
+			want: "",
 		},
 	}
 	for _, tt := range tests {

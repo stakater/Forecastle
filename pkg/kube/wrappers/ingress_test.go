@@ -178,6 +178,27 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 			},
 			want: "https://google.com",
 		},
+		{
+			name: "IngressWithValidHostWithOverridenURLWithoutScheme",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl.com"),
+			},
+			want: "",
+		},
+		{
+			name: "IngressWithValidHostWithOverridenURLWithScheme",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "https://someotherurl.com"),
+			},
+			want: "https://someotherurl.com",
+		},
+		{
+			name: "IngressWithValidHostWithOverridenInvalidURL",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl42"),
+			},
+			want: "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -409,42 +430,6 @@ func TestIngressWrapper_GetGroup(t *testing.T) {
 			}
 			if got := iw.GetGroup(); got != tt.want {
 				t.Errorf("IngressWrapper.GetGroup() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestIngressWrapper_getAppRoot(t *testing.T) {
-	type fields struct {
-		ingress *v1beta1.Ingress
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		{
-			name: "IngressWithoutAppRoot",
-			fields: fields{
-				ingress: testutil.CreateIngressWithNamespace("someIngress", "test"),
-			},
-			want: "",
-		},
-		{
-			name: "IngressWithAppRoot",
-			fields: fields{
-				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithNamespace("someIngress", "test"), annotations.ForecastleAppRootAnnotation, "/test"),
-			},
-			want: "/test",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			iw := &IngressWrapper{
-				ingress: tt.fields.ingress,
-			}
-			if got := iw.getAppRoot(); got != tt.want {
-				t.Errorf("IngressWrapper.getAppRoot() = %v, want %v", got, tt.want)
 			}
 		})
 	}

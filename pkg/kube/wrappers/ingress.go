@@ -1,6 +1,8 @@
 package wrappers
 
 import (
+	"net/url"
+
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/api/extensions/v1beta1"
@@ -54,6 +56,15 @@ func (iw *IngressWrapper) GetGroup() string {
 // GetURL func extracts url of the ingress wrapped by the object
 func (iw *IngressWrapper) GetURL() string {
 
+	if urlFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+		parsedURL, err := url.ParseRequestURI(urlFromAnnotation)
+		if err != nil {
+			logger.Warn(err)
+			return ""
+		}
+		return parsedURL.String()
+	}
+
 	if !iw.rulesExist() {
 		logger.Warn("No rules exist in ingress: ", iw.ingress.GetName())
 		return ""
@@ -70,11 +81,7 @@ func (iw *IngressWrapper) GetURL() string {
 	// Append port + ingressSubPath
 	url += iw.getIngressSubPath()
 
-	return url + iw.getAppRoot()
-}
-
-func (iw *IngressWrapper) getAppRoot() string {
-	return iw.GetAnnotationValue(annotations.ForecastleAppRootAnnotation)
+	return url
 }
 
 func (iw *IngressWrapper) rulesExist() bool {

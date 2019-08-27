@@ -13,6 +13,6 @@ const (
 	ForecastleGroupAnnotation = "forecastle.stakater.com/group"
 	// ForecastleInstanceAnnotation const used for defining which instance of forecastle to use
 	ForecastleInstanceAnnotation = "forecastle.stakater.com/instance"
-	// ForecastleAppRootAnnotation const used for specifying the root of an app if other than '/'
-	ForecastleAppRootAnnotation = "forecastle.stakater.com/appRoot"
+	// ForecastleURLAnnotation const used for specifying the URL for the forecastle app
+	ForecastleURLAnnotation = "forecastle.stakater.com/url"
 )

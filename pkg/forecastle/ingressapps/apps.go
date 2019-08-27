@@ -1,8 +1,9 @@
-package apps
+package ingressapps
 
 import (
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/kube/lists/ingresses"
 	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	"github.com/stakater/Forecastle/pkg/log"
@@ -18,7 +19,7 @@ var (
 type List struct {
 	appConfig  config.Config
 	err        error // Used for forwarding errors
-	items      []ForecastleApp
+	items      []forecastle.App
 	kubeClient kubernetes.Interface
 }
 
@@ -30,7 +31,7 @@ func NewList(kubeClient kubernetes.Interface, appConfig config.Config) *List {
 	}
 }
 
-// Populate function that populates a list of forecastle apps in selected namespaces
+// Populate function that populates a list of forecastle apps from ingresses in selected namespaces
 func (al *List) Populate(namespaces ...string) *List {
 	ingressList, err := ingresses.NewList(al.kubeClient, al.appConfig).
 		Populate(namespaces...).
@@ -53,20 +54,21 @@ func (al *List) Populate(namespaces ...string) *List {
 }
 
 // Get function returns the apps currently present in List
-func (al *List) Get() ([]ForecastleApp, error) {
+func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []ForecastleApp) {
+func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []forecastle.App) {
 	for _, ingress := range ingresses {
 		logger.Infof("Found ingress with Name '%v' in Namespace '%v'", ingress.Name, ingress.Namespace)
 
 		wrapper := wrappers.NewIngressWrapper(&ingress)
-		apps = append(apps, ForecastleApp{
-			Name:  wrapper.GetName(),
-			Group: wrapper.GetGroup(),
-			Icon:  wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
-			URL:   wrapper.GetURL(),
+		apps = append(apps, forecastle.App{
+			Name:     wrapper.GetName(),
+			Group:    wrapper.GetGroup(),
+			Icon:     wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
+			URL:      wrapper.GetURL(),
+			IsCustom: false,
 		})
 	}
 	return

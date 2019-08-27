@@ -12,8 +12,18 @@ type Config struct {
 	HeaderForeground  string
 	Title             string
 	InstanceName      string
+	CustomApps        []CustomApp
 }
 
+// CustomApp struct for specifying apps that are not generated using ingresses
+type CustomApp struct {
+	Name  string
+	Icon  string
+	URL   string
+	Group string
+}
+
+// NamespaceSelector struct for selecting namespaces based on labels and names
 type NamespaceSelector struct {
 	Any           bool
 	MatchNames    []string

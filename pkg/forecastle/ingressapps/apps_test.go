@@ -1,4 +1,4 @@
-package apps
+package ingressapps
 
 import (
 	"reflect"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
@@ -57,20 +58,20 @@ func TestList_Get(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 	type fields struct {
 		kubeClient kubernetes.Interface
-		items      []ForecastleApp
+		items      []forecastle.App
 		err        error
 	}
 	tests := []struct {
 		name    string
 		fields  fields
-		want    []ForecastleApp
+		want    []forecastle.App
 		wantErr bool
 	}{
 		{
 			name: "TestGetForecastleApps",
 			fields: fields{
 				kubeClient: kubeClient,
-				items: []ForecastleApp{
+				items: []forecastle.App{
 					{
 						Name:  "app",
 						Icon:  "https://google.com/icon.png",
@@ -79,7 +80,7 @@ func TestList_Get(t *testing.T) {
 					},
 				},
 			},
-			want: []ForecastleApp{
+			want: []forecastle.App{
 				{
 					Name:  "app",
 					Icon:  "https://google.com/icon.png",
@@ -93,9 +94,9 @@ func TestList_Get(t *testing.T) {
 			name: "TestGetForecastleAppsWithEmptyList",
 			fields: fields{
 				kubeClient: kubeClient,
-				items:      []ForecastleApp{},
+				items:      []forecastle.App{},
 			},
-			want:    []ForecastleApp{},
+			want:    []forecastle.App{},
 			wantErr: false,
 		},
 	}
@@ -125,7 +126,7 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 	tests := []struct {
 		name     string
 		args     args
-		wantApps []ForecastleApp
+		wantApps []forecastle.App
 	}{
 		{
 			name: "TestConvertIngressesToForecastleAppsWithNoApps",
@@ -142,7 +143,7 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 						annotations.ForecastleIconAnnotation, "https://google.com/icon.png"),
 				},
 			},
-			wantApps: []ForecastleApp{
+			wantApps: []forecastle.App{
 				{
 					Name:  "test-ingress",
 					Group: "",
@@ -175,7 +176,7 @@ func TestList_Populate(t *testing.T) {
 
 	type fields struct {
 		kubeClient kubernetes.Interface
-		items      []ForecastleApp
+		items      []forecastle.App
 		err        error
 	}
 	type args struct {
@@ -197,7 +198,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []ForecastleApp{
+				items: []forecastle.App{
 					{
 						Name:  "test-ingress",
 						Group: "default",
@@ -221,7 +222,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []ForecastleApp{
+				items: []forecastle.App{
 					{
 						Name:  "test-ingress",
 						Group: "default",
@@ -245,7 +246,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []ForecastleApp{
+				items: []forecastle.App{
 					{
 						Name:  "test-ingress",
 						Group: "testing",

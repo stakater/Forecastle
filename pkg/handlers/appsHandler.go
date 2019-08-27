@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/kube/util"
 
-	"github.com/stakater/Forecastle/pkg/apps"
 	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/pkg/forecastle/customapps"
+	"github.com/stakater/Forecastle/pkg/forecastle/ingressapps"
 	"github.com/stakater/Forecastle/pkg/kube"
 )
 
@@ -15,7 +17,7 @@ import (
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	kubeClient := kube.GetClient()
 
-	var forecastleApps []apps.ForecastleApp
+	var forecastleApps []forecastle.App
 	var err error
 
 	appConfig, err := config.GetConfig()
@@ -25,7 +27,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	appsList := apps.NewList(kubeClient, *appConfig)
+	ingressAppsList := ingressapps.NewList(kubeClient, *appConfig)
 
 	namespaces, err := util.PopulateNamespaceList(appConfig.NamespaceSelector)
 
@@ -36,13 +38,24 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	}
 
 	logger.Info("Namespaces to look for forecastle apps: ", namespaces)
-	forecastleApps, err = appsList.Populate(namespaces...).Get()
+	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()
 
 	if err != nil {
 		logger.Error("An error occurred while looking for forceastle apps", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	customAppsList := customapps.NewList(*appConfig)
+
+	customForecastleApps, err := customAppsList.Populate().Get()
+	if err != nil {
+		logger.Error("An error occured while populating custom forecastle apps", err)
+		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
+	}
+
+	// Append both generated and custom apps
+	forecastleApps = append(forecastleApps, customForecastleApps...)
 
 	js, err := json.Marshal(forecastleApps)
 	if err != nil {

@@ -8,10 +8,9 @@ DOCKER_TAG ?= dev
 REPOSITORY = ${DOCKER_IMAGE}:${DOCKER_TAG}
 
 GOCMD = go
-GLIDECMD = glide
 
 install:
-	"$(GLIDECMD)" install
+	go mod download
 
 test:
 	"$(GOCMD)" test -v ./...

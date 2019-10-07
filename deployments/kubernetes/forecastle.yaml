@@ -14,9 +14,9 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.27"
-    chart: "forecastle-v1.0.27"
-    release: "RELEASE-NAME"
+    version: "v1.0.28"
+    chart: "forecastle-v1.0.28"
+    release: "forecastle"
     heritage: "Tiller"
   name: forecastle
 spec:
@@ -40,7 +40,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.27"
+        image: "stakater/forecastle:v1.0.28"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -60,9 +60,9 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.27"
-    chart: "forecastle-v1.0.27"
-    release: "RELEASE-NAME"
+    version: "v1.0.28"
+    chart: "forecastle-v1.0.28"
+    release: "forecastle"
     heritage: "Tiller"
   name: forecastle
 ---
@@ -74,9 +74,9 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.27"
-    chart: "forecastle-v1.0.27"
-    release: "RELEASE-NAME"
+    version: "v1.0.28"
+    chart: "forecastle-v1.0.28"
+    release: "forecastle"
     heritage: "Tiller"
 rules:
 - apiGroups: ["", "extensions"]
@@ -91,9 +91,9 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.27"
-    chart: "forecastle-v1.0.27"
-    release: "RELEASE-NAME"
+    version: "v1.0.28"
+    chart: "forecastle-v1.0.28"
+    release: "forecastle"
     heritage: "Tiller"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -128,9 +128,9 @@ items:
       app: forecastle
       group: com.stakater.platform
       provider: stakater
-      version: "v1.0.27"
-      chart: "forecastle-v1.0.27"
-      release: "RELEASE-NAME"
+      version: "v1.0.28"
+      chart: "forecastle-v1.0.28"
+      release: "forecastle"
       heritage: "Tiller"
       expose: "true"
     name: forecastle
@@ -155,9 +155,9 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.27"
-    chart: "forecastle-v1.0.27"
-    release: "RELEASE-NAME"
+    version: "v1.0.28"
+    chart: "forecastle-v1.0.28"
+    release: "forecastle"
     heritage: "Tiller"
 data:
   config.yaml: |-

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/gobuffalo/packr"
+	packr "github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 	"github.com/stakater/Forecastle/pkg/handlers"
@@ -34,7 +34,7 @@ func main() {
 	router.HandleFunc("/config", handlers.ConfigHandler)
 
 	// Serve static files using packr
-	box := packr.NewBox("./static")
+	box := packr.New("static", "./static")
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(box)))
 
 	logger.Info("Listening at port 3000")

@@ -1,9 +1,0 @@
-apiVersion: forecastle.stakater.com/v1
-kind: ForecastleApp
-metadata:
-  name: app-1
-spec:
-  name: Grafana
-  url: https://grafana.com
-  icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/grafana.png
-  group: Default

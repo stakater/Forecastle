@@ -1,9 +1,9 @@
 package ingressapps
 
 import (
-	"strings"
-
 	"github.com/stakater/Forecastle/pkg/annotations"
+	"github.com/stakater/Forecastle/pkg/util/strings"
+
 	"github.com/stakater/Forecastle/pkg/config"
 	"k8s.io/api/extensions/v1beta1"
 )
@@ -30,18 +30,7 @@ func byForecastleExposeAnnotation(ingress v1beta1.Ingress, appConfig config.Conf
 // For filtering ingresses by forecastle instance
 func byForecastleInstanceAnnotation(ingress v1beta1.Ingress, appConfig config.Config) bool {
 	if val, ok := ingress.Annotations[annotations.ForecastleInstanceAnnotation]; ok {
-		return isForCurrentInstance(val, appConfig.InstanceName)
-	}
-	return false
-}
-
-// Check if ingress is for current instance of forecastle
-func isForCurrentInstance(instanceVal string, currentInstance string) bool {
-	instances := strings.Split(instanceVal, ",")
-	for _, instance := range instances {
-		if instance == currentInstance {
-			return true
-		}
+		return strings.ContainsBetweenDelimiter(val, appConfig.InstanceName, ",")
 	}
 	return false
 }

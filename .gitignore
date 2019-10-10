@@ -2,5 +2,5 @@ src/node_modules
 .idea
 api/vendor
 vendor
-Forecastle
 config.yaml
+.vscode

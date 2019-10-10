@@ -9,6 +9,7 @@ import (
 
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/forecastle/customapps"
+	"github.com/stakater/Forecastle/pkg/forecastle/forecastlecrdapps"
 	"github.com/stakater/Forecastle/pkg/forecastle/ingressapps"
 	"github.com/stakater/Forecastle/pkg/kube"
 )
@@ -16,6 +17,7 @@ import (
 // AppsHandler func responsible for serving apps at /apps
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	kubeClient := kube.GetClient()
+	forecastleClient := kube.GetForecastleClient()
 
 	var forecastleApps []forecastle.App
 	var err error
@@ -27,8 +29,6 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	ingressAppsList := ingressapps.NewList(kubeClient, *appConfig)
-
 	namespaces, err := util.PopulateNamespaceList(appConfig.NamespaceSelector)
 
 	if err != nil {
@@ -37,11 +37,13 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	logger.Info("Namespaces to look for forecastle apps: ", namespaces)
+	logger.Info("Looking for forecastle apps in the following namespaces: ", namespaces)
+
+	ingressAppsList := ingressapps.NewList(kubeClient, *appConfig)
 	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()
 
 	if err != nil {
-		logger.Error("An error occurred while looking for forceastle apps", err)
+		logger.Error("An error occurred while looking for forceastle apps: ", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -50,16 +52,26 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 	customForecastleApps, err := customAppsList.Populate().Get()
 	if err != nil {
-		logger.Error("An error occured while populating custom forecastle apps", err)
+		logger.Error("An error occured while populating custom forecastle apps: ", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 	}
 
 	// Append both generated and custom apps
 	forecastleApps = append(forecastleApps, customForecastleApps...)
 
+	forecastleCRDAppsList := forecastlecrdapps.NewList(forecastleClient, *appConfig)
+	forecastleCRDApps, err := forecastleCRDAppsList.Populate(namespaces...).Get()
+
+	// Log and proceed with this error
+	if err != nil {
+		logger.Error("An error occurred while looking for forceastle CRD apps: ", err)
+	} else { // Append forecastle CRD apps
+		forecastleApps = append(forecastleApps, forecastleCRDApps...)
+	}
+
 	js, err := json.Marshal(forecastleApps)
 	if err != nil {
-		logger.Error("An error occurred while marshalling apps to json", err)
+		logger.Error("An error occurred while marshalling apps to json: ", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}

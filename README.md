@@ -28,7 +28,7 @@ kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/de
 
 #### Step 2: Update configmap
 
-In the Forecastle configmap modify the `namespaces.conf` key with a comma separated list of namespaces which you want Forecastle to watch.
+In the Forecastle configmap modify the `namespaceSelector` key with a list of namespaces which you want Forecastle to watch. Refer to [this](#namespace-selector) for instructions.
 
 And enjoy!
 
@@ -65,8 +65,9 @@ Forecastle supports the following configuration options that can be modified by 
 |       title       |                                     Title for the forecastle dashboard                                     | "Forecastle - Stakater" | string            |
 |   instanceName    |                                      Name of the forecastle instance                                       |           ""            | string            |
 |    customApps     |                A list of custom apps that you would like to add to the forecastle instance                 |           {}            | []CustomApp       |
+|    crdEnabled     |                                  Enables or disables `ForecastleApp` CRD                                   |          true           | bool              |
 
-#### NamespaceSelector
+#### [NamespaceSelector](#namespace-selector)
 
 It is a selector for selecting namespaces either selecting all namespaces or a list of namespaces, or filtering namespaces through labels.
 

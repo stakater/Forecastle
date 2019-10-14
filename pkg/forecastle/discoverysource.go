@@ -5,17 +5,17 @@ type DiscoverySource int
 const (
 	Ingress DiscoverySource = iota
 	Config
-	ForecastleApp
+	ForecastleAppCRD
 )
 
 func (ds DiscoverySource) String() string {
 	names := [...]string{
 		"Ingress",
 		"Config",
-		"ForecastleApp",
+		"ForecastleAppCRD",
 	}
 
-	if ds < Ingress || ds > ForecastleApp {
+	if ds < Ingress || ds > ForecastleAppCRD {
 		return "Unknown"
 	}
 

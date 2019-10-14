@@ -1,4 +1,4 @@
-# ![](assets/web/forecastle-round-100px.png) Forecastle
+# ![Forecastle](assets/web/forecastle-round-100px.png) Forecastle
 
 [![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](http://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 
@@ -167,7 +167,7 @@ Apache2 © [Stakater](http://stakater.com)
 
 ## About
 
-### Why name Forecastle?
+### Why name Forecastle
 
 Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications on Kubernetes having a particular annotation.
 

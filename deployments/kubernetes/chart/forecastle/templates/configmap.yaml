@@ -7,4 +7,5 @@ metadata:
 {{ include "forecastle.labels.chart" . | indent 4 }}
 data:
   config.yaml: |-
-{{ toYaml .Values.forecastle.config | indent 4 }}
+{{ toYaml .Values.forecastle.config | indent 4 -}}
+    crdEnabled: {{ .Values.forecastle.createCustomResource }}

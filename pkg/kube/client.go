@@ -3,7 +3,7 @@ package kube
 import (
 	"os"
 
-	forecastlev1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -26,9 +26,9 @@ func GetClient() kubernetes.Interface {
 }
 
 // GetForecastleClient returns a forecastle resource clientset
-func GetForecastleClient() forecastlev1.Interface {
+func GetForecastleClient() forecastlev1alpha1.Interface {
 	config := getClientConfig()
-	forecastleClient, err := forecastlev1.NewForConfig(config)
+	forecastleClient, err := forecastlev1alpha1.NewForConfig(config)
 	if err != nil {
 		logger.Fatalf("Can not create forecastle client: %v", err)
 	}

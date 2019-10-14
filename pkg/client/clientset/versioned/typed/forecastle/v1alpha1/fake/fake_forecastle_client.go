@@ -19,22 +19,22 @@ limitations under the License.
 package fake
 
 import (
-	v1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1"
+	v1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )
 
-type FakeForecastleV1 struct {
+type FakeForecastleV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeForecastleV1) ForecastleApps(namespace string) v1.ForecastleAppInterface {
+func (c *FakeForecastleV1alpha1) ForecastleApps(namespace string) v1alpha1.ForecastleAppInterface {
 	return &FakeForecastleApps{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *FakeForecastleV1) RESTClient() rest.Interface {
+func (c *FakeForecastleV1alpha1) RESTClient() rest.Interface {
 	var ret *rest.RESTClient
 	return ret
 }

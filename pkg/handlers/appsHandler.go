@@ -8,8 +8,8 @@ import (
 	"github.com/stakater/Forecastle/pkg/kube/util"
 
 	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/pkg/forecastle/crdapps"
 	"github.com/stakater/Forecastle/pkg/forecastle/customapps"
-	"github.com/stakater/Forecastle/pkg/forecastle/forecastlecrdapps"
 	"github.com/stakater/Forecastle/pkg/forecastle/ingressapps"
 	"github.com/stakater/Forecastle/pkg/kube"
 )
@@ -17,7 +17,6 @@ import (
 // AppsHandler func responsible for serving apps at /apps
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	kubeClient := kube.GetClient()
-	forecastleClient := kube.GetForecastleClient()
 
 	var forecastleApps []forecastle.App
 	var err error
@@ -59,14 +58,18 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	// Append both generated and custom apps
 	forecastleApps = append(forecastleApps, customForecastleApps...)
 
-	forecastleCRDAppsList := forecastlecrdapps.NewList(forecastleClient, *appConfig)
-	forecastleCRDApps, err := forecastleCRDAppsList.Populate(namespaces...).Get()
+	if appConfig.CRDEnabled {
+		forecastleClient := kube.GetForecastleClient()
 
-	// Log and proceed with this error
-	if err != nil {
-		logger.Error("An error occurred while looking for forceastle CRD apps: ", err)
-	} else { // Append forecastle CRD apps
-		forecastleApps = append(forecastleApps, forecastleCRDApps...)
+		forecastleCRDAppsList := crdapps.NewList(forecastleClient, *appConfig)
+		forecastleCRDApps, err := forecastleCRDAppsList.Populate(namespaces...).Get()
+
+		// Log and proceed with this error
+		if err != nil {
+			logger.Error("An error occurred while looking for forceastle CRD apps: ", err)
+		} else { // Append forecastle CRD apps
+			forecastleApps = append(forecastleApps, forecastleCRDApps...)
+		}
 	}
 
 	js, err := json.Marshal(forecastleApps)

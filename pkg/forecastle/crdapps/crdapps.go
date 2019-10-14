@@ -1,8 +1,8 @@
-package forecastlecrdapps
+package crdapps
 
 import (
-	v1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1"
-	forecastlev1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
+	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/kube/lists/forecastleapps"
@@ -18,11 +18,11 @@ type List struct {
 	appConfig        config.Config
 	err              error // Used for forwarding errors
 	items            []forecastle.App
-	forecastleClient forecastlev1.Interface
+	forecastleClient forecastlev1alpha1.Interface
 }
 
 // NewList func creates a new instance of apps lister
-func NewList(forecastleClient forecastlev1.Interface, appConfig config.Config) *List {
+func NewList(forecastleClient forecastlev1alpha1.Interface, appConfig config.Config) *List {
 	return &List{
 		appConfig:        appConfig,
 		forecastleClient: forecastleClient,
@@ -34,7 +34,7 @@ func (al *List) Populate(namespaces ...string) *List {
 	forecastleAppListObj := forecastleapps.NewList(al.forecastleClient, al.appConfig).
 		Populate(namespaces...)
 
-	var forecastleAppList []v1.ForecastleApp
+	var forecastleAppList []v1alpha1.ForecastleApp
 	var err error
 
 	// Apply Instance filter
@@ -60,7 +60,7 @@ func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1.ForecastleApp) (apps []forecastle.App) {
+func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
 	for _, forecastleApp := range forecastleApps {
 		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
 
@@ -69,7 +69,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1.For
 			Group:           forecastleApp.Spec.Group,
 			Icon:            forecastleApp.Spec.Icon,
 			URL:             forecastleApp.Spec.URL,
-			DiscoverySource: forecastle.ForecastleApp,
+			DiscoverySource: forecastle.ForecastleAppCRD,
 		})
 	}
 	return

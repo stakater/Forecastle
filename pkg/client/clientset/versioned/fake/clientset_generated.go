@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	forecastlev1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1"
-	fakeforecastlev1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1/fake"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
+	fakeforecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -76,7 +76,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 
 var _ clientset.Interface = &Clientset{}
 
-// ForecastleV1 retrieves the ForecastleV1Client
-func (c *Clientset) ForecastleV1() forecastlev1.ForecastleV1Interface {
-	return &fakeforecastlev1.FakeForecastleV1{Fake: &c.Fake}
+// ForecastleV1alpha1 retrieves the ForecastleV1alpha1Client
+func (c *Clientset) ForecastleV1alpha1() forecastlev1alpha1.ForecastleV1alpha1Interface {
+	return &fakeforecastlev1alpha1.FakeForecastleV1alpha1{Fake: &c.Fake}
 }

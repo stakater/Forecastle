@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	forecastlev1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1"
+	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -30,29 +30,29 @@ import (
 
 // FakeForecastleApps implements ForecastleAppInterface
 type FakeForecastleApps struct {
-	Fake *FakeForecastleV1
+	Fake *FakeForecastleV1alpha1
 	ns   string
 }
 
-var forecastleappsResource = schema.GroupVersionResource{Group: "forecastle.stakater.com", Version: "v1", Resource: "forecastleapps"}
+var forecastleappsResource = schema.GroupVersionResource{Group: "forecastle.stakater.com", Version: "v1alpha1", Resource: "forecastleapps"}
 
-var forecastleappsKind = schema.GroupVersionKind{Group: "forecastle.stakater.com", Version: "v1", Kind: "ForecastleApp"}
+var forecastleappsKind = schema.GroupVersionKind{Group: "forecastle.stakater.com", Version: "v1alpha1", Kind: "ForecastleApp"}
 
 // Get takes name of the forecastleApp, and returns the corresponding forecastleApp object, and an error if there is any.
-func (c *FakeForecastleApps) Get(name string, options v1.GetOptions) (result *forecastlev1.ForecastleApp, err error) {
+func (c *FakeForecastleApps) Get(name string, options v1.GetOptions) (result *v1alpha1.ForecastleApp, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewGetAction(forecastleappsResource, c.ns, name), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewGetAction(forecastleappsResource, c.ns, name), &v1alpha1.ForecastleApp{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*forecastlev1.ForecastleApp), err
+	return obj.(*v1alpha1.ForecastleApp), err
 }
 
 // List takes label and field selectors, and returns the list of ForecastleApps that match those selectors.
-func (c *FakeForecastleApps) List(opts v1.ListOptions) (result *forecastlev1.ForecastleAppList, err error) {
+func (c *FakeForecastleApps) List(opts v1.ListOptions) (result *v1alpha1.ForecastleAppList, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewListAction(forecastleappsResource, forecastleappsKind, c.ns, opts), &forecastlev1.ForecastleAppList{})
+		Invokes(testing.NewListAction(forecastleappsResource, forecastleappsKind, c.ns, opts), &v1alpha1.ForecastleAppList{})
 
 	if obj == nil {
 		return nil, err
@@ -62,8 +62,8 @@ func (c *FakeForecastleApps) List(opts v1.ListOptions) (result *forecastlev1.For
 	if label == nil {
 		label = labels.Everything()
 	}
-	list := &forecastlev1.ForecastleAppList{ListMeta: obj.(*forecastlev1.ForecastleAppList).ListMeta}
-	for _, item := range obj.(*forecastlev1.ForecastleAppList).Items {
+	list := &v1alpha1.ForecastleAppList{ListMeta: obj.(*v1alpha1.ForecastleAppList).ListMeta}
+	for _, item := range obj.(*v1alpha1.ForecastleAppList).Items {
 		if label.Matches(labels.Set(item.Labels)) {
 			list.Items = append(list.Items, item)
 		}
@@ -79,43 +79,43 @@ func (c *FakeForecastleApps) Watch(opts v1.ListOptions) (watch.Interface, error)
 }
 
 // Create takes the representation of a forecastleApp and creates it.  Returns the server's representation of the forecastleApp, and an error, if there is any.
-func (c *FakeForecastleApps) Create(forecastleApp *forecastlev1.ForecastleApp) (result *forecastlev1.ForecastleApp, err error) {
+func (c *FakeForecastleApps) Create(forecastleApp *v1alpha1.ForecastleApp) (result *v1alpha1.ForecastleApp, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewCreateAction(forecastleappsResource, c.ns, forecastleApp), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewCreateAction(forecastleappsResource, c.ns, forecastleApp), &v1alpha1.ForecastleApp{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*forecastlev1.ForecastleApp), err
+	return obj.(*v1alpha1.ForecastleApp), err
 }
 
 // Update takes the representation of a forecastleApp and updates it. Returns the server's representation of the forecastleApp, and an error, if there is any.
-func (c *FakeForecastleApps) Update(forecastleApp *forecastlev1.ForecastleApp) (result *forecastlev1.ForecastleApp, err error) {
+func (c *FakeForecastleApps) Update(forecastleApp *v1alpha1.ForecastleApp) (result *v1alpha1.ForecastleApp, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateAction(forecastleappsResource, c.ns, forecastleApp), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewUpdateAction(forecastleappsResource, c.ns, forecastleApp), &v1alpha1.ForecastleApp{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*forecastlev1.ForecastleApp), err
+	return obj.(*v1alpha1.ForecastleApp), err
 }
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeForecastleApps) UpdateStatus(forecastleApp *forecastlev1.ForecastleApp) (*forecastlev1.ForecastleApp, error) {
+func (c *FakeForecastleApps) UpdateStatus(forecastleApp *v1alpha1.ForecastleApp) (*v1alpha1.ForecastleApp, error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewUpdateSubresourceAction(forecastleappsResource, "status", c.ns, forecastleApp), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewUpdateSubresourceAction(forecastleappsResource, "status", c.ns, forecastleApp), &v1alpha1.ForecastleApp{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*forecastlev1.ForecastleApp), err
+	return obj.(*v1alpha1.ForecastleApp), err
 }
 
 // Delete takes name of the forecastleApp and deletes it. Returns an error if one occurs.
 func (c *FakeForecastleApps) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(forecastleappsResource, c.ns, name), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewDeleteAction(forecastleappsResource, c.ns, name), &v1alpha1.ForecastleApp{})
 
 	return err
 }
@@ -124,17 +124,17 @@ func (c *FakeForecastleApps) Delete(name string, options *v1.DeleteOptions) erro
 func (c *FakeForecastleApps) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	action := testing.NewDeleteCollectionAction(forecastleappsResource, c.ns, listOptions)
 
-	_, err := c.Fake.Invokes(action, &forecastlev1.ForecastleAppList{})
+	_, err := c.Fake.Invokes(action, &v1alpha1.ForecastleAppList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched forecastleApp.
-func (c *FakeForecastleApps) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *forecastlev1.ForecastleApp, err error) {
+func (c *FakeForecastleApps) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.ForecastleApp, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(forecastleappsResource, c.ns, name, pt, data, subresources...), &forecastlev1.ForecastleApp{})
+		Invokes(testing.NewPatchSubresourceAction(forecastleappsResource, c.ns, name, pt, data, subresources...), &v1alpha1.ForecastleApp{})
 
 	if obj == nil {
 		return nil, err
 	}
-	return obj.(*forecastlev1.ForecastleApp), err
+	return obj.(*v1alpha1.ForecastleApp), err
 }

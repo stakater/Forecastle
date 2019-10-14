@@ -90,6 +90,27 @@ If you want to add any apps that are not exposed through ingresses or are extern
 | URL   | URL of the custom app              | String |
 | Group | Group for the custom app           | String |
 
+#### ForecastleApp CRD
+
+You can now create custom resources to add apps to forecastle dynamically. This decouples the application configuration from Ingresses as well as forecastle config. You can create the custom resource `ForecastleApp` like the following:
+
+```yaml
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: app-name
+spec:
+  name: My Awesome App
+  group: dev
+  icon: https://icon-url
+  url: http://app-url
+  instance: "" # Optional
+```
+
+The above CR will be picked up by forecastle and it will generate the App in the UI. This lets you bundle this custom resource with the app's helm chart which will make it a part of the deployment process.
+
+*Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then you just have to make sure that `forecastle.createCustomResource` is set to `true`.
+
 #### Example Config
 
 An example of a config can be seen below
@@ -107,6 +128,7 @@ title:
 headerBackground:
 headerForeground: "#ffffff"
 instanceName: "Hello"
+crdEnabled: false
 customApps:
 - name: Hello
   icon: http://hello
@@ -122,6 +144,7 @@ customApps:
 - Configurable header (Title and colors)
 - Multiple instance support
 - Provide Custom apps
+- CRD `ForecastleApp` for adding custom apps
 - Custom groups and URLs for the apps
 
 ## Running multiple instances of forecastle

@@ -7,20 +7,21 @@ import (
 
 // Config struct for forecastle
 type Config struct {
-	NamespaceSelector NamespaceSelector
-	HeaderBackground  string
-	HeaderForeground  string
-	Title             string
-	InstanceName      string
-	CustomApps        []CustomApp
+	NamespaceSelector NamespaceSelector `yaml:"namespaceSelector"`
+	HeaderBackground  string            `yaml:"headerBackground"`
+	HeaderForeground  string            `yaml:"headerForeground"`
+	Title             string            `yaml:"title"`
+	InstanceName      string            `yaml:"instanceName"`
+	CustomApps        []CustomApp       `yaml:"customApps"`
+	CRDEnabled        bool              `yaml:"crdEnabled"`
 }
 
 // CustomApp struct for specifying apps that are not generated using ingresses
 type CustomApp struct {
-	Name  string
-	Icon  string
-	URL   string
-	Group string
+	Name  string `yaml:"name"`
+	Icon  string `yaml:"icon"`
+	URL   string `yaml:"url"`
+	Group string `yaml:"group"`
 }
 
 // NamespaceSelector struct for selecting namespaces based on labels and names

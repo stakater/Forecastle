@@ -1,4 +1,4 @@
-# ![](assets/web/forecastle-round-100px.png) Forecastle
+# ![Forecastle](assets/web/forecastle-round-100px.png) Forecastle
 
 [![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](http://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 
@@ -28,7 +28,7 @@ kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/de
 
 #### Step 2: Update configmap
 
-In the Forecastle configmap modify the `namespaces.conf` key with a comma separated list of namespaces which you want Forecastle to watch.
+In the Forecastle configmap modify the `namespaceSelector` key with a list of namespaces which you want Forecastle to watch. Refer to [this](#namespaceselector) for instructions.
 
 And enjoy!
 
@@ -45,36 +45,37 @@ Forecastle looks for a specific annotations on ingresses.
 - Add the following annotations to your ingresses in order to be discovered by forecastle:
 
 | Annotation                         | Description                                                                                                                                               | Required |
-|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | `forecastle.stakater.com/expose`   | Add this with value `true` to the ingress of the app you want to show in Forecastle                                                                       | `true`   |
 | `forecastle.stakater.com/icon`     | Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons)                             | `false`  |
 | `forecastle.stakater.com/appName`  | A custom name for your application. Use if you don't want to use name of the ingress                                                                      | `false`  |
 | `forecastle.stakater.com/group`    | A custom group name. Use if you want the application to show in a different group than the namespace it is running in                                     | `false`  |
 | `forecastle.stakater.com/instance` | A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards | `false`  |
-| `forecastle.stakater.com/url`  | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                                  | `false`  |
+| `forecastle.stakater.com/url`      | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                              | `false`  |
 
 ### Forecastle
 
 Forecastle supports the following configuration options that can be modified by either ConfigMap or `values.yaml` if you are using helm
 
-| Field             |                                                 Description                                                |         Default         | Type              |
-|:-----------------:|:----------------------------------------------------------------------------------------------------------:|:-----------------------:|-------------------|
-| namespaceSelector | A fine grained namespace selector which uses a combination of hardcoded namespaces well as label selectors | any: true               | NamespaceSelector |
-| headerBackground  | Background color of the header (Specified in the CSS way)                                                  | null                    | string            |
-| headerForeground  | Foreground color of the header (Specified in the CSS way)                                                  | null                    | string            |
-| title             | Title for the forecastle dashboard                                                                         | "Forecastle - Stakater" | string            |
-| instanceName      | Name of the forecastle instance                                                                            | ""                      | string            |
-| customApps        | A list of custom apps that you would like to add to the forecastle instance                                | {}                      | []CustomApp       |
+|       Field       |                                                Description                                                 |         Default         | Type              |
+| :---------------: | :--------------------------------------------------------------------------------------------------------: | :---------------------: | ----------------- |
+| namespaceSelector | A fine grained namespace selector which uses a combination of hardcoded namespaces well as label selectors |        any: true        | NamespaceSelector |
+| headerBackground  |                         Background color of the header (Specified in the CSS way)                          |          null           | string            |
+| headerForeground  |                         Foreground color of the header (Specified in the CSS way)                          |          null           | string            |
+|       title       |                                     Title for the forecastle dashboard                                     | "Forecastle - Stakater" | string            |
+|   instanceName    |                                      Name of the forecastle instance                                       |           ""            | string            |
+|    customApps     |                A list of custom apps that you would like to add to the forecastle instance                 |           {}            | []CustomApp       |
+|    crdEnabled     |                                  Enables or disables `ForecastleApp` CRD                                   |          true           | bool              |
 
 #### NamespaceSelector
 
 It is a selector for selecting namespaces either selecting all namespaces or a list of namespaces, or filtering namespaces through labels.
 
 |     Field     |                                          Description                                          | Default | Type                                                                                         |
-|:-------------:|:---------------------------------------------------------------------------------------------:|:-------:|----------------------------------------------------------------------------------------------|
-| any           | Boolean describing whether all namespaces are selected in contrast to a list restricting them | false   | bool                                                                                         |
-| labelSelector | Filter namespaces based on kubernetes metav1.LabelSelector type                               | null    | [metav1.LabelSelector](https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#LabelSelector) |
-| matchNames    | List of namespace names                                                                       | null    | []string                                                                                     |
+| :-----------: | :-------------------------------------------------------------------------------------------: | :-----: | -------------------------------------------------------------------------------------------- |
+|      any      | Boolean describing whether all namespaces are selected in contrast to a list restricting them |  false  | bool                                                                                         |
+| labelSelector |                Filter namespaces based on kubernetes metav1.LabelSelector type                |  null   | [metav1.LabelSelector](https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#LabelSelector) |
+|  matchNames   |                                    List of namespace names                                    |  null   | []string                                                                                     |
 
 *Note:* If you specify both `labelSelector` and `matchNames`, forecastle will take a union of all namespaces matched and use them.
 
@@ -83,11 +84,32 @@ It is a selector for selecting namespaces either selecting all namespaces or a l
 If you want to add any apps that are not exposed through ingresses or are external to the cluster, you can use the custom apps feature. You can pass an array of custom apps inside the config.
 
 | Field | Description                        | Type   |
-|-------|------------------------------------|--------|
+| ----- | ---------------------------------- | ------ |
 | Name  | Name of the custom app             | String |
 | Icon  | URL of the icon for the custom app | String |
 | URL   | URL of the custom app              | String |
 | Group | Group for the custom app           | String |
+
+#### ForecastleApp CRD
+
+You can now create custom resources to add apps to forecastle dynamically. This decouples the application configuration from Ingresses as well as forecastle config. You can create the custom resource `ForecastleApp` like the following:
+
+```yaml
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: app-name
+spec:
+  name: My Awesome App
+  group: dev
+  icon: https://icon-url
+  url: http://app-url
+  instance: "" # Optional
+```
+
+The above CR will be picked up by forecastle and it will generate the App in the UI. This lets you bundle this custom resource with the app's helm chart which will make it a part of the deployment process.
+
+*Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then you just have to make sure that `forecastle.createCustomResource` is set to `true`.
 
 #### Example Config
 
@@ -106,6 +128,7 @@ title:
 headerBackground:
 headerForeground: "#ffffff"
 instanceName: "Hello"
+crdEnabled: false
 customApps:
 - name: Hello
   icon: http://hello
@@ -121,6 +144,7 @@ customApps:
 - Configurable header (Title and colors)
 - Multiple instance support
 - Provide Custom apps
+- CRD `ForecastleApp` for adding custom apps
 - Custom groups and URLs for the apps
 
 ## Running multiple instances of forecastle
@@ -167,7 +191,7 @@ Apache2 © [Stakater](http://stakater.com)
 
 ## About
 
-### Why name Forecastle?
+### Why name Forecastle
 
 Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications on Kubernetes having a particular annotation.
 

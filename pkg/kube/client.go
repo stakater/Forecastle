@@ -3,6 +3,7 @@ package kube
 import (
 	"os"
 
+	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -15,30 +16,42 @@ var (
 
 // GetClient returns a k8s clientset
 func GetClient() kubernetes.Interface {
-	var kubeClient kubernetes.Interface
-	_, err := rest.InClusterConfig()
+	config := getClientConfig()
+	kubeClient, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		kubeClient = getClientOutOfCluster()
-	} else {
-		kubeClient = getClientInCluster()
+		logger.Fatalf("Can not create kubernetes client: %v", err)
 	}
 
 	return kubeClient
 }
 
-// GetClientInCluster returns a k8s clientset to the request from inside of cluster
-func getClientInCluster() kubernetes.Interface {
+// GetForecastleClient returns a forecastle resource clientset
+func GetForecastleClient() forecastlev1alpha1.Interface {
+	config := getClientConfig()
+	forecastleClient, err := forecastlev1alpha1.NewForConfig(config)
+	if err != nil {
+		logger.Fatalf("Can not create forecastle client: %v", err)
+	}
+
+	return forecastleClient
+}
+
+func getClientConfig() *rest.Config {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		logger.Fatalf("Can not get kubernetes config: %v", err)
+		config = getOutOfClusterConfig()
 	}
 
-	clientset, err := kubernetes.NewForConfig(config)
+	return config
+}
+
+func getOutOfClusterConfig() *rest.Config {
+	config, err := buildOutOfClusterConfig()
 	if err != nil {
-		logger.Fatalf("Can not create kubernetes client: %v", err)
+		logger.Fatalf("Cannot get kubernetes config: %v", err)
 	}
 
-	return clientset
+	return config
 }
 
 func buildOutOfClusterConfig() (*rest.Config, error) {
@@ -46,21 +59,6 @@ func buildOutOfClusterConfig() (*rest.Config, error) {
 	if kubeconfigPath == "" {
 		kubeconfigPath = os.Getenv("HOME") + "/.kube/config"
 	}
+
 	return clientcmd.BuildConfigFromFlags("", kubeconfigPath)
-}
-
-// GetClientOutOfCluster returns a k8s clientset to the request from outside of cluster
-func getClientOutOfCluster() kubernetes.Interface {
-	config, err := buildOutOfClusterConfig()
-	if err != nil {
-		logger.Fatalf("Cannot get kubernetes config: %v", err)
-	}
-
-	clientset, err := kubernetes.NewForConfig(config)
-
-	if err != nil {
-		logger.Fatalf("Cannot create new kubernetes client from config: %v", err)
-	}
-
-	return clientset
 }

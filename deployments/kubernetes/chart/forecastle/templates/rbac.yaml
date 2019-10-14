@@ -17,6 +17,14 @@ rules:
 - apiGroups: ["", "extensions"]
   resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
+{{ if .Values.forecastle.createCustomResource }}
+- apiGroups:
+  - forecastle.stakater.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

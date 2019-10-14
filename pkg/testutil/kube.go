@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
 	"k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -82,4 +83,18 @@ func CreateIngressWithHostAndTLSHost(name string, host string, tlsurl string) *v
 	}
 
 	return ingress
+}
+
+func CreateForecastleApp(name string, url string, group string, icon string) *v1alpha1.ForecastleApp {
+	return &v1alpha1.ForecastleApp{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+		Spec: v1alpha1.ForecastleAppSpec{
+			Name:  name,
+			URL:   url,
+			Icon:  icon,
+			Group: group,
+		},
+	}
 }

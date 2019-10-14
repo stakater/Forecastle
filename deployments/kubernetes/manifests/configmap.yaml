@@ -8,8 +8,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.28"
-    chart: "forecastle-v1.0.28"
+    version: "v1.0.29"
+    chart: "forecastle-v1.0.29"
     release: "forecastle"
     heritage: "Tiller"
 data:
@@ -22,4 +22,4 @@ data:
       matchNames:
       - stakater
     title: null
-    
+    crdEnabled: true

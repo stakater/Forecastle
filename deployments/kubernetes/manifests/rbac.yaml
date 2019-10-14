@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.28"
-    chart: "forecastle-v1.0.28"
+    version: "v1.0.29"
+    chart: "forecastle-v1.0.29"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -21,14 +21,21 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.28"
-    chart: "forecastle-v1.0.28"
+    version: "v1.0.29"
+    chart: "forecastle-v1.0.29"
     release: "forecastle"
     heritage: "Tiller"
 rules:
 - apiGroups: ["", "extensions"]
   resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
+
+- apiGroups:
+  - forecastle.stakater.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -38,8 +45,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.28"
-    chart: "forecastle-v1.0.28"
+    version: "v1.0.29"
+    chart: "forecastle-v1.0.29"
     release: "forecastle"
     heritage: "Tiller"
 roleRef:

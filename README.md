@@ -107,9 +107,9 @@ spec:
   instance: "" # Optional
 ```
 
-##### Fetch URL's from Kubernetes Resources
+##### Automatically discover URL's from Kubernetes Resources
 
-You can fetch URL's for ForecastleApp from the following sources:
+Forecastle supports discovering URL's ForecastleApp CRD from the following resources:
 
 - Ingress
 

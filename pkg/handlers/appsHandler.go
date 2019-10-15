@@ -16,7 +16,7 @@ import (
 
 // AppsHandler func responsible for serving apps at /apps
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
-	kubeClient := kube.GetClient()
+	clients := kube.GetClients()
 
 	var forecastleApps []forecastle.App
 	var err error
@@ -28,7 +28,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	namespaces, err := util.PopulateNamespaceList(appConfig.NamespaceSelector)
+	namespaces, err := util.PopulateNamespaceList(clients.KubernetesClient, appConfig.NamespaceSelector)
 
 	if err != nil {
 		logger.Error("An error occurred while populating namespaces", err)
@@ -38,7 +38,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 	logger.Info("Looking for forecastle apps in the following namespaces: ", namespaces)
 
-	ingressAppsList := ingressapps.NewList(kubeClient, *appConfig)
+	ingressAppsList := ingressapps.NewList(clients.KubernetesClient, *appConfig)
 	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()
 
 	if err != nil {
@@ -59,9 +59,8 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	forecastleApps = append(forecastleApps, customForecastleApps...)
 
 	if appConfig.CRDEnabled {
-		forecastleClient := kube.GetForecastleClient()
 
-		forecastleCRDAppsList := crdapps.NewList(forecastleClient, *appConfig)
+		forecastleCRDAppsList := crdapps.NewList(clients, *appConfig)
 		forecastleCRDApps, err := forecastleCRDAppsList.Populate(namespaces...).Get()
 
 		// Log and proceed with this error

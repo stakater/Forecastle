@@ -5,8 +5,10 @@ import (
 	"testing"
 
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/client/clientset/versioned/fake"
+	kubefake "k8s.io/client-go/kubernetes/fake"
+
+	"github.com/stakater/Forecastle/pkg/kube"
 
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/forecastle"
@@ -15,11 +17,14 @@ import (
 )
 
 func TestNewList(t *testing.T) {
-	forecastleClient := fake.NewSimpleClientset()
+	clients := kube.Clients{
+		ForecastleAppsClient: fake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(),
+	}
 
 	type args struct {
-		forecastleClient forecastlev1alpha1.Interface
-		appConfig        config.Config
+		clients   kube.Clients
+		appConfig config.Config
 	}
 	tests := []struct {
 		name string
@@ -28,26 +33,22 @@ func TestNewList(t *testing.T) {
 	}{
 		{
 			name: "TestNewListWithNokubeClient",
-			args: args{
-				forecastleClient: nil,
-			},
-			want: &List{
-				forecastleClient: nil,
-			},
+			args: args{},
+			want: &List{},
 		},
 		{
 			name: "TestNewListWithDefaultkubeClient",
 			args: args{
-				forecastleClient: forecastleClient,
+				clients: clients,
 			},
 			want: &List{
-				forecastleClient: forecastleClient,
+				clients: clients,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewList(tt.args.forecastleClient, tt.args.appConfig); !reflect.DeepEqual(got, tt.want) {
+			if got := NewList(tt.args.clients, tt.args.appConfig); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewList() = %v, want %v", got, tt.want)
 			}
 		})
@@ -56,11 +57,14 @@ func TestNewList(t *testing.T) {
 
 func TestList_Populate(t *testing.T) {
 
-	forecastleClient := fake.NewSimpleClientset()
+	clients := kube.Clients{
+		ForecastleAppsClient: fake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(),
+	}
 
 	forecastleApp := testutil.CreateForecastleApp("app-1", "https://google.com", "default", "https://google.com/icon.png")
 
-	_, _ = forecastleClient.ForecastleV1alpha1().ForecastleApps("default").Create(forecastleApp)
+	_, _ = clients.ForecastleAppsClient.ForecastleV1alpha1().ForecastleApps("default").Create(forecastleApp)
 
 	type args struct {
 		namespaces []string
@@ -74,13 +78,13 @@ func TestList_Populate(t *testing.T) {
 		{
 			name: "TestListPopulateWithSelectedNamespaces",
 			al: &List{
-				forecastleClient: forecastleClient,
+				clients: clients,
 			},
 			args: args{
 				namespaces: []string{"default"},
 			},
 			want: &List{
-				forecastleClient: forecastleClient,
+				clients: clients,
 				items: []forecastle.App{
 					{
 						Name:            "app-1",
@@ -101,12 +105,15 @@ func TestList_Populate(t *testing.T) {
 		})
 	}
 
-	_ = forecastleClient.ForecastleV1alpha1().ForecastleApps("default").Delete("app-1", &metav1.DeleteOptions{})
+	_ = clients.ForecastleAppsClient.ForecastleV1alpha1().ForecastleApps("default").Delete("app-1", &metav1.DeleteOptions{})
 
 }
 
 func TestList_Get(t *testing.T) {
-	forecastleClient := fake.NewSimpleClientset()
+	clients := kube.Clients{
+		ForecastleAppsClient: fake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(),
+	}
 
 	tests := []struct {
 		name    string
@@ -117,7 +124,7 @@ func TestList_Get(t *testing.T) {
 		{
 			name: "TestGetForecastleApps",
 			al: &List{
-				forecastleClient: forecastleClient,
+				clients: clients,
 				items: []forecastle.App{
 					{
 						Name:  "app",
@@ -140,7 +147,7 @@ func TestList_Get(t *testing.T) {
 		{
 			name: "TestGetForecastleAppsWithEmptyList",
 			al: &List{
-				forecastleClient: forecastleClient,
+				clients: clients,
 				items:            []forecastle.App{},
 			},
 			want:    []forecastle.App{},
@@ -162,6 +169,7 @@ func TestList_Get(t *testing.T) {
 }
 
 func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
+	kubeClient := kubefake.NewSimpleClientset()
 	type args struct {
 		forecastleApps []v1alpha1.ForecastleApp
 	}
@@ -197,7 +205,7 @@ func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotApps := convertForecastleAppCustomResourcesToForecastleApps(tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) {
+			if gotApps := convertForecastleAppCustomResourcesToForecastleApps(kubeClient, tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) {
 				t.Errorf("convertForecastleAppCustomResourcesToForecastleApps() = %v, want %v", gotApps, tt.wantApps)
 			}
 		})

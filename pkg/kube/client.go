@@ -14,8 +14,22 @@ var (
 	logger = log.New()
 )
 
-// GetClient returns a k8s clientset
-func GetClient() kubernetes.Interface {
+// Clients struct exposes interfaces for kubernetes as well as custom resource interfaces
+type Clients struct {
+	KubernetesClient     kubernetes.Interface
+	ForecastleAppsClient forecastlev1alpha1.Interface
+}
+
+// GetClients returns a `Clients` object containing all available interfaces
+func GetClients() Clients {
+	return Clients{
+		KubernetesClient:     GetKubernetesClient(),
+		ForecastleAppsClient: GetForecastleClient(),
+	}
+}
+
+// GetKubernetesClient returns a k8s clientset
+func GetKubernetesClient() kubernetes.Interface {
 	config := getClientConfig()
 	kubeClient, err := kubernetes.NewForConfig(config)
 	if err != nil {

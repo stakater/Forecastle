@@ -98,3 +98,16 @@ func CreateForecastleApp(name string, url string, group string, icon string) *v1
 		},
 	}
 }
+
+func CreateForecastleAppWithURLFromIngress(name string, group string, icon string, ingressName string) *v1alpha1.ForecastleApp {
+	forecastleApp := CreateForecastleApp(name, "", group, icon)
+	forecastleApp.Spec.URLFrom = &v1alpha1.URLSource{
+		IngressRef: &v1alpha1.IngressURLSource{
+			LocalObjectReference: v1alpha1.LocalObjectReference{
+				Name: ingressName,
+			},
+		},
+	}
+
+	return forecastleApp
+}

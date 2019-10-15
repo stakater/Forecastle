@@ -113,7 +113,7 @@ Forecastle supports discovering URL's ForecastleApp CRD from the following resou
 
 - Ingress
 
-The above type of resource that you want to discover URL from **MUST** exist in the same namespace as `ForecastleApp`. Then you can add the following to the CR:
+The above type of resource that you want to discover URL from **MUST** exist in the same namespace as `ForecastleApp` CR. Then you can add the following to the CR:
 
 ```yaml
 apiVersion: forecastle.stakater.com/v1alpha1
@@ -124,7 +124,7 @@ spec:
   name: My Awesome App
   group: dev
   icon: https://icon-url
-  urlFrom:
+  urlFrom: # This is new
     ingressRef:
       name: my-app-ingress
 ```

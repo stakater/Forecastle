@@ -42,17 +42,14 @@ spec:
               type: string
             name:
               type: string
+            networkRestricted:
+              type: boolean
             url:
               type: string
             urlFrom:
               properties:
-                kind:
-                  type: string
-                name:
-                  type: string
-              required:
-              - kind
-              - name
+                ingressRef:
+                  type: object
               type: object
           required:
           - name

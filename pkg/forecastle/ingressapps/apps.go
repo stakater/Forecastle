@@ -7,6 +7,7 @@ import (
 	"github.com/stakater/Forecastle/pkg/kube/lists/ingresses"
 	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	"github.com/stakater/Forecastle/pkg/log"
+	"github.com/stakater/Forecastle/pkg/util/strings"
 	"k8s.io/api/extensions/v1beta1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -64,11 +65,12 @@ func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []forec
 
 		wrapper := wrappers.NewIngressWrapper(&ingress)
 		apps = append(apps, forecastle.App{
-			Name:            wrapper.GetName(),
-			Group:           wrapper.GetGroup(),
-			Icon:            wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
-			URL:             wrapper.GetURL(),
-			DiscoverySource: forecastle.Ingress,
+			Name:              wrapper.GetName(),
+			Group:             wrapper.GetGroup(),
+			Icon:              wrapper.GetAnnotationValue(annotations.ForecastleIconAnnotation),
+			URL:               wrapper.GetURL(),
+			DiscoverySource:   forecastle.Ingress,
+			NetworkRestricted: strings.ParseBool(wrapper.GetAnnotationValue(annotations.ForecastleNetworkRestrictedAnnotation)),
 		})
 	}
 	return

@@ -166,9 +166,9 @@ func TestList_Populate(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 
 	ingress := testutil.AddAnnotationToIngress(
-		testutil.AddAnnotationToIngress(
+		testutil.AddAnnotationToIngress(testutil.AddAnnotationToIngress(
 			testutil.CreateIngressWithHost("test-ingress", "google.com"), annotations.ForecastleExposeAnnotation, "true"),
-		annotations.IngressClassAnnotation, "ingress")
+		annotations.IngressClassAnnotation, "ingress"), annotations.ForecastleNetworkRestrictedAnnotation, "true")
 
 	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
 	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
@@ -203,11 +203,13 @@ func TestList_Populate(t *testing.T) {
 						Name:  "test-ingress",
 						Group: "default",
 						URL:   "http://google.com",
+						NetworkRestricted: true,
 					},
 					{
 						Name:  "test-ingress",
 						Group: "testing",
 						URL:   "http://google.com",
+						NetworkRestricted: true,
 					},
 				},
 			},
@@ -227,11 +229,14 @@ func TestList_Populate(t *testing.T) {
 						Name:  "test-ingress",
 						Group: "default",
 						URL:   "http://google.com",
+						NetworkRestricted: true,
+
 					},
 					{
 						Name:  "test-ingress",
 						Group: "testing",
 						URL:   "http://google.com",
+						NetworkRestricted: true,
 					},
 				},
 			},
@@ -251,6 +256,7 @@ func TestList_Populate(t *testing.T) {
 						Name:  "test-ingress",
 						Group: "testing",
 						URL:   "http://google.com",
+						NetworkRestricted: true,
 					},
 				},
 			},

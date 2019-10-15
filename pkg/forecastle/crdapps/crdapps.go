@@ -65,11 +65,12 @@ func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1alph
 		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
 
 		apps = append(apps, forecastle.App{
-			Name:            forecastleApp.Spec.Name,
-			Group:           forecastleApp.Spec.Group,
-			Icon:            forecastleApp.Spec.Icon,
-			URL:             forecastleApp.Spec.URL,
-			DiscoverySource: forecastle.ForecastleAppCRD,
+			Name:              forecastleApp.Spec.Name,
+			Group:             forecastleApp.Spec.Group,
+			Icon:              forecastleApp.Spec.Icon,
+			URL:               forecastleApp.Spec.URL,
+			DiscoverySource:   forecastle.ForecastleAppCRD,
+			NetworkRestricted: forecastleApp.Spec.NetworkRestricted,
 		})
 	}
 	return

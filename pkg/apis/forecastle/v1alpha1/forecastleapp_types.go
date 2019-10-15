@@ -7,12 +7,13 @@ import (
 // ForecastleAppSpec defines the desired state of ForecastleApp
 // +k8s:openapi-gen=true
 type ForecastleAppSpec struct {
-	Name     string  `json:"name"`
-	Instance string  `json:"instance,omitempty"`
-	Group    string  `json:"group"`
-	Icon     string  `json:"icon"`
-	URL      string  `json:"url,omitempty"`
-	URLFrom  URLFrom `json:"urlFrom,omitempty"`
+	Name              string  `json:"name"`
+	Instance          string  `json:"instance,omitempty"`
+	Group             string  `json:"group"`
+	Icon              string  `json:"icon"`
+	URL               string  `json:"url,omitempty"`
+	URLFrom           URLFrom `json:"urlFrom,omitempty"`
+	NetworkRestricted bool    `json:"networkRestricted,omitempty"`
 }
 
 type URLFrom struct {

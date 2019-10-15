@@ -107,6 +107,28 @@ spec:
   instance: "" # Optional
 ```
 
+##### Automatically discover URL's from Kubernetes Resources
+
+Forecastle supports discovering URL's ForecastleApp CRD from the following resources:
+
+- Ingress
+
+The above type of resource that you want to discover URL from **MUST** exist in the same namespace as `ForecastleApp` CR. Then you can add the following to the CR:
+
+```yaml
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: app-name
+spec:
+  name: My Awesome App
+  group: dev
+  icon: https://icon-url
+  urlFrom: # This is new
+    ingressRef:
+      name: my-app-ingress
+```
+
 The above CR will be picked up by forecastle and it will generate the App in the UI. This lets you bundle this custom resource with the app's helm chart which will make it a part of the deployment process.
 
 *Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then you just have to make sure that `forecastle.createCustomResource` is set to `true`.

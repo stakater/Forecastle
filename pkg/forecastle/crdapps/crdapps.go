@@ -2,11 +2,12 @@ package crdapps
 
 import (
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/forecastle"
+	"github.com/stakater/Forecastle/pkg/kube"
 	"github.com/stakater/Forecastle/pkg/kube/lists/forecastleapps"
 	"github.com/stakater/Forecastle/pkg/log"
+	"k8s.io/client-go/kubernetes"
 )
 
 var (
@@ -15,23 +16,23 @@ var (
 
 // List struct is used for listing forecastle apps
 type List struct {
-	appConfig        config.Config
-	err              error // Used for forwarding errors
-	items            []forecastle.App
-	forecastleClient forecastlev1alpha1.Interface
+	appConfig config.Config
+	err       error // Used for forwarding errors
+	items     []forecastle.App
+	clients   kube.Clients
 }
 
 // NewList func creates a new instance of apps lister
-func NewList(forecastleClient forecastlev1alpha1.Interface, appConfig config.Config) *List {
+func NewList(clients kube.Clients, appConfig config.Config) *List {
 	return &List{
-		appConfig:        appConfig,
-		forecastleClient: forecastleClient,
+		appConfig: appConfig,
+		clients:   clients,
 	}
 }
 
 // Populate function that populates a list of forecastle apps from forecastleapps in selected namespaces
 func (al *List) Populate(namespaces ...string) *List {
-	forecastleAppListObj := forecastleapps.NewList(al.forecastleClient, al.appConfig).
+	forecastleAppListObj := forecastleapps.NewList(al.clients.ForecastleAppsClient, al.appConfig).
 		Populate(namespaces...)
 
 	var forecastleAppList []v1alpha1.ForecastleApp
@@ -50,7 +51,7 @@ func (al *List) Populate(namespaces ...string) *List {
 		al.err = err
 	}
 
-	al.items = convertForecastleAppCustomResourcesToForecastleApps(forecastleAppList)
+	al.items = convertForecastleAppCustomResourcesToForecastleApps(al.clients.KubernetesClient, forecastleAppList)
 
 	return al
 }
@@ -60,7 +61,7 @@ func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
+func convertForecastleAppCustomResourcesToForecastleApps(kubeClient kubernetes.Interface, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
 	for _, forecastleApp := range forecastleApps {
 		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
 
@@ -68,7 +69,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(forecastleApps []v1alph
 			Name:              forecastleApp.Spec.Name,
 			Group:             forecastleApp.Spec.Group,
 			Icon:              forecastleApp.Spec.Icon,
-			URL:               forecastleApp.Spec.URL,
+			URL:               getURL(kubeClient, forecastleApp),
 			DiscoverySource:   forecastle.ForecastleAppCRD,
 			NetworkRestricted: forecastleApp.Spec.NetworkRestricted,
 		})

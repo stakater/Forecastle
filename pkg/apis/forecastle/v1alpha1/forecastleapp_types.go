@@ -7,17 +7,30 @@ import (
 // ForecastleAppSpec defines the desired state of ForecastleApp
 // +k8s:openapi-gen=true
 type ForecastleAppSpec struct {
-	Name              string  `json:"name"`
-	Instance          string  `json:"instance,omitempty"`
-	Group             string  `json:"group"`
-	Icon              string  `json:"icon"`
-	URL               string  `json:"url,omitempty"`
-	URLFrom           URLFrom `json:"urlFrom,omitempty"`
-	NetworkRestricted bool    `json:"networkRestricted,omitempty"`
+	Name     string `json:"name"`
+	Instance string `json:"instance,omitempty"`
+	Group    string `json:"group"`
+	Icon     string `json:"icon"`
+	URL      string `json:"url,omitempty"`
+	// +optional
+	URLFrom *URLSource `json:"urlFrom,omitempty"`
+	// +optional
+	NetworkRestricted bool `json:"networkRestricted,omitempty"`
 }
 
-type URLFrom struct {
-	Kind string `json:"kind"`
+// URLSource represents the set of resources to fetch the URL from
+type URLSource struct {
+	// +optional
+	IngressRef *IngressURLSource `json:"ingressRef,omitempty"`
+}
+
+// IngressURLSource selects an Ingress to populate the URL with
+type IngressURLSource struct {
+	LocalObjectReference
+}
+
+// LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
+type LocalObjectReference struct {
 	Name string `json:"name"`
 }
 

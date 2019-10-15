@@ -2,13 +2,13 @@ package util
 
 import (
 	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/kube"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
+	"k8s.io/client-go/kubernetes"
 )
 
-func PopulateNamespaceList(namespaceSelector config.NamespaceSelector) ([]string, error) {
+func PopulateNamespaceList(kubeClient kubernetes.Interface, namespaceSelector config.NamespaceSelector) ([]string, error) {
 	if namespaceSelector.Any {
 		return []string{metav1.NamespaceAll}, nil
 	}
@@ -24,7 +24,7 @@ func PopulateNamespaceList(namespaceSelector config.NamespaceSelector) ([]string
 
 		set := labels.Set(labelsMap)
 		nsOptions := metav1.ListOptions{LabelSelector: set.AsSelector().String()}
-		nsList, err := kube.GetClient().CoreV1().Namespaces().List(nsOptions)
+		nsList, err := kubeClient.CoreV1().Namespaces().List(nsOptions)
 		if err != nil {
 			return nil, err
 		}

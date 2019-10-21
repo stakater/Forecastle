@@ -7,22 +7,22 @@ import (
 
 // Config struct for forecastle
 type Config struct {
-	NamespaceSelector NamespaceSelector `yaml:"namespaceSelector"`
-	HeaderBackground  string            `yaml:"headerBackground"`
-	HeaderForeground  string            `yaml:"headerForeground"`
-	Title             string            `yaml:"title"`
-	InstanceName      string            `yaml:"instanceName"`
-	CustomApps        []CustomApp       `yaml:"customApps"`
-	CRDEnabled        bool              `yaml:"crdEnabled"`
+	NamespaceSelector NamespaceSelector `yaml:"namespaceSelector" json:"namespaceSelector"`
+	HeaderBackground  string            `yaml:"headerBackground" json:"headerBackground"`
+	HeaderForeground  string            `yaml:"headerForeground" json:"headerForeground"`
+	Title             string            `yaml:"title" json:"title"`
+	InstanceName      string            `yaml:"instanceName" json:"instanceName"`
+	CustomApps        []CustomApp       `yaml:"customApps" json:"customApps"`
+	CRDEnabled        bool              `yaml:"crdEnabled" json:"crdEnabled"`
 }
 
 // CustomApp struct for specifying apps that are not generated using ingresses
 type CustomApp struct {
-	Name              string `yaml:"name"`
-	Icon              string `yaml:"icon"`
-	URL               string `yaml:"url"`
-	Group             string `yaml:"group"`
-	NetworkRestricted bool   `yaml:"networkRestricted"`
+	Name              string `yaml:"name" json:"name"`
+	Icon              string `yaml:"icon" json:"icon"`
+	URL               string `yaml:"url" json:"url"`
+	Group             string `yaml:"group" json:"group"`
+	NetworkRestricted bool   `yaml:"networkRestricted" json:"networkRestricted"`
 }
 
 // NamespaceSelector struct for selecting namespaces based on labels and names

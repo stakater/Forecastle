@@ -3,7 +3,7 @@ import config from "../config";
 
 // Basic configuration for HTTP calls
 const instance = axios.create({
-  baseURL: config.API_URL,
+  baseURL: '/',
   responseType: "json"
 });
 

@@ -39,9 +39,11 @@ const AppCardFooter = ({
         <Chip size="small" label={discoverySource} />
       </Tooltip>
       {networkRestricted && (
-        <IconButton>
-          <VpnLockIcon />
-        </IconButton>
+        <Tooltip title="The app is Network Restricted">
+          <IconButton>
+            <VpnLockIcon />
+          </IconButton>
+        </Tooltip>
       )}
       {properties && Object.keys(properties).length > 0 && (
         <Tooltip title={isDetailsExpanded ? "Hide details" : "Show details"}>

@@ -12,7 +12,7 @@
 
 Forecastle gives you access to a control panel where you can see your running applications and access them on Kubernetes.
 
-![Screenshot](https://raw.githubusercontent.com/stakater/Forecastle/master/assets/forecastle.png)
+![Screenshot](assets/forecastle.png)
 
 ## Deploying to Kubernetes
 

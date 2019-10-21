@@ -68,7 +68,7 @@ const AppCardDetails = ({ properties, isDetailsExpanded }) => {
           ))}
 
           {/* If no properties exist */}
-          {Object.keys(properties).length === 0 && (
+          {properties && Object.keys(properties).length === 0 && (
             <ListItem>
               <ListItemText secondary="No properties found." />
             </ListItem>

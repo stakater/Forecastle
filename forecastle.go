@@ -30,12 +30,14 @@ func init() {
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/apps", handlers.AppsHandler)
-	router.HandleFunc("/config", handlers.ConfigHandler)
+	router.HandleFunc("/api/apps", handlers.AppsHandler).Methods("GET")
+	router.HandleFunc("/api/config", handlers.ConfigHandler).Methods("GET")
 
-	// Serve static files using packr
-	box := packr.New("static", "./static")
-	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(box)))
+	// Serve react frontend using packr
+	staticBox := packr.New("static", "./frontend/build/static")
+	buildBox := packr.New("build", "./frontend/build")
+	router.PathPrefix("/").Handler(http.FileServer(buildBox))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(staticBox)))
 
 	logger.Info("Listening at port 3000")
 	if err := http.ListenAndServe(":3000", router); err != nil {

@@ -72,6 +72,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(kubeClient kubernetes.I
 			URL:               getURL(kubeClient, forecastleApp),
 			DiscoverySource:   forecastle.ForecastleAppCRD,
 			NetworkRestricted: forecastleApp.Spec.NetworkRestricted,
+			Details:           forecastleApp.Spec.Details,
 		})
 	}
 	return

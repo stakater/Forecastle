@@ -18,11 +18,12 @@ type Config struct {
 
 // CustomApp struct for specifying apps that are not generated using ingresses
 type CustomApp struct {
-	Name              string `yaml:"name" json:"name"`
-	Icon              string `yaml:"icon" json:"icon"`
-	URL               string `yaml:"url" json:"url"`
-	Group             string `yaml:"group" json:"group"`
-	NetworkRestricted bool   `yaml:"networkRestricted" json:"networkRestricted"`
+	Name              string            `yaml:"name" json:"name"`
+	Icon              string            `yaml:"icon" json:"icon"`
+	URL               string            `yaml:"url" json:"url"`
+	Group             string            `yaml:"group" json:"group"`
+	NetworkRestricted bool              `yaml:"networkRestricted" json:"networkRestricted"`
+	Details           map[string]string `yaml:"details" json:"details"`
 }
 
 // NamespaceSelector struct for selecting namespaces based on labels and names

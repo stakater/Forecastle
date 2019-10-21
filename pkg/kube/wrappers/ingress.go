@@ -53,6 +53,13 @@ func (iw *IngressWrapper) GetGroup() string {
 	return iw.GetNamespace()
 }
 
+func (iw *IngressWrapper) GetDetails() map[string]string {
+	if detailsFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleDetailsAnnotation); detailsFromAnnotation != "" {
+		return makeMap(detailsFromAnnotation)
+	}
+	return nil
+}
+
 // GetURL func extracts url of the ingress wrapped by the object
 func (iw *IngressWrapper) GetURL() string {
 

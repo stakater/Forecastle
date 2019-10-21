@@ -71,6 +71,7 @@ func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []forec
 			URL:               wrapper.GetURL(),
 			DiscoverySource:   forecastle.Ingress,
 			NetworkRestricted: strings.ParseBool(wrapper.GetAnnotationValue(annotations.ForecastleNetworkRestrictedAnnotation)),
+			Details:           wrapper.GetDetails(),
 		})
 	}
 	return

@@ -3,7 +3,7 @@ package wrappers
 import "strings"
 
 func makeMap(value string) map[string]string {
-	var detailsMap map[string]string
+	detailsMap := make(map[string]string)
 
 	detailParams := strings.Split(value, ",")
 	for _, detailParam := range detailParams {

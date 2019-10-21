@@ -13,3 +13,7 @@ var (
 type Handler interface {
 	Handle(responseWriter http.ResponseWriter, request *http.Request)
 }
+
+func enableCors(w *http.ResponseWriter, origin string) {
+	(*w).Header().Set("Access-Control-Allow-Origin", origin)
+}

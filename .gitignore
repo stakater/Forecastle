@@ -4,3 +4,4 @@ api/vendor
 vendor
 config.yaml
 .vscode
+dist

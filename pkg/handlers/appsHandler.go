@@ -16,6 +16,8 @@ import (
 
 // AppsHandler func responsible for serving apps at /apps
 func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	enableCors(&responseWriter, "*")
+
 	clients := kube.GetClients()
 
 	var forecastleApps []forecastle.App

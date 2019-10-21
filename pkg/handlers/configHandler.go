@@ -9,6 +9,8 @@ import (
 
 // ConfigHandler handles the config requests coming from the frontend
 func ConfigHandler(responseWriter http.ResponseWriter, request *http.Request) {
+	enableCors(&responseWriter, "*")
+
 	appConfig, err := config.GetConfig()
 	if err != nil {
 		logger.Error("Failed to read configuration for forecastle", err)

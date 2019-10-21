@@ -12,7 +12,7 @@
 
 Forecastle gives you access to a control panel where you can see your running applications and access them on Kubernetes.
 
-![Screenshot](https://raw.githubusercontent.com/stakater/Forecastle/master/assets/forecastle.png)
+![Screenshot](assets/forecastle.png)
 
 ## Deploying to Kubernetes
 
@@ -44,14 +44,16 @@ Forecastle looks for a specific annotations on ingresses.
 
 - Add the following annotations to your ingresses in order to be discovered by forecastle:
 
-| Annotation                         | Description                                                                                                                                               | Required |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `forecastle.stakater.com/expose`   | Add this with value `true` to the ingress of the app you want to show in Forecastle                                                                       | `true`   |
-| `forecastle.stakater.com/icon`     | Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons)                             | `false`  |
-| `forecastle.stakater.com/appName`  | A custom name for your application. Use if you don't want to use name of the ingress                                                                      | `false`  |
-| `forecastle.stakater.com/group`    | A custom group name. Use if you want the application to show in a different group than the namespace it is running in                                     | `false`  |
-| `forecastle.stakater.com/instance` | A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards | `false`  |
-| `forecastle.stakater.com/url`      | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                              | `false`  |
+| Annotation                                   | Description                                                                                                                                                 | Required |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `forecastle.stakater.com/expose`             | Add this with value `true` to the ingress of the app you want to show in Forecastle                                                                         | `true`   |
+| `forecastle.stakater.com/icon`               | Icon/Image URL of the application; An icons/logos/images collection repo [Icons](https://github.com/stakater/ForecastleIcons)                               | `false`  |
+| `forecastle.stakater.com/appName`            | A custom name for your application. Use if you don't want to use name of the ingress                                                                    ßßß | `false`  |
+| `forecastle.stakater.com/group`              | A custom group name. Use if you want the application to show in a different group than the namespace it is running in                                       | `false`  |
+| `forecastle.stakater.com/instance`           | A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards   | `false`  |
+| `forecastle.stakater.com/url`                | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                                | `false`  |
+| `forecastle.stakater.com/properties`         | A comma separate list of key value pairs for the properties. This will appear as an expandable list for the app                                             | `false`  |
+| `forecastle.stakater.com/network-restricted` | Specify whether the app is network restricted or not (true or false)                                                                                        | `false`  |
 
 ### Forecastle
 
@@ -83,12 +85,14 @@ It is a selector for selecting namespaces either selecting all namespaces or a l
 
 If you want to add any apps that are not exposed through ingresses or are external to the cluster, you can use the custom apps feature. You can pass an array of custom apps inside the config.
 
-| Field | Description                        | Type   |
-| ----- | ---------------------------------- | ------ |
-| Name  | Name of the custom app             | String |
-| Icon  | URL of the icon for the custom app | String |
-| URL   | URL of the custom app              | String |
-| Group | Group for the custom app           | String |
+| Field             | Description                               | Type              |
+| ----------------- | ----------------------------------------- | ----------------- |
+| name              | Name of the custom app                    | String            |
+| icon              | URL of the icon for the custom app        | String            |
+| url               | URL of the custom app                     | String            |
+| group             | Group for the custom app                  | String            |
+| properties        | Additional Properties of the app as a map | map[string]string |
+| networkRestricted | Whether app is network restricted or not  | bool              |
 
 #### ForecastleApp CRD
 
@@ -104,6 +108,9 @@ spec:
   group: dev
   icon: https://icon-url
   url: http://app-url
+  networkRestricted: "false"
+  properties:
+    Version: 1.0
   instance: "" # Optional
 ```
 
@@ -156,6 +163,8 @@ customApps:
   icon: http://hello
   url: http://helloicon
   group: Test
+  properties:
+    Version: 1.0
 ```
 
 ## Features
@@ -168,6 +177,7 @@ customApps:
 - Provide Custom apps
 - CRD `ForecastleApp` for adding custom apps
 - Custom groups and URLs for the apps
+- Details per app
 
 ## Running multiple instances of forecastle
 

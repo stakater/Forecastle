@@ -1,0 +1,29 @@
+builds:
+- env:
+  - CGO_ENABLED=0
+  goos:
+  - windows
+  - darwin
+  - linux
+  goarch:
+  - 386
+  - amd64
+  - arm
+  - arm64
+  hooks:
+    pre: packr2 build
+    post: packr2 clean
+archives:
+- name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+checksum:
+  name_template: "{{ .ProjectName }}_v{{ .Version }}_checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+env_files:
+  github_token: /home/jenkins/.apitoken/hub

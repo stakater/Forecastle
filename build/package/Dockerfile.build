@@ -1,3 +1,8 @@
+FROM node:12.11.1 as build-deps
+WORKDIR /usr/src/app
+COPY ./frontend ./
+RUN yarn install && yarn build
+
 FROM golang:1.13.1-alpine
 MAINTAINER "Stakater Team"
 
@@ -19,6 +24,8 @@ RUN mkdir -p /tmp/packr/ && \
     rm -rf /tmp/packr
 
 ADD . "$GOPATH/src/github.com/stakater/Forecastle"
+
+COPY --from=build-deps /usr/src/app/build ${GOPATH}/src/github.com/stakater/Forecastle/frontend/build/
 
 RUN cd "$GOPATH/src/github.com/stakater/Forecastle" && \
     go mod download && \

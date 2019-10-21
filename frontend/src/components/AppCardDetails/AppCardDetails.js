@@ -34,7 +34,7 @@ const AppCardDetails = ({ properties, isDetailsExpanded }) => {
     >
       <CardContent className={classes.content}>
         <List>
-          {Object.keys(properties).map(property => (
+          {properties && Object.keys(properties).map(property => (
             <ListItem key={property}>
               <ListItemText
                 primary={property}

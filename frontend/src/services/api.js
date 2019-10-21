@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "../config";
 
 // Basic configuration for HTTP calls
 const instance = axios.create({

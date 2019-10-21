@@ -45,7 +45,7 @@ const AppCardFooter = ({
           </IconButton>
         </Tooltip>
       )}
-      {properties && Object.keys(properties).length > 0 && (
+      {(
         <Tooltip title={isDetailsExpanded ? "Hide details" : "Show details"}>
           <IconButton
             className={clsx(classes.expand, {

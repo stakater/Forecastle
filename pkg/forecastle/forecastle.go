@@ -8,5 +8,5 @@ type App struct {
 	URL               string            `json:"url"`
 	DiscoverySource   DiscoverySource   `json:"discoverySource"`
 	NetworkRestricted bool              `json:"networkRestricted"`
-	Properties        map[string]string `json:"properties"`
+	Properties        map[string]string `json:"properties,omitempty"`
 }

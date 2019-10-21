@@ -17,7 +17,7 @@ type ForecastleAppSpec struct {
 	// +optional
 	NetworkRestricted bool `json:"networkRestricted,omitempty"`
 	// +optional
-	Details map[string]string `json:"details,omitempty"`
+	Properties map[string]string `json:"properties,omitempty"`
 }
 
 // URLSource represents the set of resources to fetch the URL from

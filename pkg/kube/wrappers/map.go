@@ -3,13 +3,13 @@ package wrappers
 import "strings"
 
 func makeMap(value string) map[string]string {
-	detailsMap := make(map[string]string)
+	propertiesMap := make(map[string]string)
 
-	detailParams := strings.Split(value, ",")
-	for _, detailParam := range detailParams {
-		splitted := strings.SplitN(detailParam, ":", 2)
-		detailsMap[splitted[0]] = splitted[1]
+	propertyParams := strings.Split(value, ",")
+	for _, propertyParam := range propertyParams {
+		splitted := strings.SplitN(propertyParam, ":", 2)
+		propertiesMap[splitted[0]] = splitted[1]
 	}
 
-	return detailsMap
+	return propertiesMap
 }

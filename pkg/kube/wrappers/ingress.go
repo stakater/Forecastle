@@ -53,9 +53,9 @@ func (iw *IngressWrapper) GetGroup() string {
 	return iw.GetNamespace()
 }
 
-func (iw *IngressWrapper) GetDetails() map[string]string {
-	if detailsFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleDetailsAnnotation); detailsFromAnnotation != "" {
-		return makeMap(detailsFromAnnotation)
+func (iw *IngressWrapper) GetProperties() map[string]string {
+	if propertiesFromAnnotations := iw.GetAnnotationValue(annotations.ForecastlePropertiesAnnotation); propertiesFromAnnotations != "" {
+		return makeMap(propertiesFromAnnotations)
 	}
 	return nil
 }

@@ -45,7 +45,7 @@ func convertCustomAppsToForecastleApps(customApps []config.CustomApp) (apps []fo
 			Group:             customApp.Group,
 			DiscoverySource:   forecastle.Config,
 			NetworkRestricted: customApp.NetworkRestricted,
-			Details:           customApp.Details,
+			Properties:        customApp.Properties,
 		})
 	}
 

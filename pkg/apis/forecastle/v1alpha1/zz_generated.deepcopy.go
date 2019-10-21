@@ -93,8 +93,8 @@ func (in *ForecastleAppSpec) DeepCopyInto(out *ForecastleAppSpec) {
 		*out = new(URLSource)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.Details != nil {
-		in, out := &in.Details, &out.Details
+	if in.Properties != nil {
+		in, out := &in.Properties, &out.Properties
 		*out = make(map[string]string, len(*in))
 		for key, val := range *in {
 			(*out)[key] = val

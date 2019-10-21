@@ -23,7 +23,7 @@ type CustomApp struct {
 	URL               string            `yaml:"url" json:"url"`
 	Group             string            `yaml:"group" json:"group"`
 	NetworkRestricted bool              `yaml:"networkRestricted" json:"networkRestricted"`
-	Details           map[string]string `yaml:"details" json:"details"`
+	Properties        map[string]string `yaml:"properties" json:"properties"`
 }
 
 // NamespaceSelector struct for selecting namespaces based on labels and names

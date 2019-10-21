@@ -17,6 +17,6 @@ const (
 	ForecastleNetworkRestrictedAnnotation = "forecastle.stakater.com/network-restricted"
 	// ForecastleURLAnnotation const used for specifying the URL for the forecastle app
 	ForecastleURLAnnotation = "forecastle.stakater.com/url"
-	// ForecastleDetailsAnnotation const used for specifying app details
-	ForecastleDetailsAnnotation = "forecastle.stakater.com/details"
+	// ForecastlePropertiesAnnotation const used for specifying app properties
+	ForecastlePropertiesAnnotation = "forecastle.stakater.com/properties"
 )

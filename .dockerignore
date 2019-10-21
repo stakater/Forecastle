@@ -1,1 +1,4 @@
 vendor
+dist
+frontend/node_modules
+frontend/build

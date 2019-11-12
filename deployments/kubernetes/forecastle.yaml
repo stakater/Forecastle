@@ -82,7 +82,6 @@ rules:
 - apiGroups: ["", "extensions"]
   resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
-
 - apiGroups:
   - forecastle.stakater.com
   resources:
@@ -110,6 +109,7 @@ subjects:
 - kind: ServiceAccount
   name: forecastle
   namespace: default
+
 ---
 # Source: forecastle/templates/crd.yaml
 
@@ -241,4 +241,4 @@ data:
       matchNames:
       - stakater
     title: null
-    crdEnabled: true
+    

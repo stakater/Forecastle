@@ -29,7 +29,6 @@ rules:
 - apiGroups: ["", "extensions"]
   resources: ["ingresses", "namespaces"]
   verbs: ["get", "list"]
-
 - apiGroups:
   - forecastle.stakater.com
   resources:
@@ -57,3 +56,4 @@ subjects:
 - kind: ServiceAccount
   name: forecastle
   namespace: default
+

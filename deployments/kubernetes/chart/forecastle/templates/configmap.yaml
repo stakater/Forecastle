@@ -8,4 +8,3 @@ metadata:
 data:
   config.yaml: |-
 {{ toYaml .Values.forecastle.config | indent 4 -}}
-    crdEnabled: {{ .Values.forecastle.createCustomResource }}

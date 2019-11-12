@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"testing"
 
+	routefake "github.com/openshift/client-go/route/clientset/versioned/fake"
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
 	"github.com/stakater/Forecastle/pkg/client/clientset/versioned/fake"
 	kubefake "k8s.io/client-go/kubernetes/fake"
@@ -148,7 +149,7 @@ func TestList_Get(t *testing.T) {
 			name: "TestGetForecastleAppsWithEmptyList",
 			al: &List{
 				clients: clients,
-				items:            []forecastle.App{},
+				items:   []forecastle.App{},
 			},
 			want:    []forecastle.App{},
 			wantErr: false,
@@ -169,7 +170,12 @@ func TestList_Get(t *testing.T) {
 }
 
 func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
-	kubeClient := kubefake.NewSimpleClientset()
+	clients := kube.Clients{
+		ForecastleAppsClient: fake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(),
+		RoutesClient:         routefake.NewSimpleClientset(),
+	}
+
 	type args struct {
 		forecastleApps []v1alpha1.ForecastleApp
 	}
@@ -205,7 +211,7 @@ func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotApps := convertForecastleAppCustomResourcesToForecastleApps(kubeClient, tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) {
+			if gotApps := convertForecastleAppCustomResourcesToForecastleApps(clients, tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) {
 				t.Errorf("convertForecastleAppCustomResourcesToForecastleApps() = %v, want %v", gotApps, tt.wantApps)
 			}
 		})

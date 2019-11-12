@@ -17,6 +17,8 @@ require (
 	github.com/joho/godotenv v1.3.1-0.20190204044109-5c0e6c6ab1a0 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/onrik/logrus v0.4.2-0.20190903110901-4337fdeb70c5
+	github.com/openshift/api v3.9.1-0.20190923092516-169848dd8137+incompatible
+	github.com/openshift/client-go v0.0.0-20190923092832-6afefc9bb372
 	github.com/pelletier/go-toml v1.5.0 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/rogpeppe/go-internal v1.4.1-0.20190930122113-d89504fbbf2c // indirect
@@ -38,6 +40,8 @@ require (
 )
 
 replace (
+	github.com/openshift/api => github.com/openshift/api v3.9.1-0.20190923092516-169848dd8137+incompatible // prebase-1.16
+	github.com/openshift/client-go => github.com/openshift/client-go v0.0.0-20190923092832-6afefc9bb372 // prebase-1.16
 	k8s.io/api => k8s.io/api v0.0.0-20190918155943-95b840bb6a1f // kubernetes-1.16.0
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190913080033-27d36303b655 // kubernetes-1.16.0
 	k8s.io/client-go => k8s.io/client-go v0.0.0-20190918160344-1fbdaa4c8d90 // kubernetes-1.16.0

@@ -3,6 +3,7 @@ package kube
 import (
 	"os"
 
+	routesClient "github.com/openshift/client-go/route/clientset/versioned"
 	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
 	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/client-go/kubernetes"
@@ -18,6 +19,7 @@ var (
 type Clients struct {
 	KubernetesClient     kubernetes.Interface
 	ForecastleAppsClient forecastlev1alpha1.Interface
+	RoutesClient         routesClient.Interface
 }
 
 // GetClients returns a `Clients` object containing all available interfaces
@@ -25,7 +27,19 @@ func GetClients() Clients {
 	return Clients{
 		KubernetesClient:     GetKubernetesClient(),
 		ForecastleAppsClient: GetForecastleClient(),
+		RoutesClient:         GetRoutesClient(),
 	}
+}
+
+// GetRoutesClient resturns a routes clientset
+func GetRoutesClient() routesClient.Interface {
+	config := getClientConfig()
+	routesClient, err := routesClient.NewForConfig(config)
+	if err != nil {
+		logger.Fatalf("Can not create routes client: %v", err)
+	}
+
+	return routesClient
 }
 
 // GetKubernetesClient returns a k8s clientset

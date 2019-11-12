@@ -24,10 +24,17 @@ type ForecastleAppSpec struct {
 type URLSource struct {
 	// +optional
 	IngressRef *IngressURLSource `json:"ingressRef,omitempty"`
+	// +optional
+	RouteRef *RouteURLSource `json:"routeRef,omitempty"`
 }
 
 // IngressURLSource selects an Ingress to populate the URL with
 type IngressURLSource struct {
+	LocalObjectReference
+}
+
+// RouteURLSource selects a Route to populate the URL with
+type RouteURLSource struct {
 	LocalObjectReference
 }
 

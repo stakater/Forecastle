@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	routev1 "github.com/openshift/api/route/v1"
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
 	"k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -15,11 +16,26 @@ func CreateIngress(name string) *v1beta1.Ingress {
 	}
 }
 
+func CreateRoute(name string) *routev1.Route {
+	return &routev1.Route{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+	}
+}
+
 func CreateIngressWithNamespace(name string, namespace string) *v1beta1.Ingress {
 	ingress := CreateIngress(name)
 	ingress.ObjectMeta.Namespace = namespace
 
 	return ingress
+}
+
+func CreateRouteWithHost(name string, url string) *routev1.Route {
+	route := CreateRoute(name)
+	route.Spec.Host = url
+
+	return route
 }
 
 func CreateIngressWithHost(name string, url string) *v1beta1.Ingress {
@@ -97,6 +113,19 @@ func CreateForecastleApp(name string, url string, group string, icon string) *v1
 			Group: group,
 		},
 	}
+}
+
+func CreateForecastleAppWithURLFromRoute(name string, group string, icon string, routeName string) *v1alpha1.ForecastleApp {
+	forecastleApp := CreateForecastleApp(name, "", group, icon)
+	forecastleApp.Spec.URLFrom = &v1alpha1.URLSource{
+		RouteRef: &v1alpha1.RouteURLSource{
+			LocalObjectReference: v1alpha1.LocalObjectReference{
+				Name: routeName,
+			},
+		},
+	}
+
+	return forecastleApp
 }
 
 func CreateForecastleAppWithURLFromIngress(name string, group string, icon string, ingressName string) *v1alpha1.ForecastleApp {

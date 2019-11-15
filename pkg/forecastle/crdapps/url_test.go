@@ -3,18 +3,21 @@ package crdapps
 import (
 	"testing"
 
+	routefake "github.com/openshift/client-go/route/clientset/versioned/fake"
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/pkg/kube"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/kubernetes/fake"
+	kubefake "k8s.io/client-go/kubernetes/fake"
 )
 
 func Test_getURL(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
-
+	clients := kube.Clients{
+		RoutesClient:     routefake.NewSimpleClientset(),
+		KubernetesClient: kubefake.NewSimpleClientset(),
+	}
 	type args struct {
-		kubeClient    kubernetes.Interface
+		clients       kube.Clients
 		forecastleApp v1alpha1.ForecastleApp
 	}
 	tests := []struct {
@@ -25,7 +28,7 @@ func Test_getURL(t *testing.T) {
 		{
 			name: "TestGetURLWithDefaultURLValue",
 			args: args{
-				kubeClient:    kubeClient,
+				clients:       clients,
 				forecastleApp: *testutil.CreateForecastleApp("app-1", "https://google.com", "default", "https://icon"),
 			},
 			want: "https://google.com",
@@ -33,7 +36,7 @@ func Test_getURL(t *testing.T) {
 		{
 			name: "TestGetURLWithNoURL",
 			args: args{
-				kubeClient:    kubeClient,
+				clients:       clients,
 				forecastleApp: *testutil.CreateForecastleApp("app-1", "", "default", "https://icon"),
 			},
 			want: "",
@@ -41,7 +44,7 @@ func Test_getURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getURL(tt.args.kubeClient, tt.args.forecastleApp); got != tt.want {
+			if got := getURL(tt.args.clients, tt.args.forecastleApp); got != tt.want {
 				t.Errorf("getURL() = %v, want %v", got, tt.want)
 			}
 		})
@@ -49,12 +52,14 @@ func Test_getURL(t *testing.T) {
 }
 
 func Test_discoverURLFromRefs(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
-
-	kubeClient.ExtensionsV1beta1().Ingresses("").Create(testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"))
-
+	clients := kube.Clients{
+		RoutesClient:     routefake.NewSimpleClientset(),
+		KubernetesClient: kubefake.NewSimpleClientset(),
+	}
+	clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Create(testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"))
+	clients.RoutesClient.RouteV1().Routes("").Create(testutil.CreateRouteWithHost("my-app-route", "ingress-url.com"))
 	type args struct {
-		kubeClient    kubernetes.Interface
+		clients       kube.Clients
 		forecastleApp v1alpha1.ForecastleApp
 	}
 	tests := []struct {
@@ -65,20 +70,28 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		{
 			name: "TestDiscoverURLFromRefsWithIngressName",
 			args: args{
-				kubeClient:    kubeClient,
+				clients:       clients,
 				forecastleApp: *testutil.CreateForecastleAppWithURLFromIngress("app-1", "default", "https://icon", "my-app-ingress"),
 			},
 			want: "http://https://ingress-url.com",
 		},
+		{
+			name: "TestDiscoverURLFromRefsWithRouteName",
+			args: args{
+				clients:       clients,
+				forecastleApp: *testutil.CreateForecastleAppWithURLFromRoute("app-1", "default", "https://icon", "my-app-route"),
+			},
+			want: "http://ingress-url.com",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := discoverURLFromRefs(tt.args.kubeClient, tt.args.forecastleApp); got != tt.want {
+			if got := discoverURLFromRefs(tt.args.clients, tt.args.forecastleApp); got != tt.want {
 				t.Errorf("discoverURLFromRefs() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 
-	kubeClient.ExtensionsV1beta1().Ingresses("").Delete("my-app-ingress", &metav1.DeleteOptions{})
-
+	clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Delete("my-app-ingress", &metav1.DeleteOptions{})
+	clients.RoutesClient.RouteV1().Routes("").Delete("my-app-route", &metav1.DeleteOptions{})
 }

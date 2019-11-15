@@ -7,7 +7,6 @@ import (
 	"github.com/stakater/Forecastle/pkg/kube"
 	"github.com/stakater/Forecastle/pkg/kube/lists/forecastleapps"
 	"github.com/stakater/Forecastle/pkg/log"
-	"k8s.io/client-go/kubernetes"
 )
 
 var (
@@ -51,7 +50,7 @@ func (al *List) Populate(namespaces ...string) *List {
 		al.err = err
 	}
 
-	al.items = convertForecastleAppCustomResourcesToForecastleApps(al.clients.KubernetesClient, forecastleAppList)
+	al.items = convertForecastleAppCustomResourcesToForecastleApps(al.clients, forecastleAppList)
 
 	return al
 }
@@ -61,7 +60,7 @@ func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertForecastleAppCustomResourcesToForecastleApps(kubeClient kubernetes.Interface, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
+func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
 	for _, forecastleApp := range forecastleApps {
 		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
 
@@ -69,7 +68,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(kubeClient kubernetes.I
 			Name:              forecastleApp.Spec.Name,
 			Group:             forecastleApp.Spec.Group,
 			Icon:              forecastleApp.Spec.Icon,
-			URL:               getURL(kubeClient, forecastleApp),
+			URL:               getURL(clients, forecastleApp),
 			DiscoverySource:   forecastle.ForecastleAppCRD,
 			NetworkRestricted: forecastleApp.Spec.NetworkRestricted,
 			Properties:        forecastleApp.Spec.Properties,

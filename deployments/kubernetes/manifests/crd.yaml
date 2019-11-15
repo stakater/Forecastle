@@ -44,11 +44,17 @@ spec:
               type: string
             networkRestricted:
               type: boolean
+            properties:
+              additionalProperties:
+                type: string
+              type: object
             url:
               type: string
             urlFrom:
               properties:
                 ingressRef:
+                  type: object
+                routeRef:
                   type: object
               type: object
           required:

@@ -26,3 +26,5 @@ forecastle:
   service:
     annotations: {}
     expose: "false"
+  ingress:
+    annotations: {}

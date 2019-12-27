@@ -11,12 +11,7 @@ forecastle:
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
-    annotations:
-      authproxy.stakater.com/enabled: "true"
-      authproxy.stakater.com/upstream-url: "http://127.0.0.1:3000"
-      authproxy.stakater.com/source-service-name: forecastle
-      authproxy.stakater.com/redirection-url: "https://cp.stackator.com"
-      authproxy.stakater.com/listen: "0.0.0.0:80"
+    annotations: {}
   config:
     namespaceSelector:
       matchNames:
@@ -29,15 +24,5 @@ forecastle:
   proxy:
     enabled: false
   service:
-    annotations:
-      config.xposer.stakater.com/IngressURLPath: "/"
-      config.xposer.stakater.com/Domain: "stackator.com"
-      config.xposer.stakater.com/IngressNameTemplate: "{{.Service}}-{{.Namespace}}"
-      config.xposer.stakater.com/IngressURLTemplate: "{{.Service}}.{{.Namespace}}.{{.Domain}}"
-      config.xposer.stakater.com/TLS: "true"
-      xposer.stakater.com/annotations: |-
-        kubernetes.io/ingress.class: internal-ingress
-        ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: false
-        certmanager.k8s.io/cluster-issuer: letsencrypt-production
-    expose: "true"
+    annotations: {}
+    expose: "false"

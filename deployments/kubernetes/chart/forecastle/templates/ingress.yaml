@@ -1,5 +1,4 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := {{ template "forecastle.name" . -}}
+{{- if .Values.forecastle.ingress.enabled -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -7,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ template "forecastle.name" . }}
   labels:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
@@ -20,7 +19,7 @@ spec:
   tls:
   {{- range .Values.forecastle.ingress.tls }}
     - hosts:
-      {{- range .hosts }}
+      {{- range .Values.forecastle.ingress.hosts }}
         - {{ . | quote }}
       {{- end }}
       secretName: {{ .secretName }}
@@ -34,7 +33,7 @@ spec:
         {{- range .paths }}
           - path: {{ . }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ template "forecastle.name" $ }}
               servicePort: http
         {{- end }}
   {{- end }}

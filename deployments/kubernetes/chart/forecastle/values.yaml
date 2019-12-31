@@ -27,4 +27,9 @@ forecastle:
     annotations: {}
     expose: "false"
   ingress:
+    enabled: false
     annotations: {}
+    hosts:
+    - host: forecastle.example.com
+      paths:
+      - /

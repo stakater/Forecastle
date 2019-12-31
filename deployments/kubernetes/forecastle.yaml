@@ -1,21 +1,14 @@
 ---
 # Source: forecastle/templates/deployment.yaml
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1
 kind: Deployment
 metadata:
-  annotations:
-    authproxy.stakater.com/enabled: "true"
-    authproxy.stakater.com/listen: 0.0.0.0:80
-    authproxy.stakater.com/redirection-url: https://cp.stackator.com
-    authproxy.stakater.com/source-service-name: forecastle
-    authproxy.stakater.com/upstream-url: http://127.0.0.1:3000
-    
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.37"
-    chart: "forecastle-v1.0.37"
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -40,7 +33,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.37"
+        image: "stakater/forecastle:v1.0.38"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -52,6 +45,10 @@ spec:
       serviceAccountName: forecastle
 
 ---
+# Source: forecastle/templates/ingress.yaml
+
+
+---
 # Source: forecastle/templates/rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
@@ -60,8 +57,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.37"
-    chart: "forecastle-v1.0.37"
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -74,8 +71,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.37"
-    chart: "forecastle-v1.0.37"
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
     release: "forecastle"
     heritage: "Tiller"
 rules:
@@ -97,8 +94,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.37"
-    chart: "forecastle-v1.0.37"
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
     release: "forecastle"
     heritage: "Tiller"
 roleRef:
@@ -183,45 +180,29 @@ spec:
     storage: true
 ---
 # Source: forecastle/templates/service.yaml
----
 apiVersion: v1
-kind: List
-items:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      config.xposer.stakater.com/Domain: stackator.com
-      config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
-      config.xposer.stakater.com/IngressURLPath: /
-      config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
-      config.xposer.stakater.com/TLS: "true"
-      xposer.stakater.com/annotations: |-
-        kubernetes.io/ingress.class: internal-ingress
-        ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: false
-        certmanager.k8s.io/cluster-issuer: letsencrypt-production
-      
-    labels:
-      app: forecastle
-      group: com.stakater.platform
-      provider: stakater
-      version: "v1.0.37"
-      chart: "forecastle-v1.0.37"
-      release: "forecastle"
-      heritage: "Tiller"
-      expose: "true"
-    name: forecastle
-  spec:
-    ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 3000
-    selector:
-      app: forecastle
-      group: com.stakater.platform
-      provider: stakater
+kind: Service
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
+    release: "forecastle"
+    heritage: "Tiller"
+    expose: "false"
+  name: forecastle
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
 
 ---
 # Source: forecastle/templates/configmap.yaml
@@ -233,8 +214,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.37"
-    chart: "forecastle-v1.0.37"
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
     release: "forecastle"
     heritage: "Tiller"
 data:

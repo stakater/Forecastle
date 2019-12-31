@@ -1,42 +1,26 @@
 ---
 # Source: forecastle/templates/service.yaml
----
 apiVersion: v1
-kind: List
-items:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      config.xposer.stakater.com/Domain: stackator.com
-      config.xposer.stakater.com/IngressNameTemplate: '{{.Service}}-{{.Namespace}}'
-      config.xposer.stakater.com/IngressURLPath: /
-      config.xposer.stakater.com/IngressURLTemplate: '{{.Service}}.{{.Namespace}}.{{.Domain}}'
-      config.xposer.stakater.com/TLS: "true"
-      xposer.stakater.com/annotations: |-
-        kubernetes.io/ingress.class: internal-ingress
-        ingress.kubernetes.io/rewrite-target: /
-        ingress.kubernetes.io/force-ssl-redirect: false
-        certmanager.k8s.io/cluster-issuer: letsencrypt-production
-      
-    labels:
-      app: forecastle
-      group: com.stakater.platform
-      provider: stakater
-      version: "v1.0.37"
-      chart: "forecastle-v1.0.37"
-      release: "forecastle"
-      heritage: "Tiller"
-      expose: "true"
-    name: forecastle
-  spec:
-    ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 3000
-    selector:
-      app: forecastle
-      group: com.stakater.platform
-      provider: stakater
+kind: Service
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.38"
+    chart: "forecastle-v1.0.38"
+    release: "forecastle"
+    heritage: "Tiller"
+    expose: "false"
+  name: forecastle
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
 

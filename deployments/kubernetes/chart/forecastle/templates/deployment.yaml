@@ -20,7 +20,9 @@ spec:
       labels:
 {{ include "forecastle.labels.selector" . | indent 8 }}
     spec:
-      nodeSelector: {{- toYaml .Values.forecastle.deployment.nodeSelector | nindent 8 }}
+      {{- with .Values.forecastle.deployment.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - env:
         - name: KUBERNETES_NAMESPACE

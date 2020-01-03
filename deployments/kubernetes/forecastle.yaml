@@ -1,14 +1,14 @@
 ---
 # Source: forecastle/templates/deployment.yaml
-apiVersion: extensions/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -33,14 +33,14 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.38"
+        image: "stakater/forecastle:v1.0.39"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
           mountPath: /etc/forecastle
       volumes:
       - name: forecastle-config
-        configMap: 
+        configMap:
           name: forecastle
       serviceAccountName: forecastle
 
@@ -57,8 +57,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -71,8 +71,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
 rules:
@@ -94,8 +94,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
 roleRef:
@@ -187,8 +187,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
     expose: "false"
@@ -214,8 +214,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.38"
-    chart: "forecastle-v1.0.38"
+    version: "v1.0.39"
+    chart: "forecastle-v1.0.39"
     release: "forecastle"
     heritage: "Tiller"
 data:

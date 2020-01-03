@@ -38,4 +38,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "forecastle.name" . }}
-  namespace: {{ .Values.forecastle.namespace }}
+  namespace: {{ .Release.Namespace }}

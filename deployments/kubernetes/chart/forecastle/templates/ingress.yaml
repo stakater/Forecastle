@@ -19,7 +19,7 @@ spec:
   tls:
   {{- range .Values.forecastle.ingress.tls }}
     - hosts:
-      {{- range .Values.forecastle.ingress.hosts }}
+      {{- range .hosts }}
         - {{ . | quote }}
       {{- end }}
       secretName: {{ .secretName }}

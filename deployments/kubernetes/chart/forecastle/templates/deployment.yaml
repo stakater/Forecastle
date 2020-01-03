@@ -1,4 +1,4 @@
-apiVersion: extensions/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
 {{- if .Values.forecastle.deployment.annotations }}
@@ -20,6 +20,9 @@ spec:
       labels:
 {{ include "forecastle.labels.selector" . | indent 8 }}
     spec:
+      {{- with .Values.forecastle.deployment.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - env:
         - name: KUBERNETES_NAMESPACE
@@ -33,6 +36,6 @@ spec:
           mountPath: /etc/forecastle
       volumes:
       - name: {{ template "forecastle.name" . }}-config
-        configMap: 
+        configMap:
           name: {{ template "forecastle.name" . }}
       serviceAccountName: {{ template "forecastle.name" . }}

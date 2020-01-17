@@ -52,7 +52,7 @@ Forecastle looks for a specific annotations on ingresses.
 | `forecastle.stakater.com/group`              | A custom group name. Use if you want the application to show in a different group than the namespace it is running in                                       | `false`  |
 | `forecastle.stakater.com/instance`           | A comma separated list of name/s of the forecastle instance/s where you want this application to appear. Use when you have multiple forecastle dashboards   | `false`  |
 | `forecastle.stakater.com/url`                | A URL for the forecastle app (This will override the ingress URL). It MUST begin with a scheme i.e., `http://` or `https://`                                | `false`  |
-| `forecastle.stakater.com/properties`         | A comma separate list of key value pairs for the properties. This will appear as an expandable list for the app                                             | `false`  |
+| `forecastle.stakater.com/properties`         | A comma separate list of `key:value` pairs for the properties. This will appear as an expandable list for the app                                             | `false`  |
 | `forecastle.stakater.com/network-restricted` | Specify whether the app is network restricted or not (true or false)                                                                                        | `false`  |
 
 ### Forecastle

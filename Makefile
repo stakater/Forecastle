@@ -5,7 +5,7 @@ DOCKER_IMAGE ?= stakater/forecastle
 
 # Default value "dev"
 DOCKER_TAG ?= dev
-REPOSITORY = ${DOCKER_IMAGE}:${DOCKER_TAG}
+REPOSITORY = 812290479310.dkr.ecr.us-west-2.amazonaws.com/${DOCKER_IMAGE}:${DOCKER_TAG}
 
 GOCMD = go
 

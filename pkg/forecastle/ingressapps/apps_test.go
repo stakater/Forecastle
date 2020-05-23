@@ -166,9 +166,9 @@ func TestList_Populate(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 
 	ingress := testutil.AddAnnotationToIngress(
-		testutil.AddAnnotationToIngress(testutil.AddAnnotationToIngress(
+		testutil.AddAnnotationToIngress(
 			testutil.CreateIngressWithHost("test-ingress", "google.com"), annotations.ForecastleExposeAnnotation, "true"),
-		annotations.IngressClassAnnotation, "ingress"), annotations.ForecastleNetworkRestrictedAnnotation, "true")
+		annotations.ForecastleNetworkRestrictedAnnotation, "true")
 
 	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
 	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)

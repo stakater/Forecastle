@@ -1,0 +1,31 @@
+{{- if .Values.forecastle.route.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "forecastle.name" . }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+{{- if .Values.forecastle.route.additionalLabels }}
+{{ toYaml .Values.forecastle.route.additionalLabels | indent 4 }}
+{{- end }}
+{{- if .Values.forecastle.route.annotations }}
+  annotations:
+{{ toYaml .Values.forecastle.route.annotations | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.forecastle.route.host }}
+  host: {{ .Values.forecastle.route.host }}
+{{- end }}
+  port:
+{{ toYaml .Values.forecastle.route.port | indent 4 }}
+  to:
+    kind: Service
+    name: {{ template "forecastle.name" . }}
+    weight: 100
+  wildcardPolicy: {{ .Values.forecastle.route.wildcardPolicy }}
+  tls:
+    termination: {{ .Values.forecastle.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.forecastle.route.tls.insecureEdgeTerminationPolicy }}
+    weight: {{ .Values.forecastle.route.tls.weight }}
+{{- end -}}

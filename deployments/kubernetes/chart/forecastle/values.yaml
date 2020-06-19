@@ -33,3 +33,15 @@ forecastle:
     - host: forecastle.example.com
       paths:
       - /
+  route:
+    enabled: false
+    annotations: {}
+    additionalLabels: {}
+    host: ""
+    port:
+      targetPort: http
+    wildcardPolicy: None
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+      weight: 100

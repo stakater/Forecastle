@@ -34,7 +34,7 @@ spec:
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
-      {{- if .Values.forecastle.openshiftOauthProxy.enabled -}}
+      {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
       - name: oauth-proxy
         image: openshift/oauth-proxy:latest
         imagePullPolicy: IfNotPresent
@@ -59,7 +59,7 @@ spec:
       - name: {{ template "forecastle.name" . }}-config
         configMap:
           name: {{ template "forecastle.name" . }}
-      {{- if .Values.forecastle.openshiftOauthProxy.enabled -}}
+      {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
       - name: proxy-tls
         secret:
           secretName: openshift-oauth-proxy-tls

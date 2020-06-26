@@ -34,8 +34,34 @@ spec:
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
+      {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
+      - name: oauth-proxy
+        image: openshift/oauth-proxy:latest
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          type: Sidecar
+        ports:
+          - containerPort: 8443
+            name: public
+        args:
+          - --https-address=:8443
+          - --provider=openshift
+          - --openshift-service-account={{ template "forecastle.name" . }}
+          - --upstream=http://localhost:3000
+          - --tls-cert=/etc/tls/private/tls.crt
+          - --tls-key=/etc/tls/private/tls.key
+          - --cookie-secret=SECRET
+        volumeMounts:
+          - mountPath: /etc/tls/private
+            name: openshift-oauth-proxy-tls
+      {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config
         configMap:
           name: {{ template "forecastle.name" . }}
+      {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
+      - name: proxy-tls
+        secret:
+          secretName: openshift-oauth-proxy-tls
+      {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}

@@ -4,6 +4,10 @@ metadata:
   labels:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
+  {{- if .Values.forecastle.openshiftOauthProxy.enabled -}}
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"forecastle"}}'
+  {{- end }}
   name: {{ template "forecastle.name" . }}
 ---
 kind: ClusterRole

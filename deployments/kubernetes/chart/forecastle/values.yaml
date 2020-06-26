@@ -23,6 +23,8 @@ forecastle:
     customApps: {}
   proxy:
     enabled: false
+  openshiftOauthProxy:
+    enabled: false
   service:
     annotations: {}
     expose: "false"

@@ -12,9 +12,16 @@ metadata:
   name: {{ template "forecastle.name" . }}
 spec:
   ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 3000
+{{- if .Values.forecastle.openshiftOauthProxy.enabled -}}
+    - name: http
+      port: 443
+      protocol: TCP
+      targetPort: 8443
+{{- else -}}
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 3000
+{{- end -}}
   selector:
 {{ include "forecastle.labels.selector" . | indent 4 }}

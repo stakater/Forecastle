@@ -27,5 +27,4 @@ spec:
   tls:
     termination: {{ .Values.forecastle.route.tls.termination }}
     insecureEdgeTerminationPolicy: {{ .Values.forecastle.route.tls.insecureEdgeTerminationPolicy }}
-    weight: {{ .Values.forecastle.route.tls.weight }}
 {{- end -}}

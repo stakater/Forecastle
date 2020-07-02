@@ -46,4 +46,3 @@ forecastle:
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
-      weight: 100

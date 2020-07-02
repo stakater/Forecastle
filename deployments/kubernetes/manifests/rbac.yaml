@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.48"
-    chart: "forecastle-v1.0.48"
+    version: "v1.0.49"
+    chart: "forecastle-v1.0.49"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -21,13 +21,13 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.48"
-    chart: "forecastle-v1.0.48"
+    version: "v1.0.49"
+    chart: "forecastle-v1.0.49"
     release: "forecastle"
     heritage: "Tiller"
 rules:
-- apiGroups: ["", "extensions"]
-  resources: ["ingresses", "namespaces"]
+- apiGroups: ["", "route.openshift.io", "extensions"]
+  resources: ["ingresses", "routes", "namespaces"]
   verbs: ["get", "list"]
 - apiGroups:
   - forecastle.stakater.com
@@ -44,8 +44,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.48"
-    chart: "forecastle-v1.0.48"
+    version: "v1.0.49"
+    chart: "forecastle-v1.0.49"
     release: "forecastle"
     heritage: "Tiller"
 roleRef:

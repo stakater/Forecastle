@@ -38,8 +38,6 @@ spec:
       - name: oauth-proxy
         image: openshift/oauth-proxy:latest
         imagePullPolicy: IfNotPresent
-        lifecycle:
-          type: Sidecar
         ports:
           - containerPort: 8443
             name: public

@@ -139,7 +139,7 @@ spec:
 
 The above CR will be picked up by forecastle and it will generate the App in the UI. This lets you bundle this custom resource with the app's helm chart which will make it a part of the deployment process.
 
-*Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then you just have to make sure that `forecastle.createCustomResource` is set to `true`.
+*Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then CRDs are installed with the chart.
 
 #### Example Config
 

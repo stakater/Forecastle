@@ -58,7 +58,7 @@ spec:
         configMap:
           name: {{ template "forecastle.name" . }}
       {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
-      - name: proxy-tls
+      - name: openshift-oauth-proxy-tls
         secret:
           secretName: openshift-oauth-proxy-tls
       {{- end }}

@@ -183,6 +183,7 @@ func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 		name     string
 		args     args
 		wantApps []forecastle.App
+		err      error
 	}{
 		{
 			name: "TestConvertForecastleAppCustomResourcesToForecastleAppsWithNoApps",
@@ -211,8 +212,8 @@ func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotApps := convertForecastleAppCustomResourcesToForecastleApps(clients, tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) {
-				t.Errorf("convertForecastleAppCustomResourcesToForecastleApps() = %v, want %v", gotApps, tt.wantApps)
+			if gotApps, err := convertForecastleAppCustomResourcesToForecastleApps(clients, tt.args.forecastleApps); !reflect.DeepEqual(gotApps, tt.wantApps) && err != tt.err {
+				t.Errorf("convertForecastleAppCustomResourcesToForecastleApps() = %v, want %v, err = %v, wantErr = %v", gotApps, tt.wantApps, err, tt.err)
 			}
 		})
 	}

@@ -50,7 +50,7 @@ func (al *List) Populate(namespaces ...string) *List {
 		al.err = err
 	}
 
-	al.items = convertForecastleAppCustomResourcesToForecastleApps(al.clients, forecastleAppList)
+	al.items, al.err = convertForecastleAppCustomResourcesToForecastleApps(al.clients, forecastleAppList)
 
 	return al
 }
@@ -60,15 +60,21 @@ func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App) {
+func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App, err error) {
 	for _, forecastleApp := range forecastleApps {
 		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
+
+		url, err := getURL(clients, forecastleApp)
+
+		if err != nil {
+			return nil, err
+		}
 
 		apps = append(apps, forecastle.App{
 			Name:              forecastleApp.Spec.Name,
 			Group:             forecastleApp.Spec.Group,
 			Icon:              forecastleApp.Spec.Icon,
-			URL:               getURL(clients, forecastleApp),
+			URL:               url,
 			DiscoverySource:   forecastle.ForecastleAppCRD,
 			NetworkRestricted: forecastleApp.Spec.NetworkRestricted,
 			Properties:        forecastleApp.Spec.Properties,

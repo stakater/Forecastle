@@ -24,6 +24,7 @@ func Test_getURL(t *testing.T) {
 		name string
 		args args
 		want string
+		err  error
 	}{
 		{
 			name: "TestGetURLWithDefaultURLValue",
@@ -44,8 +45,8 @@ func Test_getURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getURL(tt.args.clients, tt.args.forecastleApp); got != tt.want {
-				t.Errorf("getURL() = %v, want %v", got, tt.want)
+			if got, err := getURL(tt.args.clients, tt.args.forecastleApp); got != tt.want && err != tt.err {
+				t.Errorf("getURL() = %v, want %v, err = %v, wantErr = %v", got, tt.want, err, tt.err)
 			}
 		})
 	}
@@ -66,6 +67,7 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		name string
 		args args
 		want string
+		err  error
 	}{
 		{
 			name: "TestDiscoverURLFromRefsWithIngressName",
@@ -86,8 +88,8 @@ func Test_discoverURLFromRefs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := discoverURLFromRefs(tt.args.clients, tt.args.forecastleApp); got != tt.want {
-				t.Errorf("discoverURLFromRefs() = %v, want %v", got, tt.want)
+			if got, err := discoverURLFromRefs(tt.args.clients, tt.args.forecastleApp); got != tt.want && err != tt.err {
+				t.Errorf("discoverURLFromRefs() = %v, want %v, err = %v, wantErr = %v", got, tt.want, err, tt.err)
 			}
 		})
 	}

@@ -36,7 +36,6 @@ func NewList(kubeClient kubernetes.Interface, appConfig config.Config) *List {
 func (al *List) Populate(namespaces ...string) *List {
 	ingressList, err := ingresses.NewList(al.kubeClient, al.appConfig).
 		Populate(namespaces...).
-		Filter(byIngressClassAnnotation).
 		Filter(byForecastleExposeAnnotation).Get()
 
 	// Apply Instance filter

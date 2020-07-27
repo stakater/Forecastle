@@ -2,7 +2,6 @@ package util
 
 import (
 	"github.com/stakater/Forecastle/pkg/config"
-	"fmt"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -11,7 +10,6 @@ import (
 
 func PopulateNamespaceList(kubeClient kubernetes.Interface, namespaceSelector config.NamespaceSelector) ([]string, error) {
 	if namespaceSelector.Any {
-		fmt.Printf("ALLNS %+v", []string{metav1.NamespaceAll})
 		return []string{metav1.NamespaceAll}, nil
 	}
 

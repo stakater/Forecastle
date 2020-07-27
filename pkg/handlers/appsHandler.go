@@ -39,6 +39,9 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	logger.Info(namespaces)
+	logger.Info(len(namespaces))
+
 	var namespacesString string
 	if len(namespaces) == 0 {
 		namespacesString = "* (All Namespaces)"
@@ -46,7 +49,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		namespacesString = strings.Join(namespaces, ",")
 	}
 
-	logger.Info("Looking for forecastle apps in the following namespaces:" + namespacesString)
+	logger.Info("Looking for forecastle apps in the following namespaces: " + namespacesString)
 
 	ingressAppsList := ingressapps.NewList(clients.KubernetesClient, *appConfig)
 	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()

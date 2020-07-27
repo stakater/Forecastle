@@ -33,12 +33,13 @@ func PopulateNamespaceList(kubeClient kubernetes.Interface, namespaceSelector co
 		}
 	}
 
-	if namespaceSelector.Any || len(namespaces) == 0 {
+	if namespaceSelector.Any {
+		log.Info("namespaceSelector.Any ")
+		fmt.Printf("namespaceSelectorALL: %+v\n", []string{metav1.NamespaceAll})
 		return []string{metav1.NamespaceAll}, nil
 	}
 
-	fmt.Printf("namespaceSelectorALL: %+v\n", []string{metav1.NamespaceAll})
-
+	log.Info("Using list of pre-specified namespaces")
 	return removeDuplicates(append(namespaces, namespaceSelector.MatchNames...)), nil
 }
 

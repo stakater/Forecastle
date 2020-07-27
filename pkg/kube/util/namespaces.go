@@ -10,9 +10,12 @@ import (
 )
 
 func PopulateNamespaceList(kubeClient kubernetes.Interface, namespaceSelector config.NamespaceSelector) ([]string, error) {
-	namespaces := []string{}
+	if namespaceSelector.Any {
+		fmt.Printf("ALLNS %+v", []string{metav1.NamespaceAll})
+		return []string{metav1.NamespaceAll}, nil
+	}
 
-	fmt.Printf("namespaceSelector: %+v\n", namespaceSelector)
+	namespaces := []string{}
 
 	if namespaceSelector.LabelSelector != nil && (len(namespaceSelector.LabelSelector.MatchLabels) != 0 || len(namespaceSelector.LabelSelector.MatchExpressions) != 0) {
 		var labelsMap map[string]string
@@ -33,13 +36,6 @@ func PopulateNamespaceList(kubeClient kubernetes.Interface, namespaceSelector co
 		}
 	}
 
-	if namespaceSelector.Any {
-		log.Info("namespaceSelector.Any ")
-		fmt.Printf("namespaceSelectorALL: %+v\n", []string{metav1.NamespaceAll})
-		return []string{metav1.NamespaceAll}, nil
-	}
-
-	log.Info("Using list of pre-specified namespaces")
 	return removeDuplicates(append(namespaces, namespaceSelector.MatchNames...)), nil
 }
 

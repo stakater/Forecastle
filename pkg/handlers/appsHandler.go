@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/kube/util"
@@ -38,7 +39,15 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	logger.Info("Looking for forecastle apps in the following namespaces: ", namespaces)
+	var namespacesString string
+	// All Namespaces are selected
+	if len(namespaces) == 1 && namespaces[0] == "" {
+		namespacesString = "* (All Namespaces)"
+	} else {
+		namespacesString = strings.Join(namespaces, ",")
+	}
+
+	logger.Info("Looking for forecastle apps in the following namespaces: " + namespacesString)
 
 	ingressAppsList := ingressapps.NewList(clients.KubernetesClient, *appConfig)
 	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()

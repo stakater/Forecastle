@@ -40,7 +40,8 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	}
 
 	var namespacesString string
-	if strings.Join(namespaces, ",") == "" {
+	// All Namespaces are selected
+	if len(namespaces) == 1 && strings.Join(namespaces, ",") == "" {
 		namespacesString = "* (All Namespaces)"
 	} else {
 		namespacesString = strings.Join(namespaces, ",")

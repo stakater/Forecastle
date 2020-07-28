@@ -8,8 +8,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
 data:
@@ -101,8 +101,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -127,7 +127,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.52"
+        image: "stakater/forecastle:v1.0.53"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -151,8 +151,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
   name: forecastle
@@ -165,8 +165,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
 rules:
@@ -188,8 +188,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
 roleRef:
@@ -213,8 +213,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.52"
-    chart: "forecastle-v1.0.52"
+    version: "v1.0.53"
+    chart: "forecastle-v1.0.53"
     release: "forecastle"
     heritage: "Tiller"
     expose: "false"

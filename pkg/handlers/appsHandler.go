@@ -13,6 +13,7 @@ import (
 	"github.com/stakater/Forecastle/pkg/forecastle/customapps"
 	"github.com/stakater/Forecastle/pkg/forecastle/ingressapps"
 	"github.com/stakater/Forecastle/pkg/kube"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // AppsHandler func responsible for serving apps at /apps
@@ -41,7 +42,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 	var namespacesString string
 	// All Namespaces are selected
-	if len(namespaces) == 1 && namespaces[0] == "" {
+	if len(namespaces) == 1 && namespaces[0] == metav1.NamespaceAll {
 		namespacesString = "* (All Namespaces)"
 	} else {
 		namespacesString = strings.Join(namespaces, ",")

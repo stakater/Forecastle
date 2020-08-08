@@ -192,8 +192,8 @@ File a GitHub [issue](https://github.com/stakater/Forecastle/issues), or send us
 
 Join and talk to us on the #tools-imc channel for discussing Forecastle
 
-[![Join Slack](https://stakater.github.io/README/stakater-join-slack-btn.png)](https://stakater-slack.herokuapp.com/)
-[![Chat](https://stakater.github.io/README/stakater-chat-btn.png)](https://stakater.slack.com/messages/CAN960CTG/)
+[![Join Slack](https://stakater.github.io/README/stakater-join-slack-btn.png)](https://slack.stakater.com/)
+[![Chat](https://stakater.github.io/README/stakater-chat-btn.png)](https://stakater-community.slack.com/messages/CAN960CTG)
 
 ## Contributing
 

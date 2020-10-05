@@ -209,6 +209,24 @@ func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "TestConvertForecastleAppCustomResourcesToForecastleAppsWithInvalidAppRouteRef",
+			args: args{
+				forecastleApps: []v1alpha1.ForecastleApp{
+					*testutil.CreateForecastleApp("app1", "https://google.com", "default", "https://google.com/icon.png"),
+					*testutil.CreateForecastleAppWithURLFromRoute("invalid-app", "default", "https://google.com/icon.png", "invalid-route"),
+				},
+			},
+			wantApps: []forecastle.App{
+				{
+					Name:            "app1",
+					Group:           "default",
+					Icon:            "https://google.com/icon.png",
+					URL:             "https://google.com",
+					DiscoverySource: forecastle.ForecastleAppCRD,
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

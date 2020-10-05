@@ -67,7 +67,9 @@ func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, f
 		url, err := getURL(clients, forecastleApp)
 
 		if err != nil {
-			return nil, err
+			logger.Errorf("Skipping... Error fetching URL for forecastleApp with Name '%v' in Namespace '%v'. Error: %v",
+				forecastleApp.Name, forecastleApp.Namespace, err)
+			continue
 		}
 
 		apps = append(apps, forecastle.App{

@@ -57,8 +57,14 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		RoutesClient:     routefake.NewSimpleClientset(),
 		KubernetesClient: kubefake.NewSimpleClientset(),
 	}
-	clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Create(testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"))
-	clients.RoutesClient.RouteV1().Routes("").Create(testutil.CreateRouteWithHost("my-app-route", "ingress-url.com"))
+	_, err := clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Create(testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"))
+	if err != nil {
+		t.Errorf("CreateIngressWithHost(\"my-app-ingress\", \"https://ingress-url.com\") Failed")
+	}
+	_, err = clients.RoutesClient.RouteV1().Routes("").Create(testutil.CreateRouteWithHost("my-app-route", "ingress-url.com"))
+	if err != nil {
+		t.Errorf("CreateRouteWithHost(\"my-app-route\", \"ingress-url.com\") Failed")
+	}
 	type args struct {
 		clients       kube.Clients
 		forecastleApp v1alpha1.ForecastleApp
@@ -94,6 +100,12 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		})
 	}
 
-	clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Delete("my-app-ingress", &metav1.DeleteOptions{})
-	clients.RoutesClient.RouteV1().Routes("").Delete("my-app-route", &metav1.DeleteOptions{})
+	err = clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Delete("my-app-ingress", &metav1.DeleteOptions{})
+	if err != nil {
+		t.Errorf("Deleting my-app-ingress Failed")
+	}
+	err = clients.RoutesClient.RouteV1().Routes("").Delete("my-app-route", &metav1.DeleteOptions{})
+	if err != nil {
+		t.Errorf("Deleting my-app-route Failed")
+	}
 }

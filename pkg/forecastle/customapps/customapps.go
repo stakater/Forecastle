@@ -3,12 +3,12 @@ package customapps
 import (
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/forecastle"
-	"github.com/stakater/Forecastle/pkg/log"
 )
 
-var (
-	logger = log.New()
-)
+// un-used variable
+// var (
+// 	logger = log.New()
+// )
 
 // List struct is used for listing forecastle apps
 type List struct {

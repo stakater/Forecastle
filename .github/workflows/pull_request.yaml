@@ -68,7 +68,6 @@ jobs:
 
     - name: Helm Lint
       run: |
-        helm init
         cd deployments/kubernetes/chart/forecastle
         helm lint
 

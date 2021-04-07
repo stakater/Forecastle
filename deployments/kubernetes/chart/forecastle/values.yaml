@@ -6,7 +6,7 @@ forecastle:
   namespace: default
   image:
     name: stakater/forecastle
-    tag:  v1.0.64
+    tag:  v1.0.65
   deployment:
     replicas: 1
     revisionHistoryLimit: 2

@@ -43,7 +43,7 @@ jobs:
 
     - name: Helm Lint
       run: |
-        cd deployments/kubernetes/chart/reloader
+        cd deployments/kubernetes/chart/forecastle
         helm lint
 
     - name: Install kubectl

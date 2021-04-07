@@ -25,3 +25,9 @@ binary-image: builder-image
 
 push:
 	docker push $(REPOSITORY)
+
+# Bump Chart
+bump-chart:
+	sed -i "s/^version:.*/version:  $(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
+	sed -i "s/^appVersion:.*/appVersion:  $(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
+	sed -i "s/tag:.*/tag:  v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml

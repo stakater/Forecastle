@@ -10,9 +10,6 @@ builds:
   - amd64
   - arm
   - arm64
-  hooks:
-    pre: packr2 build
-    post: packr2 clean
 archives:
 - name_template: "{{ .ProjectName }}_v{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
 checksum:

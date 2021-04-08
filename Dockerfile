@@ -1,34 +1,45 @@
+FROM node:12.11.1 as build-deps
+WORKDIR /usr/src/app
+COPY ./frontend ./
+RUN yarn install && yarn build
+
 # Build the manager binary
 FROM --platform=${BUILDPLATFORM} golang:1.15.2 as builder
 
 ARG TARGETOS
 ARG TARGETARCH
 
-WORKDIR /workspace
+RUN mkdir -p "$GOPATH/src/github.com/stakater/Forecastle"
 
-# Copy the Go Modules manifests
-COPY go.mod go.mod
-COPY go.sum go.sum
-# cache deps before building and copying source so that we don't need to re-download as much
-# and so that source changes don't invalidate our downloaded layer
-RUN go mod download
+WORKDIR "$GOPATH/src/github.com/stakater/Forecastle"
 
-# Copy the go source
-COPY forecastle.go forecastle.go
-COPY frontend/ frontend/
-COPY pkg/ pkg/
+# Copy manifests
+COPY . .
+
+# Install Packr2
+ARG PACKR_VERSION=2.7.1
+ARG PACKR_FILENAME=packr_${PACKR_VERSION}_linux_386.tar.gz
+ARG PACKR_URL=https://github.com/gobuffalo/packr/releases/download/v${PACKR_VERSION}/${PACKR_FILENAME}
+
+RUN mkdir -p /tmp/packr/ && \
+    wget ${PACKR_URL} -O /tmp/packr/${PACKR_FILENAME} && \
+    tar -xzvf /tmp/packr/${PACKR_FILENAME} -C /tmp/packr/ && \
+    mv /tmp/packr/packr2 /usr/local/bin/packr2 && \
+    rm -rf /tmp/packr
+
+# Copy dependencies
+COPY --from=build-deps /usr/src/app/build ./frontend/build/
 
 # Build
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on go build  -mod=mod -a -o Forecastle forecastle.go
+RUN go mod download && \
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on packr2 build -a --installsuffix cgo --ldflags="-s" -o /Forecastle && \
+    packr2 clean
 
 # Use distroless as minimal base image to package the Forecastle binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /
-COPY --from=builder /workspace/Forecastle .
+COPY --from=builder /Forecastle .
 USER nonroot:nonroot
-
-# Port for metrics and probes
-EXPOSE 9090
 
 ENTRYPOINT ["/Forecastle"]

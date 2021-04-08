@@ -36,7 +36,7 @@ spec:
           mountPath: /etc/forecastle
       {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
       - name: oauth-proxy
-        image: openshift/oauth-proxy:latest
+        image: "{{ default "stakater/oauth-proxy:v0.0.1" .Values.forecastle.openshiftOauthProxy.image }}"
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 8443

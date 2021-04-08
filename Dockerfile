@@ -14,14 +14,14 @@ COPY go.sum go.sum
 RUN go mod download
 
 # Copy the go source
-COPY main.go main.go
-COPY internal/ internal/
+COPY forecastle.go forecastle.go
+COPY frontend/ frontend/
 COPY pkg/ pkg/
 
 # Build
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on go build  -mod=mod -a -o manager main.go
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on go build  -mod=mod -a -o Forecastle forecastle.go
 
-# Use distroless as minimal base image to package the manager binary
+# Use distroless as minimal base image to package the Forecastle binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /

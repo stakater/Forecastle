@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  DOCKER_FILE_PATH: build/package/Dockerfile.build
+  DOCKER_FILE_PATH: Dockerfile
   GOLANG_VERSION: 1.15.2
   KUBERNETES_VERSION: "1.18.0"
   KIND_VERSION: "0.7.0"
@@ -35,6 +35,10 @@ jobs:
         with:
           go-version: ${{ env.GOLANG_VERSION }}
 
+      - name: Install Dependencies
+        run: |
+          make install
+
       - name: Lint
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
@@ -57,22 +61,7 @@ jobs:
       - name: Create Kind Cluster
         run: |
           kind create cluster
-
-      - name: Set up Cluster
-        run: |
           kubectl cluster-info
-          mkdir -p .local
-          echo "${{ secrets.SECRET_KUBERNETES_RESOURCES }}" | base64 --decode > .local/test-config.yaml
-
-      - name: Helm Lint
-        run: |
-          cd deployments/kubernetes/chart/forecastle
-          helm lint
-
-      - name: Make Install & Verify
-        run: |
-          make install
-
       - name: Test
         run: make test
 
@@ -109,12 +98,14 @@ jobs:
           push: true
           build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
           cache-to: type=inline
+          platforms: linux/amd64,linux/arm,linux/arm64
           tags: |
             ${{ env.IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.new_tag }}
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.created=${{ steps.prep.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
+            
       ##############################
       ## Add steps to generate required artifacts for a release here(helm chart, operator manifest etc.)
       ##############################

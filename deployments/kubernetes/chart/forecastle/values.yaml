@@ -2,7 +2,7 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.62"
+    version: "v1.0.64"
   namespace: default
   image:
     name: stakater/forecastle

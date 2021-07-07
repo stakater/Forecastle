@@ -5,3 +5,4 @@ vendor
 config.yaml
 .vscode
 dist
+.local

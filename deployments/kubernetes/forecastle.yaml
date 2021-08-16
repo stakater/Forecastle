@@ -39,12 +39,13 @@ spec:
     listKind: ForecastleAppList
     plural: forecastleapps
     singular: forecastleapp
-  preserveUnknownFields: true
+  preserveUnknownFields: false
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
+        type: object
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation

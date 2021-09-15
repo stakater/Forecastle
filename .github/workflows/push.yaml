@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - master
-
+    paths-ignore:
+      - 'README.md'
+      
 env:
   DOCKER_FILE_PATH: Dockerfile
   GOLANG_VERSION: 1.15.2

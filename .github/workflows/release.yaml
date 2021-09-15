@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "v*"
+    paths-ignore:
+      - 'README.md'
 
 env:
   GOLANG_VERSION: 1.15.2

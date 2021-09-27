@@ -20,9 +20,6 @@ spec:
       labels:
 {{ include "forecastle.labels.selector" . | indent 8 }}
     spec:
-      {{- with .Values.forecastle.deployment.nodeSelector }}
-      nodeSelector: {{- toYaml . | nindent 8 }}
-      {{- end }}
       containers:
       - env:
         - name: KUBERNETES_NAMESPACE
@@ -63,3 +60,19 @@ spec:
           secretName: openshift-oauth-proxy-tls
       {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}
+      {{- with .Values.forecastle.deployment.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.forecastle.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.forecastle.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.forecastle.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

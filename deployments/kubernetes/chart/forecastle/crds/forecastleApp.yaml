@@ -53,6 +53,9 @@ spec:
                 properties:
                   ingressRef:
                     type: object
+                    properties:
+                      name:
+                        type: string
                   routeRef:
                     type: object
                 type: object

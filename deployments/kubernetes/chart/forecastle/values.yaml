@@ -24,6 +24,7 @@ forecastle:
     enabled: false
   openshiftOauthProxy:
     enabled: false
+    serviceAccountAnnotations: {}
     # image: stakater/oauth-proxy:v0.0.2
   service:
     annotations: {}

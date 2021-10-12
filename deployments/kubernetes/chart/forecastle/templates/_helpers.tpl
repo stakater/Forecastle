@@ -42,3 +42,10 @@ Return the appropriate apiVersion for deployment.
 {{- print "extensions/v1beta1" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns oauth redirection annotation according to the release name
+*/}}
+{{- define "serviceaccount.redirectreference" -}}
+serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"{{ template "forecastle.name" . }}"}}'
+{{- end -}}

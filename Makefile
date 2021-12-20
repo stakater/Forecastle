@@ -89,5 +89,6 @@ deploy: binary-image push apply
 # Bump Chart
 bump-chart:
 	sed -i "s/^version:.*/version: v$(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
+	sed -i "s/version:.*/version: v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml 
 	sed -i "s/^appVersion:.*/appVersion: v$(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
 	sed -i "s/tag:.*/tag: v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml

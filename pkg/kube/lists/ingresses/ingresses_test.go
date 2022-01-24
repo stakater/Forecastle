@@ -1,13 +1,14 @@
 package ingresses
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/api/extensions/v1beta1"
+	networking "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -57,12 +58,12 @@ func TestList_Populate(t *testing.T) {
 
 	ingress := testutil.CreateIngressWithHost("test-ingress", "google.com")
 
-	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
-	ingressDefault, _ := kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
-	ingressTesting, _ := kubeClient.ExtensionsV1beta1().Ingresses("testing").Create(ingress)
+	_, _ = kubeClient.CoreV1().Namespaces().Create(context.TODO(), &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}}, metav1.CreateOptions{})
+	ingressDefault, _ := kubeClient.NetworkingV1().Ingresses("default").Create(context.TODO(), ingress, metav1.CreateOptions{})
+	ingressTesting, _ := kubeClient.NetworkingV1().Ingresses("testing").Create(context.TODO(), ingress, metav1.CreateOptions{})
 
 	type fields struct {
-		items      []v1beta1.Ingress
+		items      []networking.Ingress
 		err        error
 		kubeClient kubernetes.Interface
 	}
@@ -85,7 +86,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*ingressDefault,
 					*ingressTesting,
 				},
@@ -101,7 +102,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*ingressDefault,
 					*ingressTesting,
 				},
@@ -117,7 +118,7 @@ func TestList_Populate(t *testing.T) {
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*ingressDefault,
 				},
 			},
@@ -136,21 +137,21 @@ func TestList_Populate(t *testing.T) {
 		})
 	}
 
-	_ = kubeClient.CoreV1().Namespaces().Delete("testing", &metav1.DeleteOptions{})
-	_ = kubeClient.ExtensionsV1beta1().Ingresses("default").Delete("test-ingress", &metav1.DeleteOptions{})
-	_ = kubeClient.ExtensionsV1beta1().Ingresses("testing").Delete("test-ingress", &metav1.DeleteOptions{})
+	_ = kubeClient.CoreV1().Namespaces().Delete(context.TODO(), "testing", metav1.DeleteOptions{})
+	_ = kubeClient.NetworkingV1().Ingresses("default").Delete(context.TODO(), "test-ingress", metav1.DeleteOptions{})
+	_ = kubeClient.NetworkingV1().Ingresses("testing").Delete(context.TODO(), "test-ingress", metav1.DeleteOptions{})
 }
 
 func TestList_Filter(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 
 	type fields struct {
-		items      []v1beta1.Ingress
+		items      []networking.Ingress
 		err        error
 		kubeClient kubernetes.Interface
 	}
 	type args struct {
-		filterFunc func(v1beta1.Ingress, config.Config) bool
+		filterFunc func(networking.Ingress, config.Config) bool
 	}
 	tests := []struct {
 		name   string
@@ -161,17 +162,17 @@ func TestList_Filter(t *testing.T) {
 		{
 			name: "TestListFilter",
 			fields: fields{
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*testutil.CreateIngress("test-ingress"),
 				},
 				kubeClient: kubeClient,
 			},
 			args: args{
-				filterFunc: func(ingress v1beta1.Ingress, appConfig config.Config) bool { return true },
+				filterFunc: func(ingress networking.Ingress, appConfig config.Config) bool { return true },
 			},
 			want: &List{
 				kubeClient: kubeClient,
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*testutil.CreateIngress("test-ingress"),
 				},
 			},
@@ -195,14 +196,14 @@ func TestList_Get(t *testing.T) {
 	kubeClient := fake.NewSimpleClientset()
 
 	type fields struct {
-		items      []v1beta1.Ingress
+		items      []networking.Ingress
 		err        error
 		kubeClient kubernetes.Interface
 	}
 	tests := []struct {
 		name    string
 		fields  fields
-		want    []v1beta1.Ingress
+		want    []networking.Ingress
 		wantErr bool
 	}{
 		{
@@ -216,11 +217,11 @@ func TestList_Get(t *testing.T) {
 			name: "TestListGetWithItems",
 			fields: fields{
 				kubeClient: kubeClient,
-				items: []v1beta1.Ingress{
+				items: []networking.Ingress{
 					*testutil.CreateIngress("test-ingress"),
 				},
 			},
-			want: []v1beta1.Ingress{
+			want: []networking.Ingress{
 				*testutil.CreateIngress("test-ingress"),
 			},
 			wantErr: false,

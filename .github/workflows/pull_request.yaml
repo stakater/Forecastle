@@ -7,9 +7,9 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  GOLANG_VERSION: 1.15.2
-  KUBERNETES_VERSION: "1.18.0"
-  KIND_VERSION: "0.7.0"
+  GOLANG_VERSION: 1.17.2
+  KUBERNETES_VERSION: "1.22.2"
+  KIND_VERSION: "0.10.0"
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
 
     - name: Lint
       run: |
-        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
+        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.36.0
         golangci-lint run --timeout=10m ./...
 
     - name: Helm Lint

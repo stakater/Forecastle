@@ -8,7 +8,7 @@ import (
 	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	"github.com/stakater/Forecastle/pkg/log"
 	"github.com/stakater/Forecastle/pkg/util/strings"
-	"k8s.io/api/extensions/v1beta1"
+	v1 "k8s.io/api/networking/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -58,7 +58,7 @@ func (al *List) Get() ([]forecastle.App, error) {
 	return al.items, al.err
 }
 
-func convertIngressesToForecastleApps(ingresses []v1beta1.Ingress) (apps []forecastle.App) {
+func convertIngressesToForecastleApps(ingresses []v1.Ingress) (apps []forecastle.App) {
 	for _, ingress := range ingresses {
 		logger.Infof("Found ingress with Name '%v' in Namespace '%v'", ingress.Name, ingress.Namespace)
 

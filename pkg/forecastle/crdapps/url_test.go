@@ -1,6 +1,7 @@
 package crdapps
 
 import (
+	"context"
 	"testing"
 
 	routefake "github.com/openshift/client-go/route/clientset/versioned/fake"
@@ -57,11 +58,11 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		RoutesClient:     routefake.NewSimpleClientset(),
 		KubernetesClient: kubefake.NewSimpleClientset(),
 	}
-	_, err := clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Create(testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"))
+	_, err := clients.KubernetesClient.NetworkingV1().Ingresses("").Create(context.TODO(), testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"), metav1.CreateOptions{})
 	if err != nil {
 		t.Errorf("CreateIngressWithHost(\"my-app-ingress\", \"https://ingress-url.com\") Failed")
 	}
-	_, err = clients.RoutesClient.RouteV1().Routes("").Create(testutil.CreateRouteWithHost("my-app-route", "ingress-url.com"))
+	_, err = clients.RoutesClient.RouteV1().Routes("").Create(context.TODO(), testutil.CreateRouteWithHost("my-app-route", "ingress-url.com"), metav1.CreateOptions{})
 	if err != nil {
 		t.Errorf("CreateRouteWithHost(\"my-app-route\", \"ingress-url.com\") Failed")
 	}
@@ -100,11 +101,11 @@ func Test_discoverURLFromRefs(t *testing.T) {
 		})
 	}
 
-	err = clients.KubernetesClient.ExtensionsV1beta1().Ingresses("").Delete("my-app-ingress", &metav1.DeleteOptions{})
+	err = clients.KubernetesClient.NetworkingV1().Ingresses("").Delete(context.TODO(), "my-app-ingress", metav1.DeleteOptions{})
 	if err != nil {
 		t.Errorf("Deleting my-app-ingress Failed")
 	}
-	err = clients.RoutesClient.RouteV1().Routes("").Delete("my-app-route", &metav1.DeleteOptions{})
+	err = clients.RoutesClient.RouteV1().Routes("").Delete(context.TODO(), "my-app-route", metav1.DeleteOptions{})
 	if err != nil {
 		t.Errorf("Deleting my-app-route Failed")
 	}

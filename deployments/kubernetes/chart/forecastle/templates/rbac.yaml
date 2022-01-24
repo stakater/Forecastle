@@ -21,7 +21,7 @@ metadata:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
 rules:
-- apiGroups: ["", "route.openshift.io", "extensions"]
+- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
   resources: ["ingresses", "routes", "namespaces"]
   verbs: ["get", "list"]
 - apiGroups:

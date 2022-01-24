@@ -30,7 +30,7 @@ func discoverURLFromIngressRef(kubeClient kubernetes.Interface, ingressRef *v1al
 }
 
 func discoverURLFromRouteRef(routesClient routes.Interface, routeRef *v1alpha1.RouteURLSource, namespace string) (string, error) {
-	route, err := routesClient.RouteV1().Routes(namespace).Get(routeRef.Name, metav1.GetOptions{})
+	route, err := routesClient.RouteV1().Routes(namespace).Get(context.TODO(), routeRef.Name, metav1.GetOptions{})
 	if err != nil {
 		logger.Warn("Route not found with name " + routeRef.Name)
 		return "", err

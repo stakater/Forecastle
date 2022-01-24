@@ -19,6 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"context"
 	"time"
 
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
@@ -71,7 +72,7 @@ func (c *forecastleApps) Get(name string, options v1.GetOptions) (result *v1alph
 		Resource("forecastleapps").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -88,7 +89,7 @@ func (c *forecastleApps) List(opts v1.ListOptions) (result *v1alpha1.ForecastleA
 		Resource("forecastleapps").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -105,7 +106,7 @@ func (c *forecastleApps) Watch(opts v1.ListOptions) (watch.Interface, error) {
 		Resource("forecastleapps").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Watch()
+		Watch(context.TODO())
 }
 
 // Create takes the representation of a forecastleApp and creates it.  Returns the server's representation of the forecastleApp, and an error, if there is any.
@@ -115,7 +116,7 @@ func (c *forecastleApps) Create(forecastleApp *v1alpha1.ForecastleApp) (result *
 		Namespace(c.ns).
 		Resource("forecastleapps").
 		Body(forecastleApp).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -128,7 +129,7 @@ func (c *forecastleApps) Update(forecastleApp *v1alpha1.ForecastleApp) (result *
 		Resource("forecastleapps").
 		Name(forecastleApp.Name).
 		Body(forecastleApp).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -144,7 +145,7 @@ func (c *forecastleApps) UpdateStatus(forecastleApp *v1alpha1.ForecastleApp) (re
 		Name(forecastleApp.Name).
 		SubResource("status").
 		Body(forecastleApp).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }
@@ -156,7 +157,7 @@ func (c *forecastleApps) Delete(name string, options *v1.DeleteOptions) error {
 		Resource("forecastleapps").
 		Name(name).
 		Body(options).
-		Do().
+		Do(context.TODO()).
 		Error()
 }
 
@@ -172,7 +173,7 @@ func (c *forecastleApps) DeleteCollection(options *v1.DeleteOptions, listOptions
 		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(options).
-		Do().
+		Do(context.TODO()).
 		Error()
 }
 
@@ -185,7 +186,7 @@ func (c *forecastleApps) Patch(name string, pt types.PatchType, data []byte, sub
 		SubResource(subresources...).
 		Name(name).
 		Body(data).
-		Do().
+		Do(context.TODO()).
 		Into(result)
 	return
 }

@@ -6,12 +6,12 @@ import (
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/config"
 	"github.com/stakater/Forecastle/pkg/testutil"
-	"k8s.io/api/extensions/v1beta1"
+	v1 "k8s.io/api/networking/v1"
 )
 
 func Test_byForecastleExposeAnnotation(t *testing.T) {
 	type args struct {
-		ingress   v1beta1.Ingress
+		ingress   v1.Ingress
 		appConfig config.Config
 	}
 	tests := []struct {

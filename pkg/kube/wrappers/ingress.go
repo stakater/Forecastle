@@ -5,7 +5,7 @@ import (
 
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/log"
-	"k8s.io/api/extensions/v1beta1"
+	v1 "k8s.io/api/networking/v1"
 )
 
 var (
@@ -14,11 +14,11 @@ var (
 
 // IngressWrapper struct wraps a kubernetes ingress object
 type IngressWrapper struct {
-	ingress *v1beta1.Ingress
+	ingress *v1.Ingress
 }
 
 // NewIngressWrapper func creates an instance of IngressWrapper
-func NewIngressWrapper(ingress *v1beta1.Ingress) *IngressWrapper {
+func NewIngressWrapper(ingress *v1.Ingress) *IngressWrapper {
 	return &IngressWrapper{
 		ingress: ingress,
 	}

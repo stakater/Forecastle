@@ -1,6 +1,7 @@
 package crdapps
 
 import (
+	"context"
 	"errors"
 
 	routes "github.com/openshift/client-go/route/clientset/versioned"
@@ -20,7 +21,7 @@ func getURL(clients kube.Clients, forecastleApp v1alpha1.ForecastleApp) (string,
 }
 
 func discoverURLFromIngressRef(kubeClient kubernetes.Interface, ingressRef *v1alpha1.IngressURLSource, namespace string) (string, error) {
-	ingress, err := kubeClient.ExtensionsV1beta1().Ingresses(namespace).Get(ingressRef.Name, metav1.GetOptions{})
+	ingress, err := kubeClient.NetworkingV1().Ingresses(namespace).Get(context.TODO(), ingressRef.Name, metav1.GetOptions{})
 	if err != nil {
 		logger.Warn("Ingress not found with name " + ingressRef.Name)
 		return "", err

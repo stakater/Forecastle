@@ -6,12 +6,12 @@ import (
 
 	"github.com/stakater/Forecastle/pkg/annotations"
 	"github.com/stakater/Forecastle/pkg/testutil"
-	"k8s.io/api/extensions/v1beta1"
+	v1 "k8s.io/api/networking/v1"
 )
 
 func TestNewIngressWrapper(t *testing.T) {
 	type args struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name string
@@ -39,7 +39,7 @@ func TestNewIngressWrapper(t *testing.T) {
 
 func TestIngressWrapper_GetAnnotationValue(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	type args struct {
 		annotationKey string
@@ -85,7 +85,7 @@ func TestIngressWrapper_GetAnnotationValue(t *testing.T) {
 
 func TestIngressWrapper_GetName(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -114,7 +114,7 @@ func TestIngressWrapper_GetName(t *testing.T) {
 
 func TestIngressWrapper_GetNamespace(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -143,7 +143,7 @@ func TestIngressWrapper_GetNamespace(t *testing.T) {
 
 func TestIngressWrapper_GetURL(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -214,7 +214,7 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 
 func TestIngressWrapper_rulesExist(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -250,7 +250,7 @@ func TestIngressWrapper_rulesExist(t *testing.T) {
 
 func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -293,7 +293,7 @@ func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
 
 func TestIngressWrapper_supportsTLS(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -329,7 +329,7 @@ func TestIngressWrapper_supportsTLS(t *testing.T) {
 
 func TestIngressWrapper_getHost(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -365,7 +365,7 @@ func TestIngressWrapper_getHost(t *testing.T) {
 
 func TestIngressWrapper_getIngressSubPath(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string
@@ -401,7 +401,7 @@ func TestIngressWrapper_getIngressSubPath(t *testing.T) {
 
 func TestIngressWrapper_GetGroup(t *testing.T) {
 	type fields struct {
-		ingress *v1beta1.Ingress
+		ingress *v1.Ingress
 	}
 	tests := []struct {
 		name   string

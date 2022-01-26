@@ -140,7 +140,11 @@ jobs:
           linting: on
           commit_username: stakater-user
           commit_email: stakater@gmail.com
-          
+
+      # Generate manifest release
+      - name: Generate manifest
+        run: helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds > deployments/kubernetes/forecastle.yaml
+
       # Commit back changes
       - name: Commit files
         run: |

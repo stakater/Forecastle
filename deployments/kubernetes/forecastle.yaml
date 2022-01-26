@@ -1,30 +1,5 @@
 ---
-# Source: forecastle/templates/configmap.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: forecastle
-  labels:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
-    release: "forecastle"
-    heritage: "Tiller"
-data:
-  config.yaml: |-
-    customApps: {}
-    headerBackground: null
-    headerForeground: null
-    instanceName: null
-    namespaceSelector:
-      matchNames:
-      - stakater
-    title: null
----
-# Source: forecastle/templates/crd.yaml
-
+# Source: crds/forecastleApp.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -80,8 +55,14 @@ spec:
                 properties:
                   ingressRef:
                     type: object
+                    properties:
+                      name:
+                        type: string
                   routeRef:
                     type: object
+                    properties:
+                      name:
+                        type: string
                 type: object
             required:
             - name
@@ -94,6 +75,116 @@ spec:
     storage: true
     subresources:
       status: {}
+
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+  name: forecastle
+---
+# Source: forecastle/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forecastle
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+data:
+  config.yaml: |-
+    customApps: {}
+    headerBackground: null
+    headerForeground: null
+    instanceName: null
+    namespaceSelector:
+      matchNames:
+      - stakater
+    title: null
+---
+# Source: forecastle/templates/rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: forecastle-cluster-ingress-role
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+rules:
+- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
+  resources: ["ingresses", "routes", "namespaces"]
+  verbs: ["get", "list"]
+- apiGroups:
+  - forecastle.stakater.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: forecastle-cluster-ingress-role-binding
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: forecastle-cluster-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: forecastle
+  namespace: default
+---
+# Source: forecastle/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+    expose: "false"
+  name: forecastle
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
 ---
 # Source: forecastle/templates/deployment.yaml
 apiVersion: apps/v1
@@ -103,10 +194,10 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
     release: "forecastle"
-    heritage: "Tiller"
+    heritage: "Helm"
   name: forecastle
 spec:
   replicas: 1
@@ -129,7 +220,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.67"
+        image: "stakater/forecastle:v1.0.75"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -139,95 +230,3 @@ spec:
         configMap:
           name: forecastle
       serviceAccountName: forecastle
-
----
-# Source: forecastle/templates/ingress.yaml
-
-
----
-# Source: forecastle/templates/rbac.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
-    release: "forecastle"
-    heritage: "Tiller"
-  name: forecastle
----
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: forecastle-cluster-ingress-role
-  labels:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
-    release: "forecastle"
-    heritage: "Tiller"
-rules:
-- apiGroups: ["", "route.openshift.io", "extensions"]
-  resources: ["ingresses", "routes", "namespaces"]
-  verbs: ["get", "list"]
-- apiGroups:
-  - forecastle.stakater.com
-  resources:
-  - '*'
-  verbs:
-  - '*'
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: forecastle-cluster-ingress-role-binding
-  labels:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
-    release: "forecastle"
-    heritage: "Tiller"
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: forecastle-cluster-ingress-role
-subjects:
-- kind: ServiceAccount
-  name: forecastle
-  namespace: default
-
----
-# Source: forecastle/templates/route.yaml
-
----
-# Source: forecastle/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater
-    version: "v1.0.67"
-    chart: "forecastle-v1.0.67"
-    release: "forecastle"
-    heritage: "Tiller"
-    expose: "false"
-  name: forecastle
-spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 3000
-  selector:
-    app: forecastle
-    group: com.stakater.platform
-    provider: stakater

@@ -1,0 +1,24 @@
+---
+# Source: forecastle/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forecastle
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+data:
+  config.yaml: |-
+    customApps: {}
+    headerBackground: null
+    headerForeground: null
+    instanceName: null
+    namespaceSelector:
+      matchNames:
+      - stakater
+    title: null

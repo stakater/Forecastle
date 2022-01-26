@@ -1,0 +1,60 @@
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+  name: forecastle
+---
+# Source: forecastle/templates/rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: forecastle-cluster-ingress-role
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+rules:
+- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
+  resources: ["ingresses", "routes", "namespaces"]
+  verbs: ["get", "list"]
+- apiGroups:
+  - forecastle.stakater.com
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+# Source: forecastle/templates/rbac.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: forecastle-cluster-ingress-role-binding
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.75"
+    chart: "forecastle-v1.0.75"
+    release: "forecastle"
+    heritage: "Helm"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: forecastle-cluster-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: forecastle
+  namespace: default

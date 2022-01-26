@@ -140,7 +140,16 @@ jobs:
           linting: on
           commit_username: stakater-user
           commit_email: stakater@gmail.com
-          
+
+      # Generate manifest release, generates both a jumbo manifest and also a manifests directory
+      - name: Generate manifests
+        run: |
+          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds > deployments/kubernetes/forecastle.yaml
+          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds --output-dir deployments/kubernetes/manifests/ 
+          mv deployments/kubernetes/manifests/forecastle/templates/* deployments/kubernetes/manifests/ 
+          mv deployments/kubernetes/manifests/forecastle/crds/* deployments/kubernetes/manifests/ 
+          rm -r deployments/kubernetes/manifests/forecastle
+
       # Commit back changes
       - name: Commit files
         run: |

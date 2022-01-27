@@ -1,0 +1,25 @@
+---
+# Source: forecastle/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: forecastle
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.76"
+    chart: "forecastle-v1.0.76"
+    release: "forecastle"
+    heritage: "Helm"
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: forecastle
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect

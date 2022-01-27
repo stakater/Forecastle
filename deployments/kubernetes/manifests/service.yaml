@@ -7,11 +7,11 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.75"
-    chart: "forecastle-v1.0.75"
+    version: "v1.0.76"
+    chart: "forecastle-v1.0.76"
     release: "forecastle"
     heritage: "Helm"
-    expose: "false"
+    expose: "true"
   name: forecastle
 spec:
   ports:

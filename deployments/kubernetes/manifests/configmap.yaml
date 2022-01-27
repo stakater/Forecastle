@@ -8,17 +8,19 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.75"
-    chart: "forecastle-v1.0.75"
+    version: "v1.0.76"
+    chart: "forecastle-v1.0.76"
     release: "forecastle"
     heritage: "Helm"
 data:
   config.yaml: |-
+    crdEnabled: true
     customApps: {}
     headerBackground: null
     headerForeground: null
     instanceName: null
     namespaceSelector:
+      any: true
       matchNames:
       - stakater
     title: null

@@ -144,8 +144,12 @@ jobs:
       # Generate manifest release, generates both a jumbo manifest and also a manifests directory
       - name: Generate manifests
         run: |
-          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds > deployments/kubernetes/forecastle.yaml
-          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds --output-dir deployments/kubernetes/manifests/ 
+          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds --set forecastle.service.expose="true"  \
+          --set forecastle.route.enabled=true --set forecastle.route.tls.termination=reencrypt --set forecastle.config.crdEnabled=true \
+          --set forecastle.config.namespaceSelector.any=true > deployments/kubernetes/forecastle.yaml
+          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds --output-dir deployments/kubernetes/manifests/ \
+          --set forecastle.service.expose="true" --set forecastle.route.enabled=true --set forecastle.route.tls.termination=reencrypt \
+          --set forecastle.config.namespaceSelector.any=true --set forecastle.config.crdEnabled=true 
           mv deployments/kubernetes/manifests/forecastle/templates/* deployments/kubernetes/manifests/ 
           mv deployments/kubernetes/manifests/forecastle/crds/* deployments/kubernetes/manifests/ 
           rm -r deployments/kubernetes/manifests/forecastle

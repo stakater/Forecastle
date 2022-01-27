@@ -54,7 +54,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	forecastleApps, err = ingressAppsList.Populate(namespaces...).Get()
 
 	if err != nil {
-		logger.Error("An error occurred while looking for forceastle apps: ", err)
+		logger.Error("An error occurred while looking for forecastle apps: ", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -77,7 +77,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 
 		// Log and proceed with this error
 		if err != nil {
-			logger.Error("An error occurred while looking for forceastle CRD apps: ", err)
+			logger.Error("An error occurred while looking for forecastle CRD apps: ", err)
 		} else { // Append forecastle CRD apps
 			forecastleApps = append(forecastleApps, forecastleCRDApps...)
 		}

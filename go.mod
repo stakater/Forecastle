@@ -6,8 +6,8 @@ require (
 	github.com/gobuffalo/packr/v2 v2.7.1
 	github.com/gorilla/mux v1.8.0
 	github.com/onrik/logrus v0.4.2-0.20190903110901-4337fdeb70c5
-	github.com/openshift/api v3.9.1-0.20190923092516-169848dd8137+incompatible
-	github.com/openshift/client-go v0.0.0-20190923092832-6afefc9bb372
+	github.com/openshift/api v0.0.0-20211028023115-7224b732cc14
+	github.com/openshift/client-go v0.0.0-20210831095141-e19a065e79f7
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/viper v1.3.2
 	k8s.io/api v0.23.0
@@ -62,9 +62,4 @@ require (
 	sigs.k8s.io/json v0.0.0-20211020170558-c049b76a60c6 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.1.2 // indirect
 	sigs.k8s.io/yaml v1.2.0 // indirect
-)
-
-replace (
-	github.com/openshift/api => github.com/openshift/api v3.9.1-0.20190923092516-169848dd8137+incompatible // prebase-1.16
-	github.com/openshift/client-go => github.com/openshift/client-go v0.0.0-20190923092832-6afefc9bb372 // prebase-1.16
 )

@@ -1,6 +1,7 @@
 package ingressapps
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/stakater/Forecastle/pkg/forecastle"
 	"github.com/stakater/Forecastle/pkg/testutil"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/api/extensions/v1beta1"
+	v1netw "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
@@ -121,7 +122,7 @@ func TestList_Get(t *testing.T) {
 
 func Test_convertIngressesToForecastleApps(t *testing.T) {
 	type args struct {
-		ingresses []v1beta1.Ingress
+		ingresses []v1netw.Ingress
 	}
 	tests := []struct {
 		name     string
@@ -131,14 +132,14 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 		{
 			name: "TestConvertIngressesToForecastleAppsWithNoApps",
 			args: args{
-				ingresses: []v1beta1.Ingress{},
+				ingresses: []v1netw.Ingress{},
 			},
 			wantApps: nil,
 		},
 		{
 			name: "TestConvertIngressesToForecastleApps",
 			args: args{
-				ingresses: []v1beta1.Ingress{
+				ingresses: []v1netw.Ingress{
 					*testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("test-ingress", "google.com"),
 						annotations.ForecastleIconAnnotation, "https://google.com/icon.png"),
 				},
@@ -170,9 +171,9 @@ func TestList_Populate(t *testing.T) {
 			testutil.CreateIngressWithHost("test-ingress", "google.com"), annotations.ForecastleExposeAnnotation, "true"),
 		annotations.ForecastleNetworkRestrictedAnnotation, "true")
 
-	_, _ = kubeClient.CoreV1().Namespaces().Create(&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}})
-	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("default").Create(ingress)
-	_, _ = kubeClient.ExtensionsV1beta1().Ingresses("testing").Create(ingress)
+	_, _ = kubeClient.CoreV1().Namespaces().Create(context.TODO(), &v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "testing"}}, metav1.CreateOptions{})
+	_, _ = kubeClient.NetworkingV1().Ingresses("default").Create(context.TODO(), ingress, metav1.CreateOptions{})
+	_, _ = kubeClient.NetworkingV1().Ingresses("testing").Create(ingress)
 
 	type fields struct {
 		kubeClient kubernetes.Interface
@@ -200,15 +201,15 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []forecastle.App{
 					{
-						Name:  "test-ingress",
-						Group: "default",
-						URL:   "http://google.com",
+						Name:              "test-ingress",
+						Group:             "default",
+						URL:               "http://google.com",
 						NetworkRestricted: true,
 					},
 					{
-						Name:  "test-ingress",
-						Group: "testing",
-						URL:   "http://google.com",
+						Name:              "test-ingress",
+						Group:             "testing",
+						URL:               "http://google.com",
 						NetworkRestricted: true,
 					},
 				},
@@ -226,16 +227,15 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []forecastle.App{
 					{
-						Name:  "test-ingress",
-						Group: "default",
-						URL:   "http://google.com",
+						Name:              "test-ingress",
+						Group:             "default",
+						URL:               "http://google.com",
 						NetworkRestricted: true,
-
 					},
 					{
-						Name:  "test-ingress",
-						Group: "testing",
-						URL:   "http://google.com",
+						Name:              "test-ingress",
+						Group:             "testing",
+						URL:               "http://google.com",
 						NetworkRestricted: true,
 					},
 				},
@@ -253,9 +253,9 @@ func TestList_Populate(t *testing.T) {
 				kubeClient: kubeClient,
 				items: []forecastle.App{
 					{
-						Name:  "test-ingress",
-						Group: "testing",
-						URL:   "http://google.com",
+						Name:              "test-ingress",
+						Group:             "testing",
+						URL:               "http://google.com",
 						NetworkRestricted: true,
 					},
 				},

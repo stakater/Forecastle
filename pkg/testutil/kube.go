@@ -3,13 +3,13 @@ package testutil
 import (
 	routev1 "github.com/openshift/api/route/v1"
 	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"k8s.io/api/extensions/v1beta1"
+	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
-func CreateIngress(name string) *v1beta1.Ingress {
-	return &v1beta1.Ingress{
+func CreateIngress(name string) *v1.Ingress {
+	return &v1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
@@ -24,7 +24,7 @@ func CreateRoute(name string) *routev1.Route {
 	}
 }
 
-func CreateIngressWithNamespace(name string, namespace string) *v1beta1.Ingress {
+func CreateIngressWithNamespace(name string, namespace string) *v1.Ingress {
 	ingress := CreateIngress(name)
 	ingress.ObjectMeta.Namespace = namespace
 
@@ -38,9 +38,9 @@ func CreateRouteWithHost(name string, url string) *routev1.Route {
 	return route
 }
 
-func CreateIngressWithHost(name string, url string) *v1beta1.Ingress {
+func CreateIngressWithHost(name string, url string) *v1.Ingress {
 	ingress := CreateIngress(name)
-	ingress.Spec.Rules = []v1beta1.IngressRule{
+	ingress.Spec.Rules = []v1.IngressRule{
 		{
 			Host: url,
 		},
@@ -49,7 +49,7 @@ func CreateIngressWithHost(name string, url string) *v1beta1.Ingress {
 	return ingress
 }
 
-func AddAnnotationToIngress(ingress *v1beta1.Ingress, annotationKey string, annotationValue string) *v1beta1.Ingress {
+func AddAnnotationToIngress(ingress *v1.Ingress, annotationKey string, annotationValue string) *v1.Ingress {
 	if ingress.Annotations == nil {
 		ingress.Annotations = make(map[string]string)
 	}
@@ -59,13 +59,17 @@ func AddAnnotationToIngress(ingress *v1beta1.Ingress, annotationKey string, anno
 	return ingress
 }
 
-func CreateIngressWithHostAndSubPath(name string, url string, subpath string, port string) *v1beta1.Ingress {
+func CreateIngressWithHostAndSubPath(name string, url string, subpath string, port string) *v1.Ingress {
 	ingress := CreateIngressWithHost(name, url)
-	ingress.Spec.Rules[0].HTTP = &v1beta1.HTTPIngressRuleValue{
-		Paths: []v1beta1.HTTPIngressPath{
+	ingress.Spec.Rules[0].HTTP = &v1.HTTPIngressRuleValue{
+		Paths: []v1.HTTPIngressPath{
 			{
-				Backend: v1beta1.IngressBackend{
-					ServicePort: intstr.FromString(port),
+				Backend: v1.IngressBackend{
+					Service: &v1.IngressServiceBackend{
+						Port: v1.ServiceBackendPort{
+							Number: intstr.FromString(port).IntVal,
+						},
+					},
 				},
 				Path: subpath,
 			},
@@ -75,9 +79,9 @@ func CreateIngressWithHostAndSubPath(name string, url string, subpath string, po
 	return ingress
 }
 
-func CreateIngressWithTLSHost(name string, tlsurl string) *v1beta1.Ingress {
+func CreateIngressWithTLSHost(name string, tlsurl string) *v1.Ingress {
 	ingress := CreateIngress(name)
-	ingress.Spec.TLS = []v1beta1.IngressTLS{
+	ingress.Spec.TLS = []v1.IngressTLS{
 		{
 			Hosts: []string{
 				tlsurl,
@@ -88,9 +92,9 @@ func CreateIngressWithTLSHost(name string, tlsurl string) *v1beta1.Ingress {
 	return ingress
 }
 
-func CreateIngressWithHostAndTLSHost(name string, host string, tlsurl string) *v1beta1.Ingress {
+func CreateIngressWithHostAndTLSHost(name string, host string, tlsurl string) *v1.Ingress {
 	ingress := CreateIngressWithHost(name, host)
-	ingress.Spec.TLS = []v1beta1.IngressTLS{
+	ingress.Spec.TLS = []v1.IngressTLS{
 		{
 			Hosts: []string{
 				tlsurl,

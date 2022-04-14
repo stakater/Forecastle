@@ -19,9 +19,15 @@ spec:
     metadata:
       labels:
 {{ include "forecastle.labels.selector" . | indent 8 }}
+      annotations:
+        checksum/api-config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+{{- with .Values.forecastle.pod.annotations }}
+{{- toYaml . | indent 8 }}
+{{- end }}
     spec:
       containers:
-      - env:
+      - securityContext: {{- toYaml .Values.forecastle.container.securityContext | nindent 12 }}
+        env:
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -31,6 +37,7 @@ spec:
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
+        resources: {{- toYaml .Values.forecastle.resources | nindent 12 }}
       {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
       - name: oauth-proxy
         image: "{{ default "stakater/oauth-proxy:v0.0.2" .Values.forecastle.openshiftOauthProxy.image }}"
@@ -49,6 +56,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/tls/private
             name: openshift-oauth-proxy-tls
+        resources: {{- toYaml .Values.forecastle.openshiftOauthProxy.resources | nindent 12 }}
       {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config

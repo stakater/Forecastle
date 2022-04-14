@@ -1,0 +1,25 @@
+{{- if and .Values.forecastle.networkPolicy.enabled .Values.forecastle.networkPolicy.ingress.enabled ( or .Values.forecastle.networkPolicy.ingress.namespaceSelector .Values.forecastle.networkPolicy.ingress.podSelector ) }}
+kind: NetworkPolicy
+apiVersion: {{ include "networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-ingress" ( include "forecastle.name" . ) }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  policyTypes:
+    - Ingress
+  podSelector:
+    matchLabels: {{- include "forecastle.labels.selector" . | nindent 6 }}
+  ingress:
+    - from:
+{{- if .Values.forecastle.networkPolicy.ingress.namespaceSelector }}
+        - namespaceSelector:
+            matchLabels: {{- toYaml .Values.forecastle.networkPolicy.ingress.namespaceSelector | nindent 14 }}
+{{- end }}
+{{- if .Values.forecastle.networkPolicy.ingress.podSelector }}
+        - podSelector:
+            matchLabels: {{- toYaml .Values.forecastle.networkPolicy.ingress.podSelector | nindent 14 }}
+{{- end }}
+{{- end }}

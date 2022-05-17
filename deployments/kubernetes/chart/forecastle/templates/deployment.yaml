@@ -28,6 +28,10 @@ spec:
               fieldPath: metadata.namespace
         image: "{{ .Values.forecastle.image.name }}:{{ .Values.forecastle.image.tag }}"
         name: {{ template "forecastle.name" . }}
+      {{- if .Values.forecastle.deployment.resources }}
+        resources:
+{{ toYaml .Values.forecastle.deployment.resources | indent 10 }}
+      {{- end }}        
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
@@ -49,6 +53,10 @@ spec:
         volumeMounts:
           - mountPath: /etc/tls/private
             name: openshift-oauth-proxy-tls
+      {{- if .Values.forecastle.openshiftOauthProxy.resources }}
+        resources:
+{{ toYaml .Values.forecastle.openshiftOauthProxy.resources | indent 10 }}
+      {{- end }}    
       {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config

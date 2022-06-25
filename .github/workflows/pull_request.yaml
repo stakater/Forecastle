@@ -7,7 +7,6 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  GOLANG_VERSION: 1.17.2
   KUBERNETES_VERSION: "1.22.2"
   KIND_VERSION: "0.10.0"
 
@@ -28,9 +27,9 @@ jobs:
 
     - name: Set up Go
       id: go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v3
       with:
-        go-version: ${{ env.GOLANG_VERSION }}
+        go-version-file: 'go.mod'
 
     - name: Install Dependencies
       run: |

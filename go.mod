@@ -1,6 +1,6 @@
 module github.com/stakater/Forecastle
 
-go 1.17
+go 1.18
 
 require (
 	github.com/gobuffalo/packr/v2 v2.8.3

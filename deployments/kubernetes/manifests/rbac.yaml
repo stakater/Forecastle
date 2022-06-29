@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.84"
-    chart: "forecastle-v1.0.84"
+    version: "v1.0.85"
+    chart: "forecastle-v1.0.85"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -22,8 +22,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.84"
-    chart: "forecastle-v1.0.84"
+    version: "v1.0.85"
+    chart: "forecastle-v1.0.85"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -46,8 +46,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.84"
-    chart: "forecastle-v1.0.84"
+    version: "v1.0.85"
+    chart: "forecastle-v1.0.85"
     release: "forecastle"
     heritage: "Helm"
 roleRef:

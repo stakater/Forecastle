@@ -4,7 +4,7 @@ COPY ./frontend ./
 RUN yarn install --network-timeout 1000000 && yarn build
 
 # Build the manager binary
-FROM --platform=${BUILDPLATFORM} golang:1.17.2 as builder
+FROM --platform=${BUILDPLATFORM} golang:1.18 as builder
 
 ARG TARGETOS
 ARG TARGETARCH

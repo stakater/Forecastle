@@ -11,7 +11,7 @@
       "react-dom": "^16.14.0",
       "react-redux": "^7.1.1",
       "react-scripts": "3.2.0",
-      "redux-starter-kit": "^0.7.0",
+      "redux-starter-kit": "^2.0.0",
       "styled-components": "^4.4.1"
     },
     "scripts": {

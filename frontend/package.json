@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
       "@material-ui/core": "^4.5.0",
-      "@material-ui/icons": "^4.4.3",
+      "@material-ui/icons": "^4.11.3",
       "axios": "^0.27.2",
       "prop-types": "^15.8.1",
       "react": "^16.14.0",

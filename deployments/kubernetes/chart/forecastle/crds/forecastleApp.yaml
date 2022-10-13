@@ -61,6 +61,11 @@ spec:
                     properties:
                       name:
                         type: string
+                  ingressRouteRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
                 type: object
             required:
             - name

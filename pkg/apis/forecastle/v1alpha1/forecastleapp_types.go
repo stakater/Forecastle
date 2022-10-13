@@ -26,6 +26,8 @@ type URLSource struct {
 	IngressRef *IngressURLSource `json:"ingressRef,omitempty"`
 	// +optional
 	RouteRef *RouteURLSource `json:"routeRef,omitempty"`
+	// +optional
+	IngressRouteRef *IngressRouteURLSource `json:"ingressRouteRef,omitempty"`
 }
 
 // IngressURLSource selects an Ingress to populate the URL with
@@ -35,6 +37,11 @@ type IngressURLSource struct {
 
 // RouteURLSource selects a Route to populate the URL with
 type RouteURLSource struct {
+	LocalObjectReference
+}
+
+// IngressRouteURLSource selects an IngressRoute to populate the URL with
+type IngressRouteURLSource struct {
 	LocalObjectReference
 }
 

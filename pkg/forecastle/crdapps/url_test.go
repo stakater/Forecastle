@@ -92,14 +92,6 @@ func Test_discoverURLFromRefs(t *testing.T) {
 			},
 			want: "http://ingress-url.com",
 		},
-		{
-			name: "TestDiscoverURLFromRefsWithIngressRouteName",
-			args: args{
-				clients:       clients,
-				forecastleApp: *testutil.CreateForecastleAppWithURLFromIngressRoute("app-1", "default", "https://icon", "my-app-ingressroute"),
-			},
-			want: "http://ingress-url.com",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

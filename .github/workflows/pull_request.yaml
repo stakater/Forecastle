@@ -108,7 +108,7 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
 
     - name: Comment on PR
-      uses: mshick/add-pr-comment@v1
+      uses: mshick/add-pr-comment@v2
       env:
        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
       with:
@@ -117,7 +117,7 @@ jobs:
 
     - name: Notify Failure
       if: failure()
-      uses: mshick/add-pr-comment@v1
+      uses: mshick/add-pr-comment@v2
       env:
        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
       with:

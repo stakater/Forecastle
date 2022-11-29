@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.108"
-    chart: "forecastle-v1.0.108"
+    version: "v1.0.109"
+    chart: "forecastle-v1.0.109"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -33,7 +33,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.108"
+        image: "stakater/forecastle:v1.0.109"
         name: forecastle        
         volumeMounts:
         - name: forecastle-config

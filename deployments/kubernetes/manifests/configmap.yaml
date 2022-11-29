@@ -8,8 +8,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.108"
-    chart: "forecastle-v1.0.108"
+    version: "v1.0.109"
+    chart: "forecastle-v1.0.109"
     release: "forecastle"
     heritage: "Helm"
 data:

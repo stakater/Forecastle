@@ -90,8 +90,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -101,12 +101,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
 data:
@@ -131,8 +132,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -161,8 +162,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
 roleRef:
@@ -182,12 +183,13 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
     expose: "true"
   name: forecastle
+  namespace: default
 spec:
   ports:
   - name: http
@@ -207,11 +209,12 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 spec:
   replicas: 1
   revisionHistoryLimit: 2
@@ -233,8 +236,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.111"
-        name: forecastle        
+        image: "stakater/forecastle:v1.0.112"
+        name: forecastle
         volumeMounts:
         - name: forecastle-config
           mountPath: /etc/forecastle
@@ -249,12 +252,13 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.111"
-    chart: "forecastle-v1.0.111"
+    version: "v1.0.112"
+    chart: "forecastle-v1.0.112"
     release: "forecastle"
     heritage: "Helm"
 spec:

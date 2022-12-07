@@ -10,6 +10,7 @@ metadata:
 {{ include "forecastle.labels.chart" . | indent 4 }}
     expose: "{{ .Values.forecastle.service.expose }}"
   name: {{ template "forecastle.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   ports:
   {{- if .Values.forecastle.openshiftOauthProxy.enabled }}

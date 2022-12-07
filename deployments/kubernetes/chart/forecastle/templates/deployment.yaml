@@ -9,6 +9,7 @@ metadata:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
   name: {{ template "forecastle.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   replicas: {{ .Values.forecastle.deployment.replicas }}
   revisionHistoryLimit: {{ .Values.forecastle.deployment.revisionHistoryLimit }}
@@ -31,7 +32,7 @@ spec:
       {{- if .Values.forecastle.deployment.resources }}
         resources:
 {{ toYaml .Values.forecastle.deployment.resources | indent 10 }}
-      {{- end }}        
+      {{- end }}
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
@@ -56,7 +57,7 @@ spec:
       {{- if .Values.forecastle.openshiftOauthProxy.resources }}
         resources:
 {{ toYaml .Values.forecastle.openshiftOauthProxy.resources | indent 10 }}
-      {{- end }}    
+      {{- end }}
       {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config

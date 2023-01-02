@@ -5,7 +5,7 @@
     "dependencies": {
       "@material-ui/core": "^4.12.4",
       "@material-ui/icons": "^4.11.3",
-      "axios": "^1.2.0",
+      "axios": "^1.2.2",
       "prop-types": "^15.8.1",
       "react": "^16.14.0",
       "react-dom": "^16.14.0",

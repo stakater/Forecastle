@@ -90,8 +90,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -107,8 +107,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
 data:
@@ -133,8 +133,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -163,8 +163,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
 roleRef:
@@ -184,8 +184,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
     expose: "true"
@@ -210,8 +210,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -237,7 +237,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.113"
+        image: "stakater/forecastle:v1.0.114"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -258,8 +258,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.113"
-    chart: "forecastle-v1.0.113"
+    version: "v1.0.114"
+    chart: "forecastle-v1.0.114"
     release: "forecastle"
     heritage: "Helm"
 spec:

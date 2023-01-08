@@ -10,6 +10,7 @@ env:
   KUBERNETES_VERSION: "1.22.2"
   KIND_VERSION: "0.10.0"
   HELM_REGISTRY_URL: "https://stakater.github.io/stakater-charts"
+  DEFAULT_BRANCH: "master"
 
 jobs:
   build:

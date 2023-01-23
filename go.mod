@@ -10,8 +10,8 @@ require (
 	github.com/openshift/client-go v0.0.0-20210521082421-73d9475a9142
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
-	k8s.io/api v0.26.0
-	k8s.io/apimachinery v0.26.0
+	k8s.io/api v0.26.1
+	k8s.io/apimachinery v0.26.1
 	k8s.io/client-go v0.26.0
 	mvdan.cc/xurls/v2 v2.4.0
 )

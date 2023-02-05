@@ -13,9 +13,32 @@ forecastle:
     annotations: {}
     affinity: {}
     nodeSelector: {}
-    securityContext: {}
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 10001
+      fsgroup: 10001
+      # seccompProfile:
+      #  type: RuntimeDefault
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 10002
+      runAsGroup: 10002
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+      privileged: false 
+      allowPrivilegeEscalation: false
+      # seccompProfile:
+      #   type: RuntimeDefault
     tolerations: {}
     resources: {}
+    #   requests:
+    #     cpu: 100m
+    #     memory: 32Mi
+    #   limits:
+    #     cpu: 200m
+    #     memory: 64Mi
   config:
     namespaceSelector:
       matchNames:
@@ -31,7 +54,25 @@ forecastle:
     enabled: false
     serviceAccountAnnotations: {}
     resources: {}
+    #   requests:
+    #     cpu: 100m
+    #     memory: 32Mi
+    #   limits:
+    #     cpu: 200m
+    #     memory: 64Mi
     # image: stakater/oauth-proxy:v0.0.2
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 10001
+      runAsGroup: 10001
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - ALL
+      privileged: false 
+      allowPrivilegeEscalation: false
+      # seccompProfile:
+      #   type: RuntimeDefault
   service:
     annotations: {}
     expose: "false"

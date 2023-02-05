@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.118"
-    chart: "forecastle-v1.0.118"
+    version: "v1.0.119"
+    chart: "forecastle-v1.0.119"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -23,8 +23,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.118"
-    chart: "forecastle-v1.0.118"
+    version: "v1.0.119"
+    chart: "forecastle-v1.0.119"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -41,8 +41,8 @@ rules:
   resources: ["ingressroutes"]
   verbs: ["get", "list"]
 - apiGroups: ["forecastle.stakater.com"]
-  resources: ["*"]
-  verbs: ["*"]
+  resources: ["forcastleapps"]
+  verbs: ["get", "list"]
 ---
 # Source: forecastle/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -53,8 +53,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.118"
-    chart: "forecastle-v1.0.118"
+    version: "v1.0.119"
+    chart: "forecastle-v1.0.119"
     release: "forecastle"
     heritage: "Helm"
 roleRef:

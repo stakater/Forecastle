@@ -5,10 +5,10 @@ import (
 	"errors"
 
 	routes "github.com/openshift/client-go/route/clientset/versioned"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/v1/pkg/kube"
+	"github.com/stakater/Forecastle/v1/pkg/kube/wrappers"
 	ingressroutes "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"github.com/stakater/Forecastle/pkg/kube"
-	"github.com/stakater/Forecastle/pkg/kube/wrappers"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

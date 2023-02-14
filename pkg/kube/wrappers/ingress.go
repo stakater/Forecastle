@@ -3,8 +3,8 @@ package wrappers
 import (
 	"net/url"
 
-	"github.com/stakater/Forecastle/pkg/annotations"
-	"github.com/stakater/Forecastle/pkg/log"
+	"github.com/stakater/Forecastle/v1/pkg/annotations"
+	"github.com/stakater/Forecastle/v1/pkg/log"
 	v1 "k8s.io/api/networking/v1"
 )
 

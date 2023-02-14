@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stakater/Forecastle/pkg/annotations"
-	"github.com/stakater/Forecastle/pkg/testutil"
+	"github.com/stakater/Forecastle/v1/pkg/annotations"
+	"github.com/stakater/Forecastle/v1/pkg/testutil"
 	v1 "k8s.io/api/networking/v1"
 )
 

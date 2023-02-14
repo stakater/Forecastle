@@ -19,7 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "github.com/stakater/Forecastle/pkg/client/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

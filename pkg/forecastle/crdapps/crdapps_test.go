@@ -5,15 +5,15 @@ import (
 	"testing"
 
 	routefake "github.com/openshift/client-go/route/clientset/versioned/fake"
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"github.com/stakater/Forecastle/pkg/client/clientset/versioned/fake"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned/fake"
 	kubefake "k8s.io/client-go/kubernetes/fake"
 
-	"github.com/stakater/Forecastle/pkg/kube"
+	"github.com/stakater/Forecastle/v1/pkg/kube"
 
-	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/forecastle"
-	"github.com/stakater/Forecastle/pkg/testutil"
+	"github.com/stakater/Forecastle/v1/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/testutil"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

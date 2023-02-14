@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )

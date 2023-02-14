@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	routev1 "github.com/openshift/api/route/v1"
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
 	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )

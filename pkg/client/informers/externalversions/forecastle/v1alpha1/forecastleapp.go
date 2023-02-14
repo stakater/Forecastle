@@ -21,10 +21,10 @@ package v1alpha1
 import (
 	time "time"
 
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	versioned "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	internalinterfaces "github.com/stakater/Forecastle/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/stakater/Forecastle/pkg/client/listers/forecastle/v1alpha1"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	versioned "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
+	internalinterfaces "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/listers/forecastle/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"

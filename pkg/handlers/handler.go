@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/stakater/Forecastle/pkg/log"
+	"github.com/stakater/Forecastle/v1/pkg/log"
 )
 
 var (

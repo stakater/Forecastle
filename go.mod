@@ -1,4 +1,4 @@
-module github.com/stakater/Forecastle
+module github.com/stakater/Forecastle/v1
 
 go 1.19
 

@@ -3,10 +3,10 @@ package crdapps
 import (
 	"testing"
 
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"github.com/stakater/Forecastle/pkg/config"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/v1/pkg/config"
 
-	"github.com/stakater/Forecastle/pkg/testutil"
+	"github.com/stakater/Forecastle/v1/pkg/testutil"
 )
 
 func Test_byForecastleInstance(t *testing.T) {

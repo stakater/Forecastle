@@ -1,13 +1,13 @@
 package ingressapps
 
 import (
-	"github.com/stakater/Forecastle/pkg/annotations"
-	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/forecastle"
-	"github.com/stakater/Forecastle/pkg/kube/lists/ingresses"
-	"github.com/stakater/Forecastle/pkg/kube/wrappers"
-	"github.com/stakater/Forecastle/pkg/log"
-	"github.com/stakater/Forecastle/pkg/util/strings"
+	"github.com/stakater/Forecastle/v1/pkg/annotations"
+	"github.com/stakater/Forecastle/v1/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/kube/lists/ingresses"
+	"github.com/stakater/Forecastle/v1/pkg/kube/wrappers"
+	"github.com/stakater/Forecastle/v1/pkg/log"
+	"github.com/stakater/Forecastle/v1/pkg/util/strings"
 	v1 "k8s.io/api/networking/v1"
 	"k8s.io/client-go/kubernetes"
 )

@@ -21,7 +21,7 @@ package versioned
 import (
 	"fmt"
 
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

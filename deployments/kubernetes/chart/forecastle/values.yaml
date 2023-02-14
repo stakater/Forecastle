@@ -1,7 +1,5 @@
 forecastle:
   labels:
-    stakater:
-      a: b
     group: com.stakater.platform
     provider: stakater
     version: v1.0.119
@@ -12,16 +10,12 @@ forecastle:
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
-    annotations:
-      foo: bar
-      a: b
+    annotations: {}
     affinity: {}
     nodeSelector: {}
     securityContext: {}
     tolerations: {}
-    resources:
-      requests:
-        cpu: 1
+    resources: {}
   config:
     namespaceSelector:
       matchNames:

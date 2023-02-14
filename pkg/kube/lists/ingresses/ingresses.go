@@ -3,7 +3,7 @@ package ingresses
 import (
 	"context"
 
-	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/config"
 	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

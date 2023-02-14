@@ -1,10 +1,10 @@
 package ingressapps
 
 import (
-	"github.com/stakater/Forecastle/pkg/annotations"
-	"github.com/stakater/Forecastle/pkg/util/strings"
+	"github.com/stakater/Forecastle/v1/pkg/annotations"
+	"github.com/stakater/Forecastle/v1/pkg/util/strings"
 
-	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/config"
 	v1 "k8s.io/api/networking/v1"
 )
 

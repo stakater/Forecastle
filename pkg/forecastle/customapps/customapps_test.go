@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle"
 )
 
 func TestNewList(t *testing.T) {

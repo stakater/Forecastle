@@ -19,8 +19,8 @@ limitations under the License.
 package forecastle
 
 import (
-	v1alpha1 "github.com/stakater/Forecastle/pkg/client/informers/externalversions/forecastle/v1alpha1"
-	internalinterfaces "github.com/stakater/Forecastle/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/forecastle/v1alpha1"
+	internalinterfaces "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

@@ -4,9 +4,9 @@ import (
 	"os"
 
 	routesClient "github.com/openshift/client-go/route/clientset/versioned"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
+	"github.com/stakater/Forecastle/v1/pkg/log"
 	ingressroutesClient "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	"github.com/stakater/Forecastle/pkg/log"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"

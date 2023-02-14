@@ -1,8 +1,11 @@
 forecastle:
   labels:
+    stakater:
+      a: b
     group: com.stakater.platform
     provider: stakater
     version: v1.0.118
+
   namespace: default
   image:
     name: stakater/forecastle
@@ -10,12 +13,16 @@ forecastle:
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
-    annotations: {}
+    annotations:
+      foo: bar
+      a: b
     affinity: {}
     nodeSelector: {}
     securityContext: {}
     tolerations: {}
-    resources: {}
+    resources:
+      requests:
+        cpu: 1
   config:
     namespaceSelector:
       matchNames:

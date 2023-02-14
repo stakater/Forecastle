@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/stakater/Forecastle/pkg/forecastle"
-	"github.com/stakater/Forecastle/pkg/kube/util"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/kube/util"
 
-	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/forecastle/crdapps"
-	"github.com/stakater/Forecastle/pkg/forecastle/customapps"
-	"github.com/stakater/Forecastle/pkg/forecastle/ingressapps"
-	"github.com/stakater/Forecastle/pkg/kube"
+	"github.com/stakater/Forecastle/v1/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/crdapps"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/customapps"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/ingressapps"
+	"github.com/stakater/Forecastle/v1/pkg/kube"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

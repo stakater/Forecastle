@@ -23,9 +23,9 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	forecastle "github.com/stakater/Forecastle/pkg/client/informers/externalversions/forecastle"
-	internalinterfaces "github.com/stakater/Forecastle/pkg/client/informers/externalversions/internalinterfaces"
+	versioned "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
+	forecastle "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/forecastle"
+	internalinterfaces "github.com/stakater/Forecastle/v1/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

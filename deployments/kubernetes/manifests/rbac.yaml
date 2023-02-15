@@ -41,7 +41,7 @@ rules:
   resources: ["ingressroutes"]
   verbs: ["get", "list"]
 - apiGroups: ["forecastle.stakater.com"]
-  resources: ["forcastleapps"]
+  resources: ["forecastleapps"]
   verbs: ["get", "list"]
 ---
 # Source: forecastle/templates/rbac.yaml

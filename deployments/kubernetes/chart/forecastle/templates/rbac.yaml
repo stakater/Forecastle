@@ -35,7 +35,7 @@ rules:
   resources: ["ingressroutes"]
   verbs: ["get", "list"]
 - apiGroups: ["forecastle.stakater.com"]
-  resources: ["forcastleapps"]
+  resources: ["forecastleapps"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1

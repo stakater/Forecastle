@@ -63,6 +63,11 @@ spec:
                     properties:
                       name:
                         type: string
+                  ingressRouteRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
                 type: object
             required:
             - name
@@ -85,23 +90,25 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 ---
 # Source: forecastle/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 data:
@@ -126,20 +133,26 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 rules:
-- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
-  resources: ["ingresses", "routes", "namespaces"]
+- apiGroups: [""]
+  resources: ["namespaces"]
   verbs: ["get", "list"]
-- apiGroups:
-  - forecastle.stakater.com
-  resources:
-  - '*'
-  verbs:
-  - '*'
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list"]
+- apiGroups: ["traefik.containo.us"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["forecastle.stakater.com"]
+  resources: ["forecastleapps"]
+  verbs: ["get", "list"]
 ---
 # Source: forecastle/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -150,8 +163,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 roleRef:
@@ -171,12 +184,13 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
     expose: "true"
   name: forecastle
+  namespace: default
 spec:
   ports:
   - name: http
@@ -196,11 +210,12 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 spec:
   replicas: 1
   revisionHistoryLimit: 2
@@ -222,7 +237,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.79"
+        image: "stakater/forecastle:v1.0.121"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -238,12 +253,13 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 spec:

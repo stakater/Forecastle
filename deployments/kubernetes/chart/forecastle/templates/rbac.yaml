@@ -12,6 +12,7 @@ metadata:
     {{- end }}
   {{- end }}
   name: {{ template "forecastle.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -21,15 +22,21 @@ metadata:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
 rules:
-- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
-  resources: ["ingresses", "routes", "namespaces"]
+- apiGroups: [""]
+  resources: ["namespaces"]
   verbs: ["get", "list"]
-- apiGroups:
-  - forecastle.stakater.com
-  resources:
-  - '*'
-  verbs:
-  - '*'
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list"]
+- apiGroups: ["traefik.containo.us"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["forecastle.stakater.com"]
+  resources: ["forecastleapps"]
+  verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -45,4 +52,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "forecastle.name" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}

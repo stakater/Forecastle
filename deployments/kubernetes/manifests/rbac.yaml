@@ -7,11 +7,12 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 ---
 # Source: forecastle/templates/rbac.yaml
 kind: ClusterRole
@@ -22,20 +23,26 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 rules:
-- apiGroups: ["", "route.openshift.io", "networking.k8s.io"]
-  resources: ["ingresses", "routes", "namespaces"]
+- apiGroups: [""]
+  resources: ["namespaces"]
   verbs: ["get", "list"]
-- apiGroups:
-  - forecastle.stakater.com
-  resources:
-  - '*'
-  verbs:
-  - '*'
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list"]
+- apiGroups: ["traefik.containo.us"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["forecastle.stakater.com"]
+  resources: ["forecastleapps"]
+  verbs: ["get", "list"]
 ---
 # Source: forecastle/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -46,8 +53,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 roleRef:

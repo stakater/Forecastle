@@ -5,9 +5,10 @@ import (
 	"errors"
 
 	routes "github.com/openshift/client-go/route/clientset/versioned"
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"github.com/stakater/Forecastle/pkg/kube"
-	"github.com/stakater/Forecastle/pkg/kube/wrappers"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/v1/pkg/kube"
+	"github.com/stakater/Forecastle/v1/pkg/kube/wrappers"
+	ingressroutes "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -39,6 +40,16 @@ func discoverURLFromRouteRef(routesClient routes.Interface, routeRef *v1alpha1.R
 	return wrappers.NewRouteWrapper(route).GetURL(), nil
 }
 
+func discoverURLFromIngressRouteRef(ingressroutesClient ingressroutes.Interface, ingressrouteRef *v1alpha1.IngressRouteURLSource, namespace string) (string, error) {
+	ingressroute, err := ingressroutesClient.TraefikV1alpha1().IngressRoutes(namespace).Get(context.TODO(), ingressrouteRef.Name, metav1.GetOptions{})
+	if err != nil {
+		logger.Warn("IngressRoute not found with name " + ingressrouteRef.Name)
+		return "", err
+	}
+
+	return wrappers.NewIngressRouteWrapper(ingressroute).GetURL(), nil
+}
+
 func discoverURLFromRefs(clients kube.Clients, forecastleApp v1alpha1.ForecastleApp) (string, error) {
 	urlFrom := forecastleApp.Spec.URLFrom
 	if urlFrom == nil {
@@ -52,6 +63,10 @@ func discoverURLFromRefs(clients kube.Clients, forecastleApp v1alpha1.Forecastle
 
 	if urlFrom.RouteRef != nil {
 		return discoverURLFromRouteRef(clients.RoutesClient, urlFrom.RouteRef, forecastleApp.Namespace)
+	}
+
+	if urlFrom.IngressRouteRef != nil {
+		return discoverURLFromIngressRouteRef(clients.IngressRoutesClient, urlFrom.IngressRouteRef, forecastleApp.Namespace)
 	}
 
 	logger.Warn("Unsupported Ref set on ForecastleApp: " + forecastleApp.Name)

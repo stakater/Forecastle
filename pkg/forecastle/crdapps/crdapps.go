@@ -1,12 +1,12 @@
 package crdapps
 
 import (
-	v1alpha1 "github.com/stakater/Forecastle/pkg/apis/forecastle/v1alpha1"
-	"github.com/stakater/Forecastle/pkg/config"
-	"github.com/stakater/Forecastle/pkg/forecastle"
-	"github.com/stakater/Forecastle/pkg/kube"
-	"github.com/stakater/Forecastle/pkg/kube/lists/forecastleapps"
-	"github.com/stakater/Forecastle/pkg/log"
+	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
+	"github.com/stakater/Forecastle/v1/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/kube"
+	"github.com/stakater/Forecastle/v1/pkg/kube/lists/forecastleapps"
+	"github.com/stakater/Forecastle/v1/pkg/log"
 )
 
 var (

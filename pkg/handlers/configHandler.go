@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/stakater/Forecastle/pkg/config"
+	"github.com/stakater/Forecastle/v1/pkg/config"
 )
 
 // ConfigHandler handles the config requests coming from the frontend

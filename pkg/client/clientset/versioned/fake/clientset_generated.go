@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
-	fakeforecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned/typed/forecastle/v1alpha1/fake"
+	clientset "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned/typed/forecastle/v1alpha1"
+	fakeforecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned/typed/forecastle/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

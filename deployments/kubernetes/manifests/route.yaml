@@ -4,12 +4,13 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.79"
-    chart: "forecastle-v1.0.79"
+    version: "v1.0.121"
+    chart: "forecastle-v1.0.121"
     release: "forecastle"
     heritage: "Helm"
 spec:

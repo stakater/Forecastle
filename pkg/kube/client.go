@@ -4,8 +4,9 @@ import (
 	"os"
 
 	routesClient "github.com/openshift/client-go/route/clientset/versioned"
-	forecastlev1alpha1 "github.com/stakater/Forecastle/pkg/client/clientset/versioned"
-	"github.com/stakater/Forecastle/pkg/log"
+	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
+	"github.com/stakater/Forecastle/v1/pkg/log"
+	ingressroutesClient "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -20,6 +21,7 @@ type Clients struct {
 	KubernetesClient     kubernetes.Interface
 	ForecastleAppsClient forecastlev1alpha1.Interface
 	RoutesClient         routesClient.Interface
+	IngressRoutesClient  ingressroutesClient.Interface
 }
 
 // GetClients returns a `Clients` object containing all available interfaces
@@ -28,6 +30,7 @@ func GetClients() Clients {
 		KubernetesClient:     GetKubernetesClient(),
 		ForecastleAppsClient: GetForecastleClient(),
 		RoutesClient:         GetRoutesClient(),
+		IngressRoutesClient:  GetIngressRoutesClient(),
 	}
 }
 
@@ -40,6 +43,17 @@ func GetRoutesClient() routesClient.Interface {
 	}
 
 	return routesClient
+}
+
+// GetIngressRoutesClient resturns a ingressroute clientset
+func GetIngressRoutesClient() ingressroutesClient.Interface {
+	config := getClientConfig()
+	ingressroutesClient, err := ingressroutesClient.NewForConfig(config)
+	if err != nil {
+		logger.Fatalf("Can not create ingressroutes client: %v", err)
+	}
+
+	return ingressroutesClient
 }
 
 // GetKubernetesClient returns a k8s clientset

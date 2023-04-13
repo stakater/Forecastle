@@ -181,7 +181,18 @@ customApps:
 
 ## Running multiple instances of forecastle
 
-Yuou can run multiple instances of forecastle by just deploying them in a different namespace and provided a list of namespaces to look for ingresses. However, if you want flexibility over which applications to show in a specific instance regardless of the namespace, then you need to first configure forecastle instances to be a named instances. You can do that by setting `instanceName` in forecastle configuration. Once you have the named instances, you can add `forecastle.stakater.com/instance` annotation to your ingresses to control which application will show in which instance of forecastle. You can also specify multiple instances of forecastle for the same ingress so that it shows up in multiple dashboards. For example, you have 2 instances running named `dev-dashboard` and `prod-dashboard`. You can add this in the ingress's instance annotation `dev-dashboard,prod-dashboard` and the ingress will come up in both dashboards.
+You can run multiple instances of forecastle by just deploying them in a different namespace and provided a list of namespaces to look for ingresses. 
+
+However, if you want flexibility over which applications to show in a specific instance regardless of the namespace, then you need to first configure forecastle instances to be a named instances. 
+You can do that by setting `instanceName` in forecastle configuration. 
+
+Once you have the named instances, you can add `forecastle.stakater.com/instance` annotation to your ingresses to control which application will show in which instance of forecastle. 
+
+You can also specify multiple instances of forecastle for the same ingress so that it shows up in multiple dashboards. 
+For example, you have 2 instances running named `dev-dashboard` and `prod-dashboard`. 
+You can add this in the ingress's instance annotation `dev-dashboard,prod-dashboard` and the ingress will come up in both dashboards.
+
+When using Helm make sure you set a unique `nameOverride` (default `forecastle`) in the values to prevent conflicts between global resources (`ClusterRole` & `ClusterRoleBinding`).
 
 ## Help
 

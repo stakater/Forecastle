@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: v1.0.124
+    version: v1.0.125
   namespace: default
   image:
     name: stakater/forecastle
-    tag: v1.0.124
+    tag: v1.0.125
   deployment:
     replicas: 1
     revisionHistoryLimit: 2

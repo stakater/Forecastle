@@ -1,6 +1,6 @@
 # ![Forecastle](assets/web/forecastle-round-100px.png) Forecastle
 
-[![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](http://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
+[![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](https://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 
 ## Problem(s)
 
@@ -197,7 +197,7 @@ When using Helm make sure you set a unique `nameOverride` (default `forecastle`)
 ## Help
 
 **Got a question?**
-File a GitHub [issue](https://github.com/stakater/Forecastle/issues), or send us an [email](mailto:stakater@gmail.com).
+File a GitHub [issue](https://github.com/stakater/Forecastle/issues).
 
 ### Talk to us on Slack
 
@@ -243,5 +243,5 @@ Forecastle is the section of the upper deck of a ship located at the bow forward
 See [our other projects][community]
 or contact us in case of professional services and queries on <hello@stakater.com>
 
-  [website]: http://stakater.com/
-  [community]: https://www.stakater.com/projects-overview.html
+  [website]: https://stakater.com/
+  [community]: https://github.com/stakater

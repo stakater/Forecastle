@@ -1,6 +1,6 @@
 # ![Forecastle](assets/web/forecastle-round-100px.png) Forecastle
 
-[![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](http://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
+[![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](https://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 
 ## Problem(s)
 
@@ -181,12 +181,23 @@ customApps:
 
 ## Running multiple instances of forecastle
 
-Yuou can run multiple instances of forecastle by just deploying them in a different namespace and provided a list of namespaces to look for ingresses. However, if you want flexibility over which applications to show in a specific instance regardless of the namespace, then you need to first configure forecastle instances to be a named instances. You can do that by setting `instanceName` in forecastle configuration. Once you have the named instances, you can add `forecastle.stakater.com/instance` annotation to your ingresses to control which application will show in which instance of forecastle. You can also specify multiple instances of forecastle for the same ingress so that it shows up in multiple dashboards. For example, you have 2 instances running named `dev-dashboard` and `prod-dashboard`. You can add this in the ingress's instance annotation `dev-dashboard,prod-dashboard` and the ingress will come up in both dashboards.
+You can run multiple instances of forecastle by just deploying them in a different namespace and provided a list of namespaces to look for ingresses. 
+
+However, if you want flexibility over which applications to show in a specific instance regardless of the namespace, then you need to first configure forecastle instances to be a named instances. 
+You can do that by setting `instanceName` in forecastle configuration. 
+
+Once you have the named instances, you can add `forecastle.stakater.com/instance` annotation to your ingresses to control which application will show in which instance of forecastle. 
+
+You can also specify multiple instances of forecastle for the same ingress so that it shows up in multiple dashboards. 
+For example, you have 2 instances running named `dev-dashboard` and `prod-dashboard`. 
+You can add this in the ingress's instance annotation `dev-dashboard,prod-dashboard` and the ingress will come up in both dashboards.
+
+When using Helm make sure you set a unique `nameOverride` (default `forecastle`) in the values to prevent conflicts between global resources (`ClusterRole` & `ClusterRoleBinding`).
 
 ## Help
 
 **Got a question?**
-File a GitHub [issue](https://github.com/stakater/Forecastle/issues), or send us an [email](mailto:stakater@gmail.com).
+File a GitHub [issue](https://github.com/stakater/Forecastle/issues).
 
 ### Talk to us on Slack
 
@@ -219,7 +230,7 @@ View our closed [Pull Requests](https://github.com/stakater/Forecastle/pulls?q=i
 
 ## License
 
-Apache2 © [Stakater](http://stakater.com)
+Apache2 © [Stakater](https://stakater.com)
 
 ## About
 
@@ -229,8 +240,7 @@ Forecastle is the section of the upper deck of a ship located at the bow forward
 
 `Forecastle` is maintained by [Stakater][website]. Like it? Please let us know at <hello@stakater.com>
 
-See [our other projects][community]
+See [our other projects](https://github.com/stakater)
 or contact us in case of professional services and queries on <hello@stakater.com>
 
-  [website]: http://stakater.com/
-  [community]: https://www.stakater.com/projects-overview.html
+  [website]: https://stakater.com

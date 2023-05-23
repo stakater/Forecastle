@@ -14,7 +14,59 @@ forecastle:
     affinity: {}
     nodeSelector: {}
     securityContext: {}
+      #runAsNonRoot: true
+      #  seccompProfile:
+      #    type: RuntimeDefault
     tolerations: {}
+  pod:
+    annotations: {}
+  container:
+    securityContext: {}
+      #privileged: false
+      #capabilities:
+      #  drop:
+      #    - ALL
+      #readOnlyRootFilesystem: true
+      #runAsNonRoot: true
+      #runAsUser: 1000
+      #runAsGroup: 1000
+      #allowPrivilegeEscalation: false
+  resources: {}
+    #limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    #requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+  podDisruptionBudget: {}
+    #minAvailable: 90%
+    #maxUnavailable: 10%
+  networkPolicy:
+    enabled: false
+    ingress:
+      enabled: false
+      # Ingress Controller pods selector labels.
+      # These labels will be used to identify the Ingress Controller pods.
+      # e.g:
+      # podSelector:
+      #   label: nginx-ingress
+      podSelector: {}
+      # Ingress Controller namespace selector labels.
+      # These labels will be used to identify the Ingress Controller namespace.
+      # e.g:
+      # namespaceSelector:
+      #   label: nginx-ingress
+      namespaceSelector: {}
+    egress:
+      # If enabled (`true`), configure `networkPolicy.egress.apiServer` so that
+      # Forecastle can reach the API Server.
+      denyExternalTraffic: false
+      # Configure egress rule that allows traffic toward the Kube API Server.
+      apiServer:
+        # The CP(s) network IP CIDR block.
+        masterCidrBlock: "127.0.0.1/32"
+        # The CP(s) port.
+        masterPort: 443
   config:
     namespaceSelector:
       matchNames:
@@ -29,6 +81,8 @@ forecastle:
   openshiftOauthProxy:
     enabled: false
     serviceAccountAnnotations: {}
+    securityContext: {}
+    resources: {}
   service:
     annotations: {}
     expose: "false"

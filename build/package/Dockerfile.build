@@ -4,7 +4,7 @@ COPY ./frontend ./
 RUN yarn install && yarn build
 
 FROM golang:1.13.1-alpine
-MAINTAINER "Stakater Team"
+LABEL maintainer="Stakater Team"
 
 RUN apk update
 

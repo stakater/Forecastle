@@ -2,11 +2,11 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: v1.0.120
+    version: v1.0.125
   namespace: default
   image:
     name: stakater/forecastle
-    tag: v1.0.120
+    tag: v1.0.125
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
@@ -39,6 +39,53 @@ forecastle:
     #   limits:
     #     cpu: 200m
     #     memory: 64Mi
+    securityContext: {}
+      #runAsNonRoot: true
+      #  seccompProfile:
+      #    type: RuntimeDefault
+    tolerations: {}
+  pod:
+    annotations: {}
+  container:
+    securityContext: {}
+      #privileged: false
+      #capabilities:
+      #  drop:
+      #    - ALL
+      #readOnlyRootFilesystem: true
+      #runAsNonRoot: true
+      #runAsUser: 1000
+      #runAsGroup: 1000
+      #allowPrivilegeEscalation: false
+  podDisruptionBudget: {}
+    #minAvailable: 90%
+    #maxUnavailable: 10%
+  networkPolicy:
+    enabled: false
+    ingress:
+      enabled: false
+      # Ingress Controller pods selector labels.
+      # These labels will be used to identify the Ingress Controller pods.
+      # e.g:
+      # podSelector:
+      #   label: nginx-ingress
+      podSelector: {}
+      # Ingress Controller namespace selector labels.
+      # These labels will be used to identify the Ingress Controller namespace.
+      # e.g:
+      # namespaceSelector:
+      #   label: nginx-ingress
+      namespaceSelector: {}
+    egress:
+      # If enabled (`true`), configure `networkPolicy.egress.apiServer` so that
+      # Forecastle can reach the API Server.
+      denyExternalTraffic: false
+      # Configure egress rule that allows traffic toward the Kube API Server.
+      apiServer:
+        # The CP(s) network IP CIDR block.
+        masterCidrBlock: "127.0.0.1/32"
+        # The CP(s) port.
+        masterPort: 443
   config:
     namespaceSelector:
       matchNames:
@@ -61,18 +108,7 @@ forecastle:
     #     cpu: 200m
     #     memory: 64Mi
     # image: stakater/oauth-proxy:v0.0.2
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 10001
-      runAsGroup: 10001
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      privileged: false 
-      allowPrivilegeEscalation: false
-      # seccompProfile:
-      #   type: RuntimeDefault
+    securityContext: {}
   service:
     annotations: {}
     expose: "false"

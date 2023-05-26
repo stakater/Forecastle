@@ -18,6 +18,8 @@ forecastle:
       #  seccompProfile:
       #    type: RuntimeDefault
     tolerations: {}
+    # imagePullSecrets:
+    #   - name: myregistrykey
   pod:
     annotations: {}
   container:

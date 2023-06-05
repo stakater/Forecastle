@@ -107,6 +107,17 @@ func CreateIngressWithHostAndTLSHost(name string, host string, tlsurl string) *v
 	return ingress
 }
 
+func CreateIngressWithHostAndEmptyTLSHost(name string, host string) *v1.Ingress {
+	ingress := CreateIngressWithHost(name, host)
+	ingress.Spec.TLS = []v1.IngressTLS{
+		{
+			Hosts: []string{},
+		},
+	}
+
+	return ingress
+}
+
 func CreateForecastleApp(name string, url string, group string, icon string) *v1alpha1.ForecastleApp {
 	return &v1alpha1.ForecastleApp{
 		ObjectMeta: metav1.ObjectMeta{

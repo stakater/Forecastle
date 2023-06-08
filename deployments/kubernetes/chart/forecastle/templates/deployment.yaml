@@ -26,6 +26,10 @@ spec:
 {{- toYaml . | indent 8 }}
 {{- end }}
     spec:
+      {{- with .Values.forecastle.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - securityContext: {{- toYaml .Values.forecastle.container.securityContext | nindent 12 }}
         env:

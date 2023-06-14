@@ -99,7 +99,7 @@ func (iw *IngressWrapper) rulesExist() bool {
 }
 
 func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
-	if iw.supportsTLS() && len(iw.getTLSHosts()) > 0 {
+	if iw.supportsTLS() && len(iw.ingress.Spec.TLS[0].Hosts) > 0 {
 		return "https://" + iw.ingress.Spec.TLS[0].Hosts[0], true
 	}
 
@@ -111,13 +111,6 @@ func (iw *IngressWrapper) supportsTLS() bool {
 		return true
 	}
 	return false
-}
-
-func (iw *IngressWrapper) getTLSHosts() []string {
-	if iw.supportsTLS() {
-		return iw.ingress.Spec.TLS[0].Hosts
-	}
-	return []string{}
 }
 
 func (iw *IngressWrapper) getHost() string {

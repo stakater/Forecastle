@@ -274,6 +274,14 @@ func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
 			want:  "https://google.com",
 			want1: true,
 		},
+		{
+			name: "IngressWithTLSAndNoHosts",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHostAndEmptyTLSHost("someIngress", "google.com"),
+			},
+			want:  "",
+			want1: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

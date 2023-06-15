@@ -14,21 +14,23 @@ forecastle:
     affinity: {}
     nodeSelector: {}
     podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 10001
-      fsgroup: 10001
+      {}
+      # runAsNonRoot: true
+      # runAsUser: 10001
+      # fsGroup: 10001
       # seccompProfile:
-      #  type: RuntimeDefault
+      #   type: RuntimeDefault
     securityContext:
-      runAsNonRoot: true
-      runAsUser: 10002
-      runAsGroup: 10002
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop:
-          - ALL
-      privileged: false 
-      allowPrivilegeEscalation: false
+      {}
+      # runAsNonRoot: true
+      # runAsUser: 10002
+      # runAsGroup: 10002
+      # readOnlyRootFilesystem: true
+      # capabilities:
+      #  drop:
+      #    - ALL
+      # privileged: false
+      # allowPrivilegeEscalation: false
       # seccompProfile:
       #   type: RuntimeDefault
     tolerations: {}
@@ -39,17 +41,11 @@ forecastle:
     #   limits:
     #     cpu: 200m
     #     memory: 64Mi
-    securityContext: {}
-      #runAsNonRoot: true
-      #  seccompProfile:
-      #    type: RuntimeDefault
-    tolerations: {}
-    # imagePullSecrets:
-    #   - name: myregistrykey
   pod:
     annotations: {}
   container:
-    securityContext: {}
+    securityContext:
+      {}
       #privileged: false
       #capabilities:
       #  drop:
@@ -59,7 +55,8 @@ forecastle:
       #runAsUser: 1000
       #runAsGroup: 1000
       #allowPrivilegeEscalation: false
-  podDisruptionBudget: {}
+  podDisruptionBudget:
+    {}
     #minAvailable: 90%
     #maxUnavailable: 10%
   networkPolicy:
@@ -91,7 +88,7 @@ forecastle:
   config:
     namespaceSelector:
       matchNames:
-      - stakater
+        - stakater
     headerBackground:
     headerForeground:
     title:
@@ -119,10 +116,10 @@ forecastle:
     annotations: {}
     className: ~
     hosts:
-    - host: forecastle.example.com
-      paths:
-      - path: /
-        pathType: Prefix
+      - host: forecastle.example.com
+        paths:
+          - path: /
+            pathType: Prefix
     #tls:
     #- hosts:
     #  - forecastle.example.com

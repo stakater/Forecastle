@@ -73,7 +73,7 @@ spec:
 {{ toYaml .Values.forecastle.openshiftOauthProxy.resources | indent 10 }}
       {{- end }}
       {{- end }}
-      {{- with .Values.forecastle.deployment.securityContext }}
+      {{- if .Values.forecastle.deployment.securityContext }}
       securityContext:
         {{- toYaml . | nindent 10 }}
       {{- end }}

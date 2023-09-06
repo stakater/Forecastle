@@ -87,10 +87,6 @@ spec:
           secretName: openshift-oauth-proxy-tls
       {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}
-      {{- with .Values.forecastle.deployment.podSecurityContext }}
-      securityContext:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- with .Values.forecastle.deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

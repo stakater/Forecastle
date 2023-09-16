@@ -8,7 +8,7 @@ require (
 	github.com/onrik/logrus v0.10.0
 	github.com/openshift/api v0.0.0-20210720160326-96bb0f993a66
 	github.com/openshift/client-go v0.0.0-20210521082421-73d9475a9142
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.16.0
 	k8s.io/api v0.26.0
 	k8s.io/apimachinery v0.26.0

@@ -1,10 +1,10 @@
-FROM node:12.11.1 as build-deps
+FROM node:12.22.12 as build-deps
 WORKDIR /usr/src/app
 COPY ./frontend ./
 RUN yarn install && yarn build
 
 FROM golang:1.13.1-alpine
-MAINTAINER "Stakater Team"
+LABEL maintainer="Stakater Team"
 
 RUN apk update
 

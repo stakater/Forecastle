@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.121"
-    chart: "forecastle-v1.0.121"
+    version: "v1.0.127"
+    chart: "forecastle-v1.0.127"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -23,8 +23,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.121"
-    chart: "forecastle-v1.0.121"
+    version: "v1.0.127"
+    chart: "forecastle-v1.0.127"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -40,6 +40,9 @@ rules:
 - apiGroups: ["traefik.containo.us"]
   resources: ["ingressroutes"]
   verbs: ["get", "list"]
+- apiGroups: ["traefik.io"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
 - apiGroups: ["forecastle.stakater.com"]
   resources: ["forecastleapps"]
   verbs: ["get", "list"]
@@ -53,8 +56,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.121"
-    chart: "forecastle-v1.0.121"
+    version: "v1.0.127"
+    chart: "forecastle-v1.0.127"
     release: "forecastle"
     heritage: "Helm"
 roleRef:

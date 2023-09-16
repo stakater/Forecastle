@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.121"
-    chart: "forecastle-v1.0.121"
+    version: "v1.0.127"
+    chart: "forecastle-v1.0.127"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -27,14 +27,18 @@ spec:
         app: forecastle
         group: com.stakater.platform
         provider: stakater
+      annotations:
+        checksum/api-config: b4082837631aaa2678a872e391d8e09ed35c590f39203dd25526abeb874885e1
     spec:
       containers:
-      - env:
+      - securityContext:
+            {}
+        env:
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.121"
+        image: "stakater/forecastle:v1.0.127"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -44,3 +48,7 @@ spec:
         configMap:
           name: forecastle
       serviceAccountName: forecastle
+      securityContext:
+        fsgroup: 10001
+        runAsNonRoot: true
+        runAsUser: 10001

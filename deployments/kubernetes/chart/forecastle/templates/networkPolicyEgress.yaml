@@ -1,0 +1,22 @@
+{{- if and .Values.forecastle.networkPolicy.enabled .Values.forecastle.networkPolicy.egress.denyExternalTraffic }}
+kind: NetworkPolicy
+apiVersion: {{ include "networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-egress" ( include "forecastle.name" . ) }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  policyTypes:
+    - Egress
+  podSelector:
+    matchLabels: {{- include "forecastle.labels.selector" . | nindent 6 }}
+  egress:
+    - to:
+        - ipBlock:
+            cidr: {{ .Values.forecastle.networkPolicy.egress.apiServer.masterCidrBlock | quote }}
+      ports:
+        - port: {{ .Values.forecastle.networkPolicy.egress.apiServer.masterPort }}
+          protocol: TCP
+{{- end }}

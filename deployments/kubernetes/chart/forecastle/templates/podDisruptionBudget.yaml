@@ -1,0 +1,14 @@
+{{- if and .Values.forecastle.podDisruptionBudget ( gt ( int .Values.forecastle.deployment.replicas ) 1 ) -}}
+kind: PodDisruptionBudget
+apiVersion: {{ include "podDisruptionBudget.apiVersion" . }}
+metadata:
+  name: {{ include "forecastle.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+spec:
+  selector:
+    matchLabels: {{ include "forecastle.labels.selector" . | nindent 6 }}
+{{ toYaml .Values.forecastle.podDisruptionBudget | indent 2 }}
+{{- end }}

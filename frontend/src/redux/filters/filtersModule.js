@@ -1,4 +1,4 @@
-import { createSlice } from "redux-starter-kit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   query: ""

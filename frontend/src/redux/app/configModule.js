@@ -9,7 +9,7 @@ const initialState = {
   };
 
 const configSlice = createSlice({
-    slice: "config",
+    name: "config",
     initialState,
     reducers: {
         loading: state => ({

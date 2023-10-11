@@ -1,4 +1,4 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from '@reduxjs/toolkit';
 import { getConfig } from '../../services/api'
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
   };
 
 const configSlice = createSlice({
-    slice: "config",
+    name: "config",
     initialState,
     reducers: {
         loading: state => ({

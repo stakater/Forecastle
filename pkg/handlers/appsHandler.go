@@ -84,6 +84,7 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 	}
 
 	js, err := json.Marshal(forecastleApps)
+	logger.Info(js)
 	if err != nil {
 		logger.Error("An error occurred while marshalling apps to json: ", err)
 		http.Error(responseWriter, err.Error(), http.StatusInternalServerError)

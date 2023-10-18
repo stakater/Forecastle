@@ -1,4 +1,4 @@
-import { createSlice } from "redux-starter-kit";
+import { createSlice } from "@reduxjs/toolkit";
 import { getApps } from "../../services/api";
 import { groupBy } from "../../utils/utils";
 
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const appsSlice = createSlice({
-  slice: "apps",
+  name: "apps",
   initialState,
   reducers: {
     loading: state => ({

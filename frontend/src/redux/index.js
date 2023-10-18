@@ -1,4 +1,4 @@
-import { configureStore } from "redux-starter-kit";
+import { configureStore } from "@reduxjs/toolkit";
 
 import appsReducer from "./app/appsModule";
 import configReducer from "./app/configModule";

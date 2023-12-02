@@ -1,4 +1,4 @@
-FROM node:20 as build-deps
+FROM node:21 as build-deps
 WORKDIR /usr/src/app
 COPY ./frontend ./
 RUN yarn install --network-timeout 1000000 && yarn build

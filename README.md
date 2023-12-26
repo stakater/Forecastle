@@ -2,25 +2,59 @@
 
 [![Get started with Stakater](https://stakater.github.io/README/stakater-github-banner.png)](https://stakater.com/?utm_source=IngressMonitorController&utm_medium=github)
 
-## Problem(s)
+## Table of Contents:
 
-- We would like to have a central place where we can easily look for and access our applications running on Kubernetes.
-- We would like to have a tool which can dynamically discover and list the apps running on Kubernetes.
-- A launchpad to access developer tools e.g. Jenkins, Nexus, Kibana, Grafana, etc.
+- [Introduction](#introduction)
+  - [Problem](#problem)
+  - [Solution](#solution)
+- [Deployment Guide](#deployment-guide)
+  - [Vanilla Manifests](#vanilla-manifests)
+  - [Helm Charts](#helm-charts)
+- [Configuration](#configuration)
+  - [Ingresses](#ingresses)
+  - [Forecastle](#forecastle)
+    - [NamespaceSelector](#namespaceselector)
+    - [Custom Apps](#custom-apps)
+    - [ForecastleApp CRD](#forecastleapp-crd)
+      - [Automatically discover URL's from Kubernetes Resources](#automatically-discover-urls-from-kubernetes-resources)
+    - [Example Config](#example-configuration)
+- [Features](#features)
+- [Scaling with Multiple Instances](#scaling-with-multiple-instances)
+- [Help](#help)
+  - [Talk to us on Slack](#talk-to-us-on-slack)
+- [Contributing](#contributing)
+  - [Bug Reports & Feature Requests](#bug-reports--feature-requests)
+  - [Developing](#developing)
+- [Changelog](#changelog)
+- [License](#license)
+- [About](#about)
+  - [Why name Forecastle](#why-the-name-forecastle)
 
-## Solution
+
+## Introduction
+### Problem
+
+- Finding and accessing applications on Kubernetes can be challenging without a central hub.
+- It's essential to have a dynamic way to discover and list applications that are actively running on Kubernetes.
+- Developers often need a streamlined portal to access essential tools like Jenkins, Nexus, Kibana, Grafana, and others.
+
+### Solution
 
 Forecastle gives you access to a control panel where you can see your running applications and access them on Kubernetes.
 
+Forecastle provides a unified control panel, serving as a convenient gateway to view and access your applications deployed on Kubernetes. Whether it's monitoring tools, CI/CD pipelines, or other applications, Forecastle brings them all to your fingertips in one central location.
+
 ![Screenshot](assets/forecastle.png)
 
-## Deploying to Kubernetes
+## Deployment Guide
 
-You can deploy Forecastle both using vanilla k8s manifests or helm charts.
+Forecastle can be seamlessly deployed on both Kubernetes and OpenShift platforms. You have the option to use either vanilla Kubernetes manifests or Helm charts for deployment. Below are the step-by-step instructions for each method.
 
 ### Vanilla Manifests
 
-#### Step 1: You can apply vanilla manifests by running the following command
+#### Step 1: Apply manifests
+
+You can get Forecastle by running the following command on your cluster:
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
@@ -28,21 +62,27 @@ kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/de
 
 #### Step 2: Update configmap
 
-In the Forecastle configmap modify the `namespaceSelector` key with a list of namespaces which you want Forecastle to watch. Refer to [this](#namespaceselector) for instructions.
-
-And enjoy!
+Modify the `namespaceSelector` key in the Forecastle ConfigMap to list the namespaces you want Forecastle to monitor. For detailed instructions, see [namespace selector configuration](#namespaceselector) for instructions.
 
 ### Helm Charts
 
-If you configured `helm` on your cluster, you can deploy Forecastle via helm chart located under `deployments/kubernetes/chart/Forecastle` folder.
+If you have Helm configured on your Kubernetes cluster, deploy Forecastle using the Helm chart. The chart is located [here.](./deployments/kubernetes/chart/forecastle)
+
+Adjust the configuration in values.yaml if required and run the following command:
+  
+```bash
+helm install forecastle ./deployments/kubernetes/chart/forecastle
+```
 
 ## Configuration
 
+Forecastle simplifies the discovery and management of applications on Kubernetes and OpenShift. It utilizes specific annotations on ingresses and offers various configuration options for customization.
+
 ### Ingresses
 
-Forecastle looks for a specific annotations on ingresses.
+Forecastle identifies applications through annotations added to Kubernetes ingresses. Here’s a guide to the necessary annotations:
 
-- Add the following annotations to your ingresses in order to be discovered by forecastle:
+To be discovered by Forecastle, add the following annotations to your ingresses:
 
 | Annotation                                   | Description                                                                                                                                                 | Required |
 | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -57,7 +97,7 @@ Forecastle looks for a specific annotations on ingresses.
 
 ### Forecastle
 
-Forecastle supports the following configuration options that can be modified by either ConfigMap or `values.yaml` if you are using helm
+You can customize Forecastle using either a ConfigMap or the values.yaml file when deploying with Helm. Below are the configurable fields:
 
 |       Field       |                                                Description                                                 |         Default         | Type              |
 | :---------------: | :--------------------------------------------------------------------------------------------------------: | :---------------------: | ----------------- |
@@ -69,9 +109,11 @@ Forecastle supports the following configuration options that can be modified by 
 |    customApps     |                A list of custom apps that you would like to add to the forecastle instance                 |           {}            | []CustomApp       |
 |    crdEnabled     |                                  Enables or disables `ForecastleApp` CRD                                   |          true           | bool              |
 
-#### NamespaceSelector
+#### Detailed Configurations
 
-It is a selector for selecting namespaces either selecting all namespaces or a list of namespaces, or filtering namespaces through labels.
+##### NamespaceSelector
+
+Selects namespaces for Forecastle to monitor, either by listing specific namespaces or using label selectors.
 
 |     Field     |                                          Description                                          | Default | Type                                                                                         |
 | :-----------: | :-------------------------------------------------------------------------------------------: | :-----: | -------------------------------------------------------------------------------------------- |
@@ -79,11 +121,11 @@ It is a selector for selecting namespaces either selecting all namespaces or a l
 | labelSelector |                Filter namespaces based on kubernetes metav1.LabelSelector type                |  null   | [metav1.LabelSelector](https://godoc.org/k8s.io/apimachinery/pkg/apis/meta/v1#LabelSelector) |
 |  matchNames   |                                    List of namespace names                                    |  null   | []string                                                                                     |
 
-*Note:* If you specify both `labelSelector` and `matchNames`, forecastle will take a union of all namespaces matched and use them.
+*Note:* If you specify both `labelSelector` and `matchNames`, Forecastle will take a union of all namespaces matched and use them.
 
-#### Custom Apps
+##### Custom Apps
 
-If you want to add any apps that are not exposed through ingresses or are external to the cluster, you can use the custom apps feature. You can pass an array of custom apps inside the config.
+Allows adding non-Kubernetes or external apps to Forecastle. This is an extremely useful feature especially when your apps are distributed both on kubernetes and off it. You can pass an array of custom apps inside the config.
 
 | Field             | Description                               | Type              |
 | ----------------- | ----------------------------------------- | ----------------- |
@@ -96,7 +138,11 @@ If you want to add any apps that are not exposed through ingresses or are extern
 
 #### ForecastleApp CRD
 
-You can now create custom resources to add apps to forecastle dynamically. This decouples the application configuration from Ingresses as well as forecastle config. You can create the custom resource `ForecastleApp` like the following:
+With Forecastle, you can dynamically integrate applications into the dashboard using the ForecastleApp Custom Resource Definition (CRD). This feature allows for greater flexibility and decouples application configuration from both Ingresses and the Forecastle configuration.
+
+**Creating a ForecastleApp:**
+
+To create a ForecastleApp, use the following template as a guide. This configuration allows you to specify the app name, group, icon, URL, and additional properties:
 
 ```yaml
 apiVersion: forecastle.stakater.com/v1alpha1
@@ -114,13 +160,16 @@ spec:
   instance: "" # Optional
 ```
 
-##### Automatically discover URL's from Kubernetes Resources
+#### Automatically discover URL's from Kubernetes Resources
 
-Forecastle supports discovering URL's ForecastleApp CRD from the following resources:
+ForecastleApp CRD supports automatic URL discovery from certain Kubernetes resources, such as:
 
-- Ingress
+- Ingress: Ensures the application's URL is automatically retrieved from the Ingress resource in the same namespace.
 
-The above type of resource that you want to discover URL from **MUST** exist in the same namespace as `ForecastleApp` CR. Then you can add the following to the CR:
+
+
+To utilize this feature, add the urlFrom field to your ForecastleApp specification like so:
+*Please note that the type of resource that you want to discover has be be in the same namespace as the `ForecastleApp` CR.*
 
 ```yaml
 apiVersion: forecastle.stakater.com/v1alpha1
@@ -136,13 +185,13 @@ spec:
       name: my-app-ingress
 ```
 
-The above CR will be picked up by forecastle and it will generate the App in the UI. This lets you bundle this custom resource with the app's helm chart which will make it a part of the deployment process.
+This configuration instructs Forecastle to fetch the app URL directly from the specified Ingress resource, simplifying deployment and configuration.
 
-*Note:* You have to enable CRD feature first if you have disabled it. You can do that by applying the CRD and specifying `crdEnabled: true` in forecastle config. If you're using the helm chart then CRDs are installed with the chart.
+*Note: To use the CRD feature, ensure it's enabled by setting `crdEnabled: true` in the Forecastle configuration or enabling it in the Helm chart.*
 
-#### Example Config
+#### Example Configuration
 
-An example of a config can be seen below
+Below is an example of how you might configure Forecastle using a combination of namespace selectors and custom apps:
 
 ```yaml
 namespaceSelector:
@@ -167,32 +216,51 @@ customApps:
     Version: 1.0
 ```
 
+This configuration demonstrates how to set namespace selectors, customize the header's appearance, enable or disable the CRD feature, and add a custom app with specific properties.
+
 ## Features
 
-- List apps found in all namespaces listed in the configmap
-- Search apps
-- Grouped apps per namespace
-- Configurable header (Title and colors)
-- Multiple instance support
-- Provide Custom apps
-- CRD `ForecastleApp` for adding custom apps
-- Custom groups and URLs for the apps
-- Details per app
+Forecastle boasts a range of functionalities designed to streamline the management and accessibility of applications in Kubernetes environments. Key features include:
 
-## Running multiple instances of forecastle
+1. **Comprehensive App Listing**: Forecastle aggregates and displays apps from all namespaces specified in the ConfigMap, providing a centralized view of your resources.
 
-You can run multiple instances of forecastle by just deploying them in a different namespace and provided a list of namespaces to look for ingresses. 
+2. **Search Functionality**: Quickly locate specific applications with an intuitive search feature, enhancing user experience and efficiency.
 
-However, if you want flexibility over which applications to show in a specific instance regardless of the namespace, then you need to first configure forecastle instances to be a named instances. 
-You can do that by setting `instanceName` in forecastle configuration. 
+3. **Namespace Grouping**: Apps are neatly organized and grouped by their respective namespaces, making navigation and management more straightforward.
 
-Once you have the named instances, you can add `forecastle.stakater.com/instance` annotation to your ingresses to control which application will show in which instance of forecastle. 
+4. **Customizable Header**: Tailor the look and feel of your Forecastle dashboard with configurable header options, including title customization and color schemes.
 
-You can also specify multiple instances of forecastle for the same ingress so that it shows up in multiple dashboards. 
-For example, you have 2 instances running named `dev-dashboard` and `prod-dashboard`. 
-You can add this in the ingress's instance annotation `dev-dashboard,prod-dashboard` and the ingress will come up in both dashboards.
+5. **Support for Multiple Instances**: Forecastle is designed to support multiple instances, accommodating varied and complex deployment scenarios.
 
-When using Helm make sure you set a unique `nameOverride` (default `forecastle`) in the values to prevent conflicts between global resources (`ClusterRole` & `ClusterRoleBinding`).
+6. **Custom Apps Integration**: Easily add non-Kubernetes or external applications to your dashboard for a more comprehensive overview of your tools and resources.
+
+7. **ForecastleApp CRD**: Utilize the ForecastleApp Custom Resource Definition to dynamically add custom applications, further enhancing the dashboard’s flexibility.
+
+8. **Custom Grouping and URLs**: Organize your applications into custom groups and assign specific URLs for tailored navigation and accessibility.
+
+9. **Detailed App Information**: Each application comes with detailed information, offering insights and essential details at a glance.
+
+## Scaling with Multiple Instances
+
+Forecastle's design allows for running multiple instances, providing scalability and flexibility in diverse environments. Here's how you can effectively scale Forecastle.
+
+### Deploying Multiple Instances
+
+**Basic Deployment**: To run multiple Forecastle instances, deploy each instance in a separate namespace. Specify a list of namespaces for each instance to monitor ingresses.
+
+### Configuring Named Instances for Enhanced Flexibility
+
+**Named Instance Configuration**: For greater control over which applications are displayed in specific instances (irrespective of their namespaces), configure each Forecastle instance with a unique name using the `instanceName` setting in the Forecastle configuration.
+
+### Controlling Application Display Across Instances
+
+**Application-Specific Instance Display**: After naming your instances, use the `forecastle.stakater.com/instance` annotation on your ingresses. This annotation dictates which application appears in which Forecastle instance.
+
+**Multiple Instance Display**: It's possible for a single application (ingress) to appear in multiple Forecastle dashboards. For instance, if you have two instances named dev-dashboard and prod-dashboard, adding `dev-dashboard,prod-dashboard` in the ingress's instance annotation will ensure the application is visible on both dashboards.
+
+### Helm Deployment Considerations
+
+**Unique Naming in Helm**: When deploying Forecastle instances via Helm, ensure each instance has a unique `nameOverride` value (default is forecastle). This step is crucial to avoid conflicts between global resources like ClusterRole and ClusterRoleBinding.
 
 ## Help
 
@@ -234,9 +302,11 @@ Apache2 © [Stakater](https://stakater.com)
 
 ## About
 
-### Why name Forecastle
+### Why the name "Forecastle"?
 
-Forecastle is the section of the upper deck of a ship located at the bow forward of the foremast. This Forecastle will act as a control panel and show all your running applications on Kubernetes having a particular annotation.
+The term "Forecastle" originates from maritime vocabulary, referring to the upper deck of a ship situated at the bow, just in front of the foremast. Historically, it's a place from where sailors navigate and observe the vast sea ahead.
+
+In the context of our project, we've adopted this name as a metaphor for the role Forecastle plays in the world of Kubernetes. Just like the ship's forecastle, our Forecastle acts as a central observation and control panel. It gives users a comprehensive view of all their running applications on Kubernetes, specifically those marked with a designated annotation. Forecastle is designed to be your Kubernetes dashboard, providing a clear view and easy access to your deployed applications, much like a sailor surveying the sea from the ship's bow.
 
 `Forecastle` is maintained by [Stakater][website]. Like it? Please let us know at <hello@stakater.com>
 

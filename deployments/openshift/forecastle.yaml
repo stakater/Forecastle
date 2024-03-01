@@ -95,12 +95,14 @@ metadata:
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 ---
 # Source: forecastle/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: forecastle
+  namespace: default
   labels:
     app: forecastle
     group: com.stakater.platform
@@ -142,6 +144,9 @@ rules:
 - apiGroups: ["networking.k8s.io"]
   resources: ["ingresses"]
   verbs: ["get", "list"]
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list"]
 - apiGroups: ["traefik.containo.us"]
   resources: ["ingressroutes"]
   verbs: ["get", "list"]
@@ -172,7 +177,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: forecastle
-  namespace: forecastle
+  namespace: default
 ---
 # Source: forecastle/templates/service.yaml
 apiVersion: v1
@@ -188,6 +193,7 @@ metadata:
     heritage: "Helm"
     expose: "true"
   name: forecastle
+  namespace: default
 spec:
   ports:
   - name: http
@@ -212,6 +218,7 @@ metadata:
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
+  namespace: default
 spec:
   replicas: 1
   revisionHistoryLimit: 2
@@ -247,3 +254,29 @@ spec:
         configMap:
           name: forecastle
       serviceAccountName: forecastle
+---
+# Source: forecastle/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: forecastle
+  namespace: default
+  labels:
+    app: forecastle
+    group: com.stakater.platform
+    provider: stakater
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
+    release: "forecastle"
+    heritage: "Helm"
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: forecastle
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: reencrypt
+    insecureEdgeTerminationPolicy: Redirect

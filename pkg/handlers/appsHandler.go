@@ -83,6 +83,10 @@ func AppsHandler(responseWriter http.ResponseWriter, request *http.Request) {
 		}
 	}
 
+	if forecastleApps == nil {
+		forecastleApps = []forecastle.App{}
+	}
+
 	js, err := json.Marshal(forecastleApps)
 	if err != nil {
 		logger.Error("An error occurred while marshalling apps to json: ", err)

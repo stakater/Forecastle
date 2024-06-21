@@ -93,7 +93,7 @@ Modify the `namespaceSelector` key in the Forecastle ConfigMap to list the names
 If you have Helm configured on your Kubernetes cluster, deploy Forecastle using the Helm chart. The chart is located [here.](./deployments/kubernetes/chart/forecastle)
 
 Adjust the configuration in values.yaml if required and run the following command:
-  
+
 ```bash
 helm install forecastle ./deployments/kubernetes/chart/forecastle
 ```
@@ -231,9 +231,9 @@ spec:
   group: dev
   icon: https://icon-url
   url: http://app-url
-  networkRestricted: "false"
+  networkRestricted: false
   properties:
-    Version: 1.0
+    Version: "1.0"
   instance: "" # Optional
 ```
 

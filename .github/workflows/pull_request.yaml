@@ -141,8 +141,8 @@ jobs:
       env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ env.IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
-        allow-repeats: false
+        message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
+        allow-repeats: true
 
     - name: Notify Failure
       if: failure()
@@ -151,7 +151,7 @@ jobs:
        GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
       with:
         message: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
-        allow-repeats: false
+        allow-repeats: true
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3

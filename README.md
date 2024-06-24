@@ -70,9 +70,9 @@ Forecastle boasts a range of functionalities designed to streamline the manageme
 
 ## Admin Guide
 
-This section is intended for Administrators aiming to deploy Forecastle in Kubernetes environments. Forecastle offers flexible deployment options, accommodating both Kubernetes and OpenShift platforms with ease.
+This section is intended for Administrators aiming to deploy Forecastle on their clusters. Forecastle offers flexible deployment options, accommodating both Kubernetes and OpenShift platforms with ease.
 
-You have the choice of deploying Forecastle using traditional Kubernetes manifests or through Helm charts. Detailed instructions for both methods are provided below to guide you through the deployment process.
+You have the choice of deploying Forecastle using traditional manifests or through Helm charts. Detailed instructions for both methods are provided below to guide you through the deployment process.
 
 ### Vanilla Manifests
 
@@ -80,8 +80,29 @@ You have the choice of deploying Forecastle using traditional Kubernetes manifes
 
 You can get Forecastle by running the following command on your cluster:
 
+for Kubernetes:
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
+```
+
+for OpenShift:
+```bash
+kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/openshift/forecastle.yaml
+```
+
+##### Accessing the Dashboard
+
+For Kubernetes environments, you can use the following port-foward command to access the Forecastle dashboard: 
+```bash
+kubectl port-forward svc/forecastle 8080:8080
+```
+
+Please note that you would need to configure ingress to to access Forecastle from outside the cluster based on your cluster's ingress configuration.
+
+For OpenShift environments, a default route is created for the Forecastle service. You can access the dashboard using the route URL.
+
+```bash
+oc get route forecastle
 ```
 
 #### Step 2: Update configmap

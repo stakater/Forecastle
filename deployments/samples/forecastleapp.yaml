@@ -1,0 +1,14 @@
+---
+apiVersion: forecastle.stakater.com/v1alpha1
+kind: ForecastleApp
+metadata:
+  name: google
+spec:
+  name: Google
+  group: test
+  icon: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
+  url: https://www.google.com/
+  networkRestricted: false
+  properties:
+    Version: "1.0"
+  instance: ""

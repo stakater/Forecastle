@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.141"
-    chart: "forecastle-v1.0.141"
+    version: "v1.0.142"
+    chart: "forecastle-v1.0.142"
     release: "forecastle"
     heritage: "Helm"
     expose: "true"
@@ -17,7 +17,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 8080
+    port: 80
     protocol: TCP
     targetPort: 3000
   selector:

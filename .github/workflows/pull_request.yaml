@@ -73,7 +73,7 @@ jobs:
       run: |
         sha=${{ github.event.pull_request.head.sha }}
         tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${sha:0:8}"
-        echo "##[set-output name=GIT_TAG;]$(echo ${tag})"
+        echo "GIT_TAG=$(echo ${tag})" >> $GITHUB_OUTPUT
     
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -103,7 +103,7 @@ jobs:
         build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
         platforms: linux/amd64,linux/arm,linux/arm64
         tags: |
-          ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.new_tag }}
+          ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}
         labels: |
           org.opencontainers.image.source=${{ github.event.repository.clone_url }}
           org.opencontainers.image.created=${{ steps.prep.outputs.created }}

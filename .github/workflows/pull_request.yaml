@@ -139,7 +139,7 @@ jobs:
     - name: Comment on PR
       uses: mshick/add-pr-comment@v2
       env:
-       GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ env.IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
         allow-repeats: false

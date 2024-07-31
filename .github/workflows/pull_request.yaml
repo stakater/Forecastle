@@ -87,7 +87,7 @@ jobs:
 
     # To identify any broken changes in dockerfiles or dependencies
 
-    - name: Build and Push image to ghcr registry
+    - name: Build image
       uses: docker/build-push-action@v5
       with:
         context: .

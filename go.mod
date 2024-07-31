@@ -16,7 +16,7 @@ require (
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
-require github.com/traefik/traefik/v2 v2.9.10
+require github.com/traefik/traefik/v2 v2.11.6
 
 require (
 	github.com/cenkalti/backoff/v4 v4.2.0 // indirect

@@ -90,8 +90,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -107,8 +107,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
 data:
@@ -133,8 +133,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
 rules:
@@ -166,8 +166,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
 roleRef:
@@ -187,8 +187,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
     expose: "true"
@@ -197,7 +197,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 80
+    port: 8080
     protocol: TCP
     targetPort: 3000
   selector:
@@ -213,8 +213,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -234,7 +234,7 @@ spec:
         group: com.stakater.platform
         provider: stakater
       annotations:
-        checksum/api-config: 19a79114b4cb8397745fc9eabbcaddcf3eac217e57c4160ec37efd99ae05eaec
+        checksum/api-config: 3ebc5523d8aeee4106b9debcb5033740666262a515fc298b84945cc77a7544d5
     spec:
       containers:
       - securityContext:
@@ -244,7 +244,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.144"
+        image: "stakater/forecastle:v1.0.136"
         name: forecastle
         volumeMounts:
         - name: forecastle-config
@@ -265,8 +265,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.144"
-    chart: "forecastle-v1.0.144"
+    version: "v1.0.136"
+    chart: "forecastle-v1.0.136"
     release: "forecastle"
     heritage: "Helm"
 spec:

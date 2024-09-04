@@ -1,7 +1,7 @@
 FROM node:20 as build-deps
 WORKDIR /usr/src/app
 COPY ./frontend ./
-RUN yarn install --network-timeout 1000000 && yarn build
+RUN yarn install && yarn build
 
 # Build the manager binary
 FROM --platform=${BUILDPLATFORM} golang:1.22 as builder

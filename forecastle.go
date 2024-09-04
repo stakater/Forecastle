@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	packr "github.com/gobuffalo/packr/v2"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 	"github.com/stakater/Forecastle/v1/pkg/handlers"

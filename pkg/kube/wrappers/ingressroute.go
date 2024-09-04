@@ -3,7 +3,7 @@ package wrappers
 import (
 	"mvdan.cc/xurls/v2"
 
-	ingressroutev1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/traefik/v1alpha1"
+	ingressroutev1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/traefikio/v1alpha1"
 )
 
 // IngressRouteWrapper struct wraps a Traefik ingressroute object
@@ -23,7 +23,7 @@ func (irw *IngressRouteWrapper) GetURL() string {
 	xurlsStrict := xurls.Relaxed()
 	parsedUrl := ""
 
-	for _,element := range irw.ingressroute.Spec.Routes {
+	for _, element := range irw.ingressroute.Spec.Routes {
 		tempUrl := xurlsStrict.FindString(element.Match)
 		if len(tempUrl) > 0 {
 			parsedUrl = tempUrl

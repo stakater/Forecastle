@@ -13,15 +13,15 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     name: Build
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"    
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     steps:
     - name: Check out code
       uses: actions/checkout@v4
       with:
         ref: ${{github.event.pull_request.head.sha}}
-    
+
     # Setting up helm binary
     - name: Set up Helm
       uses: azure/setup-helm@v3
@@ -64,7 +64,7 @@ jobs:
     #   run: |
     #     kind create cluster
     #     kubectl cluster-info
-        
+
     # - name: Test
     #   run: make test
 
@@ -74,7 +74,7 @@ jobs:
         sha=${{ github.event.pull_request.head.sha }}
         tag="SNAPSHOT-PR-${{ github.event.pull_request.number }}-${sha:0:8}"
         echo "GIT_TAG=$(echo ${tag})" >> $GITHUB_OUTPUT
-    
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
@@ -103,30 +103,3 @@ jobs:
           org.opencontainers.image.source=${{ github.event.repository.clone_url }}
           org.opencontainers.image.created=${{ steps.prep.outputs.created }}
           org.opencontainers.image.revision=${{ github.sha }}
-
-    # - name: Comment on PR
-    #   uses: mshick/add-pr-comment@v2
-    #   env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     message: '@${{ github.actor }} Image is available for testing. `docker pull ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.GIT_TAG }}`'
-    #     allow-repeats: true
-
-    # - name: Notify Failure
-    #   if: failure()
-    #   uses: mshick/add-pr-comment@v2
-    #   env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     message: '@${{ github.actor }} Yikes! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
-    #     allow-repeats: true
-
-    # - name: Notify Slack
-    #   uses: 8398a7/action-slack@v3
-    #   if: always() # Pick up events even if the job fails or is canceled.
-    #   with:
-    #     status: ${{ job.status }}
-    #     fields: repo,author,action,eventName,ref,workflow
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.STAKATER_GITHUB_TOKEN }}
-    #     SLACK_WEBHOOK_URL: ${{ secrets.STAKATER_DELIVERY_SLACK_WEBHOOK }}

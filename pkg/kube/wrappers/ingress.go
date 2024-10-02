@@ -79,13 +79,18 @@ func (iw *IngressWrapper) GetURL() string {
 
 	var url string
 
-	if host, exists := iw.tryGetTLSHost(); exists { // Get TLS Host if it exists
-		url = host
+	if host, exists := iw.tryGetTLSHost(); exists { // Get TLS Host if defined
+		url = "https://" + host
+	} else if host, exists := iw.tryGetRuleHost(); exists { // Fallback to normal host if defined
+		url = "http://" + host
+	} else if host, exists := iw.tryGetStatusHost(); exists { // Fallback to status host if defined
+		url = "http://" + host
 	} else {
-		url = iw.getHost() // Fallback for normal Host
+		logger.Warn("Unable to infer host for ingress: ", iw.ingress.GetName())
+		return ""
 	}
 
-	// Append port + ingressSubPath
+	// Append path if defined
 	url += iw.getIngressSubPath()
 
 	return url
@@ -100,9 +105,8 @@ func (iw *IngressWrapper) rulesExist() bool {
 
 func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
 	if iw.supportsTLS() && len(iw.ingress.Spec.TLS[0].Hosts) > 0 {
-		return "https://" + iw.ingress.Spec.TLS[0].Hosts[0], true
+		return iw.ingress.Spec.TLS[0].Hosts[0], true
 	}
-
 	return "", false
 }
 
@@ -113,8 +117,23 @@ func (iw *IngressWrapper) supportsTLS() bool {
 	return false
 }
 
-func (iw *IngressWrapper) getHost() string {
-	return "http://" + iw.ingress.Spec.Rules[0].Host
+func (iw *IngressWrapper) tryGetRuleHost() (string, bool) {
+	if iw.ingress.Spec.Rules[0].Host != "" {
+		return iw.ingress.Spec.Rules[0].Host, true
+	}
+	return "", false
+}
+
+func (iw *IngressWrapper) tryGetStatusHost() (string, bool) {
+	if len(iw.ingress.Status.LoadBalancer.Ingress) > 0 {
+		ingressStatus := iw.ingress.Status.LoadBalancer.Ingress[0]
+		if ingressStatus.Hostname != "" {
+			return ingressStatus.Hostname, true
+		} else if ingressStatus.IP != "" {
+			return ingressStatus.IP, true
+		}
+	}
+	return "", false
 }
 
 func (iw *IngressWrapper) getIngressSubPath() string {

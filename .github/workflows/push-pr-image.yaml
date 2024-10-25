@@ -9,6 +9,7 @@ on:
 env:
   KUBERNETES_VERSION: "1.30.0"
   KIND_VERSION: "0.23.0"
+  REGISTRY: ghcr.io
 
 jobs:
 

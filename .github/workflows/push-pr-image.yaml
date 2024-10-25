@@ -7,45 +7,26 @@ on:
     types: [ labeled ]
 
 env:
-  DOCKER_FILE_PATH: Dockerfile
-  KUBERNETES_VERSION: "1.22.2"
-  KIND_VERSION: "0.10.0"
-  REGISTRY: ghcr.io
+  KUBERNETES_VERSION: "1.30.0"
+  KIND_VERSION: "0.23.0"
 
 jobs:
-  build:
+
+  push-image:
     runs-on: ubuntu-latest
-    name: Build
-    if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
+    name: Push PR Image
+    if: ${{ github.event.label.name == 'build-push-image' }}
     steps:
+
+    - name: Remove the test label
+      uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: build-push-image
+
     - name: Check out code
       uses: actions/checkout@v4
       with:
         ref: ${{github.event.pull_request.head.sha}}
-
-    # Setting up helm binary
-    - name: Set up Helm
-      uses: azure/setup-helm@v3
-
-    - name: Set up Go
-      id: go
-      uses: actions/setup-go@v4
-      with:
-        go-version-file: 'go.mod'
-
-    - name: Install Dependencies
-      run: |
-        make install
-
-    - name: Lint
-      run: |
-        go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
-        golangci-lint run --timeout=10m ./...
-
-    - name: Helm Lint
-      run: |
-        cd deployments/kubernetes/chart/forecastle
-        helm lint
 
     - name: Generate Tag
       id: generate_tag
@@ -64,15 +45,13 @@ jobs:
       run: |
         echo GHCR_IMAGE_REPOSITORY=${{env.REGISTRY}}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
-    # To identify any broken changes in dockerfiles or dependencies
-
     - name: Build image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ${{ env.DOCKER_FILE_PATH  }}
         pull: true
-        push: false
+        push: true
         cache-to: type=inline
         build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
         platforms: linux/amd64,linux/arm,linux/arm64

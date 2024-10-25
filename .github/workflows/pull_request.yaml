@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - master
-    types: [ labeled ]
 
 env:
   DOCKER_FILE_PATH: Dockerfile

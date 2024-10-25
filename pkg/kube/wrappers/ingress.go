@@ -92,10 +92,7 @@ func (iw *IngressWrapper) GetURL() string {
 }
 
 func (iw *IngressWrapper) rulesExist() bool {
-	if len(iw.ingress.Spec.Rules) > 0 {
-		return true
-	}
-	return false
+	return len(iw.ingress.Spec.Rules) > 0
 }
 
 func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
@@ -107,10 +104,7 @@ func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
 }
 
 func (iw *IngressWrapper) supportsTLS() bool {
-	if len(iw.ingress.Spec.TLS) > 0 {
-		return true
-	}
-	return false
+	return len(iw.ingress.Spec.TLS) > 0
 }
 
 func (iw *IngressWrapper) getHost() string {

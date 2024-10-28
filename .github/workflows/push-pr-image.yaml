@@ -1,4 +1,4 @@
-name: Pull Request
+name: Push PR Image on Label
 
 on:
   pull_request:

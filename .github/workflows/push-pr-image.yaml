@@ -53,7 +53,7 @@ jobs:
         username: stakater-user
         password: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Build image
+    - name: Build and Push image
       uses: docker/build-push-action@v5
       with:
         context: .

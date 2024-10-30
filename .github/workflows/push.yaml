@@ -7,8 +7,8 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  KUBERNETES_VERSION: "1.22.2"
-  KIND_VERSION: "0.10.0"
+  KUBERNETES_VERSION: "1.30.0"
+  KIND_VERSION: "0.23.0"
   HELM_REGISTRY_URL: "https://stakater.github.io/stakater-charts"
   DEFAULT_BRANCH: "master"
   REGISTRY: ghcr.io
@@ -42,7 +42,7 @@ jobs:
 
       - name: Lint
         run: |
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.56.0
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.61.0
           golangci-lint run --timeout=10m ./...
 
       - name: Install kubectl

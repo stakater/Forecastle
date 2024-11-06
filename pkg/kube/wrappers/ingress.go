@@ -92,10 +92,7 @@ func (iw *IngressWrapper) GetURL() string {
 }
 
 func (iw *IngressWrapper) rulesExist() bool {
-	if iw.ingress.Spec.Rules != nil && len(iw.ingress.Spec.Rules) > 0 {
-		return true
-	}
-	return false
+	return len(iw.ingress.Spec.Rules) > 0
 }
 
 func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
@@ -107,10 +104,7 @@ func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
 }
 
 func (iw *IngressWrapper) supportsTLS() bool {
-	if iw.ingress.Spec.TLS != nil && len(iw.ingress.Spec.TLS) > 0 {
-		return true
-	}
-	return false
+	return len(iw.ingress.Spec.TLS) > 0
 }
 
 func (iw *IngressWrapper) getHost() string {
@@ -120,7 +114,7 @@ func (iw *IngressWrapper) getHost() string {
 func (iw *IngressWrapper) getIngressSubPath() string {
 	rule := iw.ingress.Spec.Rules[0]
 	if rule.HTTP != nil {
-		if rule.HTTP.Paths != nil && len(rule.HTTP.Paths) > 0 {
+		if len(rule.HTTP.Paths) > 0 {
 			return rule.HTTP.Paths[0].Path
 		}
 	}

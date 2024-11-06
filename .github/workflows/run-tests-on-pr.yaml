@@ -1,0 +1,60 @@
+name: Run Tests on PR Label
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [ labeled ]
+
+env:
+  KUBERNETES_VERSION: "1.30.0"
+  KIND_VERSION: "0.23.0"
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    if:  ${{ github.event.label.name == 'ok-to-test' }}
+    steps:
+
+    - name: Remove the test label
+      uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: ok-to-test
+
+    - name: Check out code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{github.event.pull_request.head.sha}}
+
+    - name: Set up Go
+      id: go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: 'go.mod'
+
+    - name: Install Dependencies
+      run: |
+        make install
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+        sudo install ./kubectl /usr/local/bin/ && rm kubectl
+        kubectl version --client=true
+
+    - name: Install Kind
+      run: |
+        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
+        sudo install ./kind /usr/local/bin && rm kind
+        kind version
+        kind version | grep -q ${KIND_VERSION}
+
+    - name: Create Kind Cluster
+      run: |
+        kind create cluster
+        kubectl cluster-info
+
+    - name: Test
+      run: make test

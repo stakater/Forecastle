@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getApps } from "../../services/api";
-import { groupBy, sortAlphabetically, uniq } from "../../utils/utils";
+import { groupBy, sortAlphabetically } from "../../utils/utils";
 
 const initialState = {
   data: [],

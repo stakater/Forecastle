@@ -45,7 +45,7 @@ export const AppList = ({ apps, groups, isLoading, isLoaded, error, loadApps }) 
     loadApps();
   }, [loadApps]);
 
-  const groups = sortAlphabetically(Object.keys(apps))
+  const groups = sortAlphabetically(Object.keys(apps || {}))
 
   return (
     <main className={classes.root}>

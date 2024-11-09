@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
+export const AppList = ({ apps, groups, isLoading, isLoaded, error, loadApps }) => {
   const classes = useStyles();
 
   useEffect(() => {
@@ -50,11 +50,11 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
 
       {/* Display list of apps  */}
       <Container className={classes.cardGrid} fixed>
-        {Object.keys(apps).map(key => (
+        {groups.map(group => (
           <ExpansionPanel
             defaultExpanded
             className={classes.expansionPanel}
-            key={key}
+            key={group}
           >
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -63,12 +63,12 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
               className={classes.expansionPanelHeader}
             >
               <Typography className={classes.heading}>
-                {key.toUpperCase()} ({apps[key].length})
+                {group.toUpperCase()} ({apps[group].length})
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.panelDetails}>
               <Grid container spacing={4}>
-                {apps[key].map((app, idx) => (
+                {apps[group].map((app, idx) => (
                   <Grid key={idx} item xs={12} sm={6} md={3}>
                     <AppCard card={app} />
                   </Grid>
@@ -94,6 +94,7 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
 
 AppList.props = {
   apps: PropTypes.array,
+  groups: PropTypes.array,
   isLoading: PropTypes.bool.isRequired,
   isLoaded: PropTypes.bool.isRequired,
   error: PropTypes.oneOf([PropTypes.string, PropTypes.object])
@@ -101,13 +102,15 @@ AppList.props = {
 
 AppList.defaultProps = {
   apps: [],
+  groups: [],
   isLoading: false,
   isLoaded: false,
   error: null
 };
 
 const mapStateToProps = state => ({
-  apps: selectApps(state.apps.data, state.filters),
+  apps: selectApps(state.apps.data.apps, state.filters),
+  apps: state.apps.data.groups,
   isLoading: state.apps.isLoading,
   isLoaded: state.apps.isLoaded,
   error: state.apps.error

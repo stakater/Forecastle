@@ -14,4 +14,4 @@ export const isURL = str => {
 };
 
 export const sortAlphabetically = (array, accessor = i => i) =>
-  array.sort((a, b) => accessor(a).toLowerCase().localeCompare(accessor(b).toLowerCase(), 'en', {numeric: true}));
+  array.slice().sort((a, b) => accessor(a).toLowerCase().localeCompare(accessor(b).toLowerCase(), 'en', {numeric: true}));

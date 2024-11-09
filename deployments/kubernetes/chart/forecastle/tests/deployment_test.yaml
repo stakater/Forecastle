@@ -1,0 +1,37 @@
+suite: Deployment
+
+templates:
+  - deployment.yaml
+  - configmap.yaml # dependency
+
+tests:
+  - it: includes container security context
+    template: deployment.yaml
+    set:
+      forecastle.deployment.securityContext: { allowPrivilegeEscalation: false }
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+
+  - it: includes container security context (deprecated) entries
+    template: deployment.yaml
+    set:
+      forecastle.container.securityContext: { allowPrivilegeEscalation: false }
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+
+  - it: merges container security context fields
+    template: deployment.yaml
+    set:
+      forecastle.container.securityContext: { allowPrivilegeEscalation: true }
+      forecastle.deployment.securityContext: { runAsNonRoot: true, allowPrivilegeEscalation: false }
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
+          value: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true

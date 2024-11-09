@@ -13,14 +13,10 @@ forecastle:
     annotations: {}
     affinity: {}
     nodeSelector: {}
-    securityContext: {}
+    podSecurityContext: {}
       #runAsNonRoot: true
       #  seccompProfile:
       #    type: RuntimeDefault
-    tolerations: {}
-  pod:
-    annotations: {}
-  container:
     securityContext: {}
       #privileged: false
       #capabilities:
@@ -31,6 +27,9 @@ forecastle:
       #runAsUser: 1000
       #runAsGroup: 1000
       #allowPrivilegeEscalation: false
+    tolerations: {}
+  pod:
+    annotations: {}
   resources: {}
     #limits:
     #  cpu: 100m

@@ -44,7 +44,12 @@ const loadApps = () => async dispatch => {
     dispatch(loading());
     let { data } = await getApps();
 
-    data = groupBy("group")(data);
+    // todo: move to utils
+    data.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'en', {numeric: true}));
+    
+    let groups = [...new Set(data.map(i => i.group))];
+ 
+    data = { groups, apps: data };
 
     dispatch(loadAppsSuccess(data));
   } catch (e) {

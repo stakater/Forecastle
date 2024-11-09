@@ -12,3 +12,6 @@ export const isURL = str => {
   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
   return regexp.test(str);
 };
+
+export const sortAlphabetically = (array, accessor = i => i) =>
+  array.sort((a, b) => accessor(a).toLowerCase().localeCompare(accessor(b).toLowerCase(), 'en', {numeric: true}));

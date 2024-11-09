@@ -102,7 +102,7 @@ AppList.props = {
 };
 
 AppList.defaultProps = {
-  apps: [],
+  apps: {},
   isLoading: false,
   isLoaded: false,
   error: null

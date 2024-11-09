@@ -47,7 +47,7 @@ const loadApps = () => async dispatch => {
     const apps = groupBy("group")(sortAlphabetically(data, i => i.name))
     const groups = sortAlphabetically(uniq(data.map(i => i.group)))
 
-    dispatch(loadAppsSuccess({ groups, apps ));
+    dispatch(loadAppsSuccess({ groups, apps }));
   } catch (e) {
     if (e.response && e.response.data) {
       dispatch(fail(e.response.data));

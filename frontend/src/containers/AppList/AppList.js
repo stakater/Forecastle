@@ -110,7 +110,7 @@ AppList.defaultProps = {
 
 const mapStateToProps = state => ({
   apps: selectApps(state.apps.data.apps, state.filters),
-  apps: state.apps.data.groups,
+  groups: state.apps.data.groups,
   isLoading: state.apps.isLoading,
   isLoaded: state.apps.isLoaded,
   error: state.apps.error

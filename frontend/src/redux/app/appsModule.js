@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getApps } from "../../services/api";
-import { groupBy } from "../../utils/utils";
+import { groupBy, sortAlphabetically, uniq } from "../../utils/utils";
 
 const initialState = {
   data: [],
@@ -44,14 +44,10 @@ const loadApps = () => async dispatch => {
     dispatch(loading());
     let { data } = await getApps();
 
-    // todo: move to utils
-    data.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'en', {numeric: true}));
-    
-    let groups = [...new Set(data.map(i => i.group))];
+    const apps = sortAlphabetically(data, i => i.name)
+    const groups = sortAlphabetically(uniq(data.map(i => i.group)))
  
-    data = { groups, apps: data };
-
-    dispatch(loadAppsSuccess(data));
+    dispatch(loadAppsSuccess({ groups, apps ));
   } catch (e) {
     if (e.response && e.response.data) {
       dispatch(fail(e.response.data));

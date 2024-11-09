@@ -43,6 +43,8 @@ export const AppList = ({ apps, groups, isLoading, isLoaded, error, loadApps }) 
     loadApps();
   }, [loadApps]);
 
+  const groups = sortAlphabetically(Object.keys(apps))
+
   return (
     <main className={classes.root}>
       {/* Show loader when fetching apps collections */}
@@ -93,8 +95,7 @@ export const AppList = ({ apps, groups, isLoading, isLoaded, error, loadApps }) 
 };
 
 AppList.props = {
-  apps: PropTypes.array,
-  groups: PropTypes.array,
+  apps: PropTypes.object,
   isLoading: PropTypes.bool.isRequired,
   isLoaded: PropTypes.bool.isRequired,
   error: PropTypes.oneOf([PropTypes.string, PropTypes.object])
@@ -102,15 +103,13 @@ AppList.props = {
 
 AppList.defaultProps = {
   apps: [],
-  groups: [],
   isLoading: false,
   isLoaded: false,
   error: null
 };
 
 const mapStateToProps = state => ({
-  apps: selectApps(state.apps.data.apps, state.filters),
-  groups: state.apps.data.groups,
+  apps: selectApps(state.apps.data, state.filters),
   isLoading: state.apps.isLoading,
   isLoaded: state.apps.isLoaded,
   error: state.apps.error

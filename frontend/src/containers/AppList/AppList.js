@@ -5,6 +5,8 @@ import { Box, Grid, Container, makeStyles } from "@material-ui/core";
 
 import * as appsStore from "../../redux/app/appsModule";
 import selectApps from "../../redux/app/appsSelector";
+import { sortAlphabetically } from "../../utils/utils";
+
 import { AppCard, PageLoader } from "../../components";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { AppBar, Toolbar, Typography, InputBase } from "@material-ui/core";
 import { connect } from "react-redux";
@@ -63,6 +63,11 @@ const useStyles = makeStyles(theme => ({
 const SearchAppBar = ({ config, query, setQuery }) => {
   const classes = useStyles();
 
+  const title = config.title || "Forecastle - Stakater"
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
   const handleSearchInput = e => {
     setQuery(e.target.value);
   };
@@ -78,7 +83,7 @@ const SearchAppBar = ({ config, query, setQuery }) => {
       >
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            {config.title || "Forecastle - Stakater"}
+            {title}
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>

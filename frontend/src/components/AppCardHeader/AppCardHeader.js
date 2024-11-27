@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     right: "0.5rem"
   }
 }));
-const AppCardHeader = ({ name, url, onOpenAppLink }) => {
+const AppCardHeader = ({ name, url }) => {
   const classes = useStyles();
 
   return (
@@ -53,7 +53,6 @@ const AppCardHeader = ({ name, url, onOpenAppLink }) => {
 AppCardHeader.propTypes = {
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  onOpenAppLink: PropTypes.func.isRequired
 };
 
 export default AppCardHeader;

@@ -14,11 +14,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AppCardContent = ({ icon, name, onOpenAppLink }) => {
+const AppCardContent = ({ icon, name, url }) => {
   const classes = useStyles();
 
   return (
-    <CardActionArea onClick={onOpenAppLink}>
+    <CardActionArea href={url} target="_blank">
       <Grid className={classes.mediaWrapper}>
         <CardMedia className={classes.media} image={icon} title={name} />
       </Grid>
@@ -29,7 +29,7 @@ const AppCardContent = ({ icon, name, onOpenAppLink }) => {
 AppCardContent.propTypes = {
   icon: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  onOpenAppLink: PropTypes.func.isRequired
+  url: PropTypes.string.isRequired
 };
 
 export default AppCardContent;

@@ -1,10 +1,10 @@
-FROM node:20 as build-deps
+FROM node:20 AS build-deps
 WORKDIR /usr/src/app
 COPY ./frontend ./
 RUN yarn install --network-timeout 1000000 && yarn build
 
 # Build the manager binary
-FROM --platform=${BUILDPLATFORM} golang:1.23 as builder
+FROM --platform=${BUILDPLATFORM} golang:1.23 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH

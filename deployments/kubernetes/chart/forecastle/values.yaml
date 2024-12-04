@@ -43,18 +43,6 @@ forecastle:
     #     memory: 64Mi
   pod:
     annotations: {}
-  container:
-    securityContext:
-      {}
-      #privileged: false
-      #capabilities:
-      #  drop:
-      #    - ALL
-      #readOnlyRootFilesystem: true
-      #runAsNonRoot: true
-      #runAsUser: 1000
-      #runAsGroup: 1000
-      #allowPrivilegeEscalation: false
   podDisruptionBudget:
     {}
     #minAvailable: 90%

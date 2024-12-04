@@ -31,7 +31,10 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-      - securityContext: {{- toYaml .Values.forecastle.container.securityContext | nindent 12 }}
+      - {{- $containerSecurityContext := mustMergeOverwrite ((.Values.forecastle.container).securityContext | default dict) ((.Values.forecastle.deployment).securityContext | default dict) }}
+        {{- if $containerSecurityContext }}
+        securityContext: {{- toYaml $containerSecurityContext | nindent 12 }}
+        {{- end }}
         env:
         - name: KUBERNETES_NAMESPACE
           valueFrom:
@@ -46,10 +49,6 @@ spec:
         volumeMounts:
         - name: {{ template "forecastle.name" . }}-config
           mountPath: /etc/forecastle
-      {{- with .Values.forecastle.deployment.securityContext }}
-        securityContext:
-          {{- toYaml . | nindent 10 }}
-      {{- end }}
       {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
       - name: oauth-proxy
         image: "{{ default "stakater/oauth-proxy:v0.0.2" .Values.forecastle.openshiftOauthProxy.image }}"

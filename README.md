@@ -111,12 +111,11 @@ Modify the `namespaceSelector` key in the Forecastle ConfigMap to list the names
 
 ### Helm Charts
 
-If you have Helm configured on your Kubernetes cluster, deploy Forecastle using the Helm chart. The chart is located [here.](./deployments/kubernetes/chart/forecastle)
+You can use Helm to deploy Forecastle. Head over to the [values.yaml](./deployments/kubernetes/chart/forecastle/values.yaml) to find configuration options.
 
-Adjust the configuration in values.yaml if required and run the following command:
-
-```bash
-helm install forecastle ./deployments/kubernetes/chart/forecastle
+```shell
+helm repo add stakater-charts https://stakater.github.io/stakater-charts/
+helm install forecastle stakater-charts/forecastle
 ```
 
 ### Configuration

@@ -14,22 +14,17 @@ const AppCard = ({ card }) => {
     SetIsDetailsExpanded(!isDetailsExpanded);
   };
 
-  const handleOpenAppLink = url => {
-    window.open(url, "_blank");
-  };
-
   return (
     <Card>
       <AppCardHeader
         name={card.name}
         url={card.url}
-        onOpenAppLink={() => handleOpenAppLink(card.url)}
       />
 
       <AppCardContent
         name={card.name}
         icon={card.icon}
-        onOpenAppLink={() => handleOpenAppLink(card.url)}
+        url={card.url}
       />
 
       <AppCardFooter

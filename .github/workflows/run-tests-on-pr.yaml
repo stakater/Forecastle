@@ -4,7 +4,11 @@ on:
   pull_request:
     branches:
       - master
-    types: [ labeled ]
+    types:
+      - opened
+      - reopened
+      - labeled
+      - synchronize
 
 env:
   KUBERNETES_VERSION: "1.30.0"
@@ -15,7 +19,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Test
-    if:  ${{ github.event.label.name == 'ok-to-test' }}
+    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
     steps:
 
     - name: Remove the test label

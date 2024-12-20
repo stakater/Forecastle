@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
+    "@mui/material": "^5.0.0",
     "@material-ui/icons": "^4.11.3",
     "@reduxjs/toolkit": "^2.3.0",
     "axios": "^1.2.2",

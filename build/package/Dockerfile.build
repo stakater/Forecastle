@@ -1,4 +1,4 @@
-FROM node:20.11.0 AS build-deps
+FROM node:22.14.0 AS build-deps
 WORKDIR /usr/src/app
 COPY ./frontend ./
 RUN yarn install && yarn build

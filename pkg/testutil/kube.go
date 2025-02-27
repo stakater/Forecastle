@@ -118,6 +118,28 @@ func CreateIngressWithHostAndEmptyTLSHost(name string, host string) *v1.Ingress 
 	return ingress
 }
 
+func CreateIngressWithStatusHostnameHost(name string, host string) *v1.Ingress {
+	ingress := CreateIngress(name)
+	ingress.Status.LoadBalancer.Ingress = []v1.IngressLoadBalancerIngress{
+		{
+			Hostname: host,
+		},
+	}
+
+	return ingress
+}
+
+func CreateIngressWithStatusIPHost(name string, host string) *v1.Ingress {
+	ingress := CreateIngress(name)
+	ingress.Status.LoadBalancer.Ingress = []v1.IngressLoadBalancerIngress{
+		{
+			IP: host,
+		},
+	}
+
+	return ingress
+}
+
 func CreateForecastleApp(name string, url string, group string, icon string) *v1alpha1.ForecastleApp {
 	return &v1alpha1.ForecastleApp{
 		ObjectMeta: metav1.ObjectMeta{

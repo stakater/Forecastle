@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getApps } from "../../services/api";
-import { groupBy } from "../../utils/utils";
+import { groupBy, sortAlphabetically } from "../../utils/utils";
 
 const initialState = {
   data: [],
@@ -44,7 +44,7 @@ const loadApps = () => async dispatch => {
     dispatch(loading());
     let { data } = await getApps();
 
-    data = groupBy("group")(data);
+    data = groupBy("group")(sortAlphabetically(data, i => i.name));
 
     dispatch(loadAppsSuccess(data));
   } catch (e) {

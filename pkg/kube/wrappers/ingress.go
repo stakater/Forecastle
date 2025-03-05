@@ -72,50 +72,70 @@ func (iw *IngressWrapper) GetURL() string {
 		return parsedURL.String()
 	}
 
-	if !iw.rulesExist() {
-		logger.Warn("No rules exist in ingress: ", iw.ingress.GetName())
+	var url string
+
+	if host, exists := iw.tryGetTLSHost(); exists { // Get TLS Host if defined
+		url = "https://" + host
+	} else if host, exists := iw.tryGetRuleHost(); exists { // Fallback to normal host if defined
+		url = "http://" + host
+	} else if host, exists := iw.tryGetStatusHost(); exists { // Fallback to status host if defined
+		url = "http://" + host
+	} else {
+		logger.Warn("Unable to infer host for ingress: ", iw.ingress.GetName())
 		return ""
 	}
 
-	var url string
-
-	if host, exists := iw.tryGetTLSHost(); exists { // Get TLS Host if it exists
-		url = host
-	} else {
-		url = iw.getHost() // Fallback for normal Host
-	}
-
-	// Append port + ingressSubPath
+	// Append path if defined
 	url += iw.getIngressSubPath()
 
 	return url
-}
-
-func (iw *IngressWrapper) rulesExist() bool {
-	return len(iw.ingress.Spec.Rules) > 0
-}
-
-func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
-	if iw.supportsTLS() && len(iw.ingress.Spec.TLS[0].Hosts) > 0 {
-		return "https://" + iw.ingress.Spec.TLS[0].Hosts[0], true
-	}
-
-	return "", false
 }
 
 func (iw *IngressWrapper) supportsTLS() bool {
 	return len(iw.ingress.Spec.TLS) > 0
 }
 
-func (iw *IngressWrapper) getHost() string {
-	return "http://" + iw.ingress.Spec.Rules[0].Host
+func (iw *IngressWrapper) tryGetTLSHost() (string, bool) {
+	if iw.supportsTLS() && len(iw.ingress.Spec.TLS[0].Hosts) > 0 {
+		return iw.ingress.Spec.TLS[0].Hosts[0], true
+	}
+	return "", false
+}
+
+func (iw *IngressWrapper) rulesExist() bool {
+	return len(iw.ingress.Spec.Rules) > 0
+}
+
+func (iw *IngressWrapper) tryGetRuleHost() (string, bool) {
+	if iw.rulesExist() && iw.ingress.Spec.Rules[0].Host != "" {
+		return iw.ingress.Spec.Rules[0].Host, true
+	}
+	return "", false
+}
+
+func (iw *IngressWrapper) statusLoadBalancerExist() bool {
+	return len(iw.ingress.Status.LoadBalancer.Ingress) > 0
+}
+
+func (iw *IngressWrapper) tryGetStatusHost() (string, bool) {
+	if iw.statusLoadBalancerExist() {
+		ingressStatus := iw.ingress.Status.LoadBalancer.Ingress[0]
+		if ingressStatus.Hostname != "" {
+			return ingressStatus.Hostname, true
+		} else if ingressStatus.IP != "" {
+			return ingressStatus.IP, true
+		}
+	}
+	return "", false
 }
 
 func (iw *IngressWrapper) getIngressSubPath() string {
-	rule := iw.ingress.Spec.Rules[0]
-	if rule.HTTP != nil {
-		if len(rule.HTTP.Paths) > 0 {
-			return rule.HTTP.Paths[0].Path
+	if iw.rulesExist() {
+		rule := iw.ingress.Spec.Rules[0]
+		if rule.HTTP != nil {
+			if len(rule.HTTP.Paths) > 0 {
+				return rule.HTTP.Paths[0].Path
+			}
 		}
 	}
 	return ""

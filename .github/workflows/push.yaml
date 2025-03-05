@@ -67,7 +67,7 @@ jobs:
 
       - name: Generate Tag
         id: generate_tag
-        uses: anothrNick/github-tag-action@1.67.0
+        uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: true
@@ -92,7 +92,7 @@ jobs:
           echo GHCR_IMAGE_REPOSITORY=${{env.REGISTRY}}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Build and push image to ghcr registry
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH  }}
@@ -119,7 +119,7 @@ jobs:
           echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Build and push Image to DockerHub registry
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH  }}
@@ -142,7 +142,7 @@ jobs:
       # Generate tag for operator without "v"
       - name: Generate Operator Tag
         id: generate_operator_tag
-        uses: anothrNick/github-tag-action@1.67.0
+        uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: false
@@ -199,7 +199,7 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Push Latest Tag
-        uses: anothrNick/github-tag-action@1.67.0
+        uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: true

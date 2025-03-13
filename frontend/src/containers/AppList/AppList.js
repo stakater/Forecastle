@@ -5,6 +5,8 @@ import { Box, Grid, Container, makeStyles } from "@material-ui/core";
 
 import * as appsStore from "../../redux/app/appsModule";
 import selectApps from "../../redux/app/appsSelector";
+import { sortAlphabetically } from "../../utils/utils";
+
 import { AppCard, PageLoader } from "../../components";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -36,12 +38,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
+export const AppList = ({ apps, groups, isLoading, isLoaded, error, loadApps }) => {
   const classes = useStyles();
 
   useEffect(() => {
     loadApps();
   }, [loadApps]);
+
+  const groups = sortAlphabetically(Object.keys(apps || {}))
 
   return (
     <main className={classes.root}>
@@ -50,11 +54,11 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
 
       {/* Display list of apps  */}
       <Container className={classes.cardGrid} fixed>
-        {Object.keys(apps).map(key => (
+        {groups.map(group => (
           <ExpansionPanel
             defaultExpanded
             className={classes.expansionPanel}
-            key={key}
+            key={group}
           >
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -63,12 +67,12 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
               className={classes.expansionPanelHeader}
             >
               <Typography className={classes.heading}>
-                {key.toUpperCase()} ({apps[key].length})
+                {group.toUpperCase()} ({apps[group].length})
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails className={classes.panelDetails}>
               <Grid container spacing={4}>
-                {apps[key].map((app, idx) => (
+                {apps[group].map((app, idx) => (
                   <Grid key={idx} item xs={12} sm={6} md={3}>
                     <AppCard card={app} />
                   </Grid>
@@ -93,14 +97,14 @@ export const AppList = ({ apps, isLoading, isLoaded, error, loadApps }) => {
 };
 
 AppList.props = {
-  apps: PropTypes.array,
+  apps: PropTypes.object,
   isLoading: PropTypes.bool.isRequired,
   isLoaded: PropTypes.bool.isRequired,
   error: PropTypes.oneOf([PropTypes.string, PropTypes.object])
 };
 
 AppList.defaultProps = {
-  apps: [],
+  apps: {},
   isLoading: false,
   isLoaded: false,
   error: null

@@ -167,9 +167,9 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 		{
 			name: "IngressWithTLSHostButNoHost",
 			fields: fields{
-				ingress: testutil.CreateIngressWithTLSHost("someIngress2", "https://google.com"),
+				ingress: testutil.CreateIngressWithTLSHost("someIngress2", "google.com"),
 			},
-			want: "",
+			want: "https://google.com",
 		},
 		{
 			name: "IngressWithTLSHostAndNormalHost",
@@ -198,6 +198,20 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl42"),
 			},
 			want: "",
+		},
+		{
+			name: "IngressWithStatusHostnameHostButNoHostNorTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithStatusHostnameHost("someIngress2", "google.com"),
+			},
+			want: "http://google.com",
+		},
+		{
+			name: "IngressWithStatusIPHostButNoHostNorTLSHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithStatusIPHost("someIngress2", "1.1.1.1"),
+			},
+			want: "http://1.1.1.1",
 		},
 	}
 	for _, tt := range tests {
@@ -271,7 +285,7 @@ func TestIngressWrapper_tryGetTLSHost(t *testing.T) {
 			fields: fields{
 				ingress: testutil.CreateIngressWithHostAndTLSHost("someIngress", "google.com", "google.com"),
 			},
-			want:  "https://google.com",
+			want:  "google.com",
 			want1: true,
 		},
 		{
@@ -335,7 +349,7 @@ func TestIngressWrapper_supportsTLS(t *testing.T) {
 	}
 }
 
-func TestIngressWrapper_getHost(t *testing.T) {
+func TestIngressWrapper_tryGetRuleHost(t *testing.T) {
 	type fields struct {
 		ingress *v1.Ingress
 	}
@@ -343,20 +357,23 @@ func TestIngressWrapper_getHost(t *testing.T) {
 		name   string
 		fields fields
 		want   string
+		want1  bool
 	}{
 		{
 			name: "IngressWithEmptyHost",
 			fields: fields{
 				ingress: testutil.CreateIngressWithHost("someIngress", ""),
 			},
-			want: "http://",
+			want:  "",
+			want1: false,
 		},
 		{
 			name: "IngressWithCorrectHost",
 			fields: fields{
 				ingress: testutil.CreateIngressWithHost("someIngress", "google.com"),
 			},
-			want: "http://google.com",
+			want:  "google.com",
+			want1: true,
 		},
 	}
 	for _, tt := range tests {
@@ -364,8 +381,63 @@ func TestIngressWrapper_getHost(t *testing.T) {
 			iw := &IngressWrapper{
 				ingress: tt.fields.ingress,
 			}
-			if got := iw.getHost(); got != tt.want {
-				t.Errorf("IngressWrapper.getHost() = %v, want %v", got, tt.want)
+			got, got1 := iw.tryGetRuleHost()
+			if got != tt.want {
+				t.Errorf("IngressWrapper.tryGetRuleHost() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("IngressWrapper.tryGetRuleHost() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestIngressWrapper_tryGetStatusHost(t *testing.T) {
+	type fields struct {
+		ingress *v1.Ingress
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   string
+		want1  bool
+	}{
+		{
+			name: "IngressWithEmptyStatusHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithHost("someIngress", ""),
+			},
+			want:  "",
+			want1: false,
+		},
+		{
+			name: "IngressWithCorrectHostnameStatusHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithStatusHostnameHost("someIngress", "google.com"),
+			},
+			want:  "google.com",
+			want1: true,
+		},
+		{
+			name: "IngressWithCorrectIPStatusHost",
+			fields: fields{
+				ingress: testutil.CreateIngressWithStatusIPHost("someIngress", "1.1.1.1"),
+			},
+			want:  "1.1.1.1",
+			want1: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			iw := &IngressWrapper{
+				ingress: tt.fields.ingress,
+			}
+			got, got1 := iw.tryGetStatusHost()
+			if got != tt.want {
+				t.Errorf("IngressWrapper.tryGetStatusHost() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("IngressWrapper.tryGetStatusHost() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}

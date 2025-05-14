@@ -67,7 +67,7 @@ jobs:
 
       - name: Generate Tag
         id: generate_tag
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@1.73.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: true
@@ -142,7 +142,7 @@ jobs:
       # Generate tag for operator without "v"
       - name: Generate Operator Tag
         id: generate_operator_tag
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@1.73.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: false
@@ -199,7 +199,7 @@ jobs:
           branch: ${{ github.ref }}
 
       - name: Push Latest Tag
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@1.73.0
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           WITH_V: true

@@ -6,7 +6,7 @@ require (
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/gorilla/mux v1.8.1
 	github.com/onrik/logrus v0.11.0
-	github.com/openshift/api v0.0.0-20210720160326-96bb0f993a66
+	github.com/openshift/api 674ad74beffc
 	github.com/openshift/client-go v0.0.0-20210521082421-73d9475a9142
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.19.0

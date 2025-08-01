@@ -1,6 +1,6 @@
 module github.com/stakater/Forecastle/v1
 
-go 1.23.2
+go 1.24.0
 
 require (
 	github.com/gobuffalo/packr/v2 v2.8.3
@@ -16,7 +16,7 @@ require (
 	mvdan.cc/xurls/v2 v2.5.0
 )
 
-require github.com/traefik/traefik/v2 v2.11.24
+require github.com/traefik/traefik/v2 v2.11.28
 
 require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -63,7 +63,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/traefik/paerser v0.2.2 // indirect
-	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/exp v0.0.0-20241210194714-1829a127f884 // indirect

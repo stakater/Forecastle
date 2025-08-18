@@ -140,19 +140,16 @@ jobs:
       ##############################
 
       # Generate tag for operator without "v"
-      - name: Generate Operator Tag
-        id: generate_operator_tag
-        uses: anothrNick/github-tag-action@1.73.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-          WITH_V: false
-          DEFAULT_BUMP: patch
-          DRY_RUN: true
+      - name: Remove "v" from version
+        id: tag_without_v
+        run: |
+          TAG=${{ steps.generate_tag.outputs.new_tag }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
 
       # Update chart tag to the latest semver tag
       - name: Update Chart Version
         env:
-          VERSION: ${{ steps.generate_operator_tag.outputs.new_tag }}
+          VERSION: ${{ steps.tag_without_v.outputs.VERSION }}
         run: make bump-chart
 
       # Publish helm chart

@@ -7,8 +7,8 @@ metadata:
     app: forecastle
     group: com.stakater.platform
     provider: stakater
-    version: "v1.0.17"
-    chart: "forecastle-v1.0.17"
+    version: "v1.0.159"
+    chart: "forecastle-v1.0.159"
     release: "forecastle"
     heritage: "Helm"
   name: forecastle
@@ -28,7 +28,7 @@ spec:
         group: com.stakater.platform
         provider: stakater
       annotations:
-        checksum/api-config: 641db66bfd004b5ca6b1095707c4da92dba0dcc0e5520d02b779e6124da2e0e4
+        checksum/api-config: 98e5c75b9207f09b47f19b4c99565077855c86df482ba2c1a54b9d60b6bcbef9
     spec:
       containers:
       -
@@ -37,7 +37,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "stakater/forecastle:v1.0.17"
+        image: "stakater/forecastle:v1.0.159"
         name: forecastle
         volumeMounts:
         - name: forecastle-config

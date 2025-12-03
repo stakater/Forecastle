@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/mux"
@@ -28,18 +29,55 @@ func init() {
 }
 
 func main() {
+	basePath := "" // Hardcoded for testing
 	router := mux.NewRouter()
 
-	router.HandleFunc("/api/apps", handlers.AppsHandler).Methods("GET")
-	router.HandleFunc("/api/config", handlers.ConfigHandler).Methods("GET")
+	// API routes
+	sub := router.PathPrefix(basePath).Subrouter()
+	sub.HandleFunc("/api/apps", handlers.AppsHandler).Methods("GET")
+	sub.HandleFunc("/api/config", handlers.ConfigHandler).Methods("GET")
 
-	// Serve react frontend using packr
+	// Packr boxes for frontend
 	staticBox := packr.New("static", "./frontend/build/static")
 	buildBox := packr.New("build", "./frontend/build")
-	router.PathPrefix("/").Handler(http.FileServer(buildBox))
-	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(staticBox)))
 
-	logger.Info("Listening at port 3000")
+	// Serve static assets
+	sub.PathPrefix("/static/").Handler(
+		http.StripPrefix(basePath+"/static/", http.FileServer(staticBox)),
+	)
+
+	// SPA fallback handler
+	sub.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Strip basePath from URL
+		filePath := strings.TrimPrefix(r.URL.Path, basePath+"/")
+
+		// If the path is empty (user requested /forecastle), serve index.html
+		if filePath == "" {
+			indexData, err := buildBox.Find("index.html")
+			if err != nil {
+				http.Error(w, "index.html not found", http.StatusInternalServerError)
+				return
+			}
+			w.Write(indexData)
+			return
+		}
+
+		// Try to find the file in buildBox
+		if fileData, err := buildBox.Find(filePath); err == nil {
+			w.Write(fileData)
+			return
+		}
+
+		// Fallback to index.html for React routing
+		indexData, err := buildBox.Find("index.html")
+		if err != nil {
+			http.Error(w, "index.html not found", http.StatusInternalServerError)
+			return
+		}
+		w.Write(indexData)
+	})
+
+	logger.Infof("Listening at port 3000 with base path: %s", basePath)
 	if err := http.ListenAndServe(":3000", router); err != nil {
 		logger.Error(err)
 	}

@@ -29,7 +29,7 @@ func init() {
 }
 
 func main() {
-	basePath := "" // Hardcoded for testing
+	basePath := ""
 	router := mux.NewRouter()
 
 	// API routes

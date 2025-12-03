@@ -55,13 +55,6 @@ jobs:
       run: |
         echo GHCR_IMAGE_REPOSITORY=${{env.REGISTRY}}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
-    - name: Login to ghcr registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{env.REGISTRY}}
-        username: stakater-user
-        password: ${{secrets.GITHUB_TOKEN}}
-        
     # To identify any broken changes in dockerfiles or dependencies
     - name: Build image
       uses: docker/build-push-action@v6
@@ -69,7 +62,7 @@ jobs:
         context: .
         file: ${{ env.DOCKER_FILE_PATH  }}
         pull: true
-        push: true
+        push: false
         cache-to: type=inline
         build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
         platforms: linux/amd64,linux/arm,linux/arm64

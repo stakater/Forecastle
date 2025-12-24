@@ -7,3 +7,4 @@ config.yaml
 dist
 .local
 Forecastle
+node_modules

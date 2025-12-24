@@ -48,11 +48,29 @@ const loadApps = () => async dispatch => {
 
     dispatch(loadAppsSuccess(data));
   } catch (e) {
-    if (e.response && e.response.data) {
-      dispatch(fail(e.response.data));
-    } else {
-      dispatch(fail(e.message));
+    // Extract a clean error message
+    let errorMessage = 'An unexpected error occurred';
+
+    if (e.response) {
+      // Server responded with an error status
+      const status = e.response.status;
+      const statusText = e.response.statusText || 'Error';
+
+      if (status === 404) {
+        errorMessage = 'API endpoint not found. Make sure the backend is running.';
+      } else if (status >= 500) {
+        errorMessage = `Server error (${status}): ${statusText}`;
+      } else {
+        errorMessage = `Request failed (${status}): ${statusText}`;
+      }
+    } else if (e.request) {
+      // Request was made but no response received
+      errorMessage = 'No response from server. Check if the backend is running.';
+    } else if (e.message) {
+      errorMessage = e.message;
     }
+
+    dispatch(fail(errorMessage));
   }
 };
 

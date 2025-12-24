@@ -8,3 +8,6 @@ dist
 .local
 Forecastle
 node_modules
+
+# Embedded frontend build (populated during Docker build)
+internal/web/build/

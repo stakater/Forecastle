@@ -96,9 +96,18 @@ const AppList = () => {
   const hasApps = Object.keys(apps).length > 0;
   const hasQuery = filters.query && filters.query.trim().length > 0;
 
-  // Load apps on mount
+  // Load apps on mount and auto-refresh every 30 seconds
   useEffect(() => {
+    // Initial load
     dispatch(loadApps());
+
+    // Auto-refresh every 30 seconds
+    const refreshInterval = setInterval(() => {
+      dispatch(loadApps());
+    }, 30000);
+
+    // Cleanup on unmount
+    return () => clearInterval(refreshInterval);
   }, [dispatch]);
 
   // Retry handler

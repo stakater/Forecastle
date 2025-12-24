@@ -1,45 +1,37 @@
-FROM node:20 AS build-deps
-WORKDIR /usr/src/app
-COPY ./frontend ./
-RUN yarn install --network-timeout 1000000 && yarn build
+# Stage 1: Build frontend
+FROM node:20 AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/yarn.lock ./
+RUN yarn install --frozen-lockfile --network-timeout 1000000
+COPY frontend/ ./
+RUN yarn build
 
-# Build the manager binary
+# Stage 2: Build Go binary
 FROM --platform=${BUILDPLATFORM} golang:1.24 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH
 
-RUN mkdir -p "$GOPATH/src/github.com/stakater/Forecastle"
+WORKDIR /app
 
-WORKDIR "$GOPATH/src/github.com/stakater/Forecastle"
+# Copy go mod files first for better caching
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Copy manifests
+# Copy source code
 COPY . .
 
-# Install Packr2
-ARG PACKR_VERSION=2.7.1
-ARG PACKR_FILENAME=packr_${PACKR_VERSION}_linux_386.tar.gz
-ARG PACKR_URL=https://github.com/gobuffalo/packr/releases/download/v${PACKR_VERSION}/${PACKR_FILENAME}
+# Copy frontend build to internal/web/build for embedding
+COPY --from=frontend-builder /app/frontend/build ./internal/web/build/
 
-RUN mkdir -p /tmp/packr/ && \
-    wget ${PACKR_URL} -O /tmp/packr/${PACKR_FILENAME} && \
-    tar -xzvf /tmp/packr/${PACKR_FILENAME} -C /tmp/packr/ && \
-    mv /tmp/packr/packr2 /usr/local/bin/packr2 && \
-    rm -rf /tmp/packr
+# Build the binary
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -ldflags="-s -w" -o /forecastle ./cmd/forecastle
 
-# Copy dependencies
-COPY --from=build-deps /usr/src/app/build ./frontend/build/
-
-# Build
-RUN go mod download && \
-    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on packr2 build -a --installsuffix cgo --ldflags="-s" -o /Forecastle && \
-    packr2 clean
-
-# Use distroless as minimal base image to package the Forecastle binary
-# Refer to https://github.com/GoogleContainerTools/distroless for more details
+# Stage 3: Runtime image
 FROM gcr.io/distroless/static:nonroot
 WORKDIR /
-COPY --from=builder /Forecastle .
+COPY --from=builder /forecastle .
 USER nonroot:nonroot
 
-ENTRYPOINT ["/Forecastle"]
+ENTRYPOINT ["/forecastle"]

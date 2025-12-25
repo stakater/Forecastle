@@ -1,6 +1,8 @@
 package crdapps
 
 import (
+	"strings"
+
 	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
 	"github.com/stakater/Forecastle/v1/pkg/config"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle"
@@ -74,7 +76,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, f
 
 		apps = append(apps, forecastle.App{
 			Name:              forecastleApp.Spec.Name,
-			Group:             forecastleApp.Spec.Group,
+			Group:             strings.ToLower(forecastleApp.Spec.Group),
 			Icon:              forecastleApp.Spec.Icon,
 			URL:               url,
 			DiscoverySource:   forecastle.ForecastleAppCRD,

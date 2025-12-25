@@ -139,7 +139,7 @@ const AppListItem = ({ app }) => {
             flexShrink: 0,
           }}
         >
-          {hasProperties && (
+          {hasProperties ? (
             <Tooltip title={isExpanded ? 'Hide details' : 'Show details'} arrow>
               <IconButton
                 size="small"
@@ -156,6 +156,9 @@ const AppListItem = ({ app }) => {
                 <ExpandMoreIcon fontSize="small" />
               </IconButton>
             </Tooltip>
+          ) : (
+            // Placeholder to maintain alignment when no properties
+            <Box sx={{ width: 28, height: 28 }} />
           )}
           <Tooltip title="Open in new tab" arrow>
             <IconButton

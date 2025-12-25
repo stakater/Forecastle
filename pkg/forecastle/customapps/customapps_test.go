@@ -77,7 +77,7 @@ func TestList_Populate(t *testing.T) {
 						Name:            "Test",
 						URL:             "http://google.com",
 						Icon:            "http://google.com",
-						Group:           "My Group",
+						Group:           "my group", // Normalized to lowercase for case-insensitive grouping
 						DiscoverySource: forecastle.Config,
 					},
 				},
@@ -186,7 +186,7 @@ func Test_convertCustomAppsToForecastleApps(t *testing.T) {
 				forecastle.App{
 					Name:            "test",
 					Icon:            "http://google.com/image.png",
-					Group:           "New",
+					Group:           "new", // Normalized to lowercase for case-insensitive grouping
 					URL:             "http://google.com",
 					DiscoverySource: forecastle.Config,
 				},

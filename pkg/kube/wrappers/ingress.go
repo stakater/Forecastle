@@ -2,6 +2,7 @@ package wrappers
 
 import (
 	"net/url"
+	"strings"
 
 	"github.com/stakater/Forecastle/v1/pkg/annotations"
 	"github.com/stakater/Forecastle/v1/pkg/log"
@@ -45,12 +46,12 @@ func (iw *IngressWrapper) GetNamespace() string {
 	return iw.ingress.Namespace
 }
 
-// GetGroup func extracts group name from the ingress
+// GetGroup func extracts group name from the ingress (normalized to lowercase for consistent grouping)
 func (iw *IngressWrapper) GetGroup() string {
 	if groupFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleGroupAnnotation); groupFromAnnotation != "" {
-		return groupFromAnnotation
+		return strings.ToLower(groupFromAnnotation)
 	}
-	return iw.GetNamespace()
+	return strings.ToLower(iw.GetNamespace())
 }
 
 func (iw *IngressWrapper) GetProperties() map[string]string {

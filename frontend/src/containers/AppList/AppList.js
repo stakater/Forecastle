@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Box, Container, Skeleton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import { loadApps } from '../../redux/app/appsModule';
+import { loadApps, refreshApps } from '../../redux/app/appsModule';
 import selectApps from '../../redux/app/appsSelector';
 import { selectViewMode } from '../../redux/slices/uiSlice';
 import { AppGridView, AppListView } from '../../components/views';
@@ -15,7 +15,7 @@ const CardSkeleton = () => {
   return (
     <Box
       sx={{
-        borderRadius: 3,
+        borderRadius: 1.5,
         border: `1px solid ${theme.palette.divider}`,
         backgroundColor: theme.palette.background.paper,
         p: 2,
@@ -98,12 +98,12 @@ const AppList = () => {
 
   // Load apps on mount and auto-refresh every 30 seconds
   useEffect(() => {
-    // Initial load
+    // Initial load (shows loading state)
     dispatch(loadApps());
 
-    // Auto-refresh every 30 seconds
+    // Background refresh every 30 seconds (silent, only updates if data changed)
     const refreshInterval = setInterval(() => {
-      dispatch(loadApps());
+      dispatch(refreshApps());
     }, 30000);
 
     // Cleanup on unmount

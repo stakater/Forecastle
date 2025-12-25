@@ -28,7 +28,7 @@ const AppGroup = ({ name, count, children, defaultExpanded = true }) => {
       sx={{
         backgroundColor: 'transparent',
         boxShadow: 'none',
-        borderRadius: '12px !important',
+        borderRadius: '6px !important',
         overflow: 'hidden',
         '&:before': {
           display: 'none',
@@ -50,7 +50,7 @@ const AppGroup = ({ name, count, children, defaultExpanded = true }) => {
           backgroundColor: theme.palette.mode === 'dark'
             ? 'rgba(255, 255, 255, 0.05)'
             : 'rgba(0, 0, 0, 0.03)',
-          borderRadius: '12px',
+          borderRadius: '6px',
           minHeight: 52,
           px: 2,
           '&:hover': {
@@ -120,6 +120,7 @@ const AppGroup = ({ name, count, children, defaultExpanded = true }) => {
           p: 0,
           pt: 2,
           pb: 3,
+          px: 2,
         }}
       >
         {children}

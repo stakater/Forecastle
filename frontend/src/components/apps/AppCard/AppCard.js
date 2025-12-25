@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -18,10 +19,12 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AppIcon from '../AppIcon';
 import AppBadge from '../AppBadge';
 import { isURL } from '../../../utils/utils';
+import { toggleCardExpanded, selectExpandedCards } from '../../../redux/slices/uiSlice';
 
 const AppCard = ({ app }) => {
   const theme = useTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const expandedCards = useSelector(selectExpandedCards);
   const [isHovered, setIsHovered] = useState(false);
 
   const {
@@ -33,12 +36,16 @@ const AppCard = ({ app }) => {
     properties,
   } = app;
 
+  // Generate a unique ID for this card
+  const appId = useMemo(() => `${name}-${url}`, [name, url]);
+  const isExpanded = !!expandedCards[appId];
+
   const hasProperties = properties && Object.keys(properties).length > 0;
 
   const handleExpandClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsExpanded(!isExpanded);
+    dispatch(toggleCardExpanded(appId));
   };
 
   return (
@@ -50,7 +57,7 @@ const AppCard = ({ app }) => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        borderRadius: 3,
+        borderRadius: 1.5,
         border: `1px solid ${isHovered ? theme.palette.primary.main : theme.palette.divider}`,
         backgroundColor: theme.palette.background.paper,
         transition: 'all 0.2s ease',
@@ -61,6 +68,8 @@ const AppCard = ({ app }) => {
             : '0 8px 24px rgba(0, 0, 0, 0.12)'
           : 'none',
         overflow: 'hidden',
+        minWidth: 200,
+        height: '100%',
       }}
     >
       <Box
@@ -217,9 +226,17 @@ const AppCard = ({ app }) => {
             overflow: 'auto',
           }}
         >
-          <Box sx={{ px: 2, py: 1.5 }}>
+          <Box
+            sx={{
+              px: 2,
+              py: 1.5,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
+              gap: 1.5,
+            }}
+          >
             {properties && Object.keys(properties).map((key) => (
-              <Box key={key} sx={{ mb: 1.5, '&:last-child': { mb: 0 } }}>
+              <Box key={key}>
                 <Typography
                   variant="caption"
                   component="div"
@@ -227,7 +244,7 @@ const AppCard = ({ app }) => {
                     fontWeight: 600,
                     color: theme.palette.text.secondary,
                     textTransform: 'uppercase',
-                    fontSize: '0.65rem',
+                    fontSize: '0.6rem',
                     letterSpacing: '0.05em',
                     mb: 0.25,
                   }}
@@ -239,10 +256,15 @@ const AppCard = ({ app }) => {
                     href={properties[key]}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     sx={{
-                      fontSize: '0.8rem',
+                      fontSize: '0.75rem',
                       color: theme.palette.primary.main,
                       textDecoration: 'none',
+                      display: 'block',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
                       '&:hover': {
                         textDecoration: 'underline',
                       },
@@ -255,7 +277,10 @@ const AppCard = ({ app }) => {
                     variant="body2"
                     sx={{
                       color: theme.palette.text.primary,
-                      fontSize: '0.8rem',
+                      fontSize: '0.75rem',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {properties[key]}

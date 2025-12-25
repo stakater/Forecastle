@@ -42,6 +42,7 @@ const initialState = {
   themeMode: getInitialTheme(),
   viewMode: getInitialViewMode(), // 'grid' or 'list'
   sidebarOpen: false,
+  expandedCards: {}, // { [appId]: true } - tracks expanded cards
 };
 
 const uiSlice = createSlice({
@@ -84,6 +85,22 @@ const uiSlice = createSlice({
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
+    toggleCardExpanded: (state, action) => {
+      const appId = action.payload;
+      if (state.expandedCards[appId]) {
+        delete state.expandedCards[appId];
+      } else {
+        state.expandedCards[appId] = true;
+      }
+    },
+    setCardExpanded: (state, action) => {
+      const { appId, expanded } = action.payload;
+      if (expanded) {
+        state.expandedCards[appId] = true;
+      } else {
+        delete state.expandedCards[appId];
+      }
+    },
   },
 });
 
@@ -94,11 +111,15 @@ export const {
   toggleViewMode,
   setSidebarOpen,
   toggleSidebar,
+  toggleCardExpanded,
+  setCardExpanded,
 } = uiSlice.actions;
 
 // Selectors
 export const selectThemeMode = (state) => state.ui.themeMode;
 export const selectViewMode = (state) => state.ui.viewMode;
 export const selectSidebarOpen = (state) => state.ui.sidebarOpen;
+export const selectExpandedCards = (state) => state.ui.expandedCards;
+export const selectIsCardExpanded = (appId) => (state) => !!state.ui.expandedCards[appId];
 
 export default uiSlice.reducer;

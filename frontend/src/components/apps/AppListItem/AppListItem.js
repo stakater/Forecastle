@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Box,
   Typography,
@@ -17,10 +18,12 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AppIcon from '../AppIcon';
 import AppBadge from '../AppBadge';
 import { isURL } from '../../../utils/utils';
+import { toggleCardExpanded, selectExpandedCards } from '../../../redux/slices/uiSlice';
 
 const AppListItem = ({ app }) => {
   const theme = useTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const expandedCards = useSelector(selectExpandedCards);
   const [isHovered, setIsHovered] = useState(false);
 
   const {
@@ -32,12 +35,16 @@ const AppListItem = ({ app }) => {
     properties,
   } = app;
 
+  // Generate a unique ID for this item
+  const appId = useMemo(() => `${name}-${url}`, [name, url]);
+  const isExpanded = !!expandedCards[appId];
+
   const hasProperties = properties && Object.keys(properties).length > 0;
 
   const handleExpandClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsExpanded(!isExpanded);
+    dispatch(toggleCardExpanded(appId));
   };
 
   const handleRowClick = () => {
@@ -193,8 +200,9 @@ const AppListItem = ({ app }) => {
       <Collapse in={isExpanded} timeout="auto" unmountOnExit>
         <Box
           sx={{
-            pl: 8,
-            pr: 2,
+            pl: 9,
+            pr: 3,
+            pt: 1,
             pb: 2,
             display: 'flex',
             flexWrap: 'wrap',

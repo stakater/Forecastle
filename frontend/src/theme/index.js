@@ -33,7 +33,7 @@ const createAppTheme = (mode) => {
       easing: transitions.easing,
     },
     shape: {
-      borderRadius: 8,
+      borderRadius: 6,
     },
     shadows: [
       'none',
@@ -74,14 +74,14 @@ const createAppTheme = (mode) => {
           root: {
             textTransform: 'none',
             fontWeight: 500,
-            borderRadius: '8px',
+            borderRadius: '6px',
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: '12px',
+            borderRadius: '8px',
             boxShadow: `0 1px 3px ${palette.app.cardShadow}`,
             transition: `all ${transitions.duration.shorter}ms ${transitions.easing.easeOut}`,
             '&:hover': {
@@ -104,7 +104,7 @@ const createAppTheme = (mode) => {
       MuiAccordion: {
         styleOverrides: {
           root: {
-            borderRadius: '8px',
+            borderRadius: '6px',
             '&:before': {
               display: 'none',
             },
@@ -117,7 +117,7 @@ const createAppTheme = (mode) => {
       MuiAccordionSummary: {
         styleOverrides: {
           root: {
-            borderRadius: '8px',
+            borderRadius: '6px',
             minHeight: '56px',
             '&.Mui-expanded': {
               minHeight: '56px',
@@ -140,7 +140,7 @@ const createAppTheme = (mode) => {
       MuiInputBase: {
         styleOverrides: {
           root: {
-            borderRadius: '8px',
+            borderRadius: '6px',
           },
         },
       },

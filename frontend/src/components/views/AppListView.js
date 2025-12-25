@@ -22,7 +22,7 @@ const AppListView = ({ apps }) => {
           <Paper
             variant="outlined"
             sx={{
-              borderRadius: 2,
+              borderRadius: 1,
               overflow: 'hidden',
               borderColor: theme.palette.divider,
             }}

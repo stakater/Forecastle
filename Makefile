@@ -25,7 +25,8 @@ install:
 	"$(GOCMD)" mod download
 
 build-frontend:
-	cd frontend && yarn install && yarn build
+	cd frontend && yarn install && yarn build && cd ..
+	rm -rf internal/web/build
 	mkdir -p internal/web/build
 	cp -r frontend/build/* internal/web/build/
 

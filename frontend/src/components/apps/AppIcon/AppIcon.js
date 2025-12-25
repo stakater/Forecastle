@@ -30,7 +30,7 @@ const AppIcon = ({ src, alt, size = 48 }) => {
       sx={{
         width: size,
         height: size,
-        borderRadius: 2,
+        borderRadius: 1,
         overflow: 'hidden',
         backgroundColor: theme.palette.mode === 'dark'
           ? 'rgba(255, 255, 255, 0.05)'
@@ -47,7 +47,7 @@ const AppIcon = ({ src, alt, size = 48 }) => {
             width: size,
             height: size,
             backgroundColor: getAvatarColor(alt || 'App'),
-            borderRadius: 2,
+            borderRadius: 1,
             fontSize: size * 0.4,
             fontWeight: 600,
           }}

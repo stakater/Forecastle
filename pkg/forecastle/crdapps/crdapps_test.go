@@ -172,7 +172,7 @@ func TestList_Get(t *testing.T) {
 func Test_convertForecastleAppCustomResourcesToForecastleApps(t *testing.T) {
 	clients := kube.Clients{
 		ForecastleAppsClient: fake.NewSimpleClientset(),
-		KubernetesClient:     kubefake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 		RoutesClient:         routefake.NewSimpleClientset(),
 	}
 

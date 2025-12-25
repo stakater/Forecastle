@@ -15,7 +15,7 @@ import (
 func Test_getURL(t *testing.T) {
 	clients := kube.Clients{
 		RoutesClient:     routefake.NewSimpleClientset(),
-		KubernetesClient: kubefake.NewSimpleClientset(),
+		KubernetesClient: kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 	}
 	type args struct {
 		clients       kube.Clients
@@ -56,7 +56,7 @@ func Test_getURL(t *testing.T) {
 func Test_discoverURLFromRefs(t *testing.T) {
 	clients := kube.Clients{
 		RoutesClient:     routefake.NewSimpleClientset(),
-		KubernetesClient: kubefake.NewSimpleClientset(),
+		KubernetesClient: kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 	}
 	_, err := clients.KubernetesClient.NetworkingV1().Ingresses("").Create(context.TODO(), testutil.CreateIngressWithHost("my-app-ingress", "https://ingress-url.com"), metav1.CreateOptions{})
 	if err != nil {

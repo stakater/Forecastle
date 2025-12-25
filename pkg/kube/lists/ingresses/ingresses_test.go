@@ -15,7 +15,7 @@ import (
 )
 
 func TestNewList(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	type args struct {
 		kubeClient kubernetes.Interface
 		appConfig  config.Config
@@ -54,7 +54,7 @@ func TestNewList(t *testing.T) {
 }
 
 func TestList_Populate(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 
 	ingress := testutil.CreateIngressWithHost("test-ingress", "google.com")
 
@@ -143,7 +143,7 @@ func TestList_Populate(t *testing.T) {
 }
 
 func TestList_Filter(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 
 	type fields struct {
 		items      []networking.Ingress
@@ -193,7 +193,7 @@ func TestList_Filter(t *testing.T) {
 }
 
 func TestList_Get(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 
 	type fields struct {
 		items      []networking.Ingress

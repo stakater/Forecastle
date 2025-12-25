@@ -1,0 +1,3 @@
+# Placeholder for go:embed directive
+# This file ensures the build directory exists for linting
+# The actual frontend build replaces this directory's contents

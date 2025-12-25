@@ -10,4 +10,5 @@ Forecastle
 node_modules
 
 # Embedded frontend build (populated during Docker build)
-internal/web/build/
+internal/web/build/*
+!internal/web/build/.gitkeep

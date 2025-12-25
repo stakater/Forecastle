@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -19,13 +18,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import AppIcon from '../AppIcon';
 import AppBadge from '../AppBadge';
 import { isURL } from '../../../utils/utils';
-import { toggleCardExpanded, selectExpandedCards } from '../../../redux/slices/uiSlice';
 
 const AppCard = ({ app }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const expandedCards = useSelector(selectExpandedCards);
   const [isHovered, setIsHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     name,
@@ -36,16 +33,12 @@ const AppCard = ({ app }) => {
     properties,
   } = app;
 
-  // Generate a unique ID for this card
-  const appId = useMemo(() => `${name}-${url}`, [name, url]);
-  const isExpanded = !!expandedCards[appId];
-
   const hasProperties = properties && Object.keys(properties).length > 0;
 
   const handleExpandClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleCardExpanded(appId));
+    setIsExpanded(!isExpanded);
   };
 
   return (

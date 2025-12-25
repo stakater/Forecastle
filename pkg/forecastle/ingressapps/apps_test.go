@@ -17,7 +17,7 @@ import (
 )
 
 func TestNewList(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	type args struct {
 		kubeClient kubernetes.Interface
 		appConfig  config.Config
@@ -56,7 +56,7 @@ func TestNewList(t *testing.T) {
 }
 
 func TestList_Get(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	type fields struct {
 		kubeClient kubernetes.Interface
 		items      []forecastle.App
@@ -164,7 +164,7 @@ func Test_convertIngressesToForecastleApps(t *testing.T) {
 }
 
 func TestList_Populate(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 
 	ingress := testutil.AddAnnotationToIngress(
 		testutil.AddAnnotationToIngress(

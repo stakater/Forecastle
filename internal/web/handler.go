@@ -213,7 +213,7 @@ func (h *Handler) ConfigHandler(w http.ResponseWriter, r *http.Request) {
 // HealthzHandler handles GET /healthz (liveness probe)
 func (h *Handler) HealthzHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("ok"))
+	_, _ = w.Write([]byte("ok"))
 }
 
 // ReadyzHandler handles GET /readyz (readiness probe)
@@ -224,9 +224,9 @@ func (h *Handler) ReadyzHandler(w http.ResponseWriter, r *http.Request) {
 
 	if hasCache {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ready"))
+		_, _ = w.Write([]byte("ready"))
 	} else {
 		w.WriteHeader(http.StatusServiceUnavailable)
-		w.Write([]byte("cache not ready"))
+		_, _ = w.Write([]byte("cache not ready"))
 	}
 }

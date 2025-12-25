@@ -64,7 +64,7 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 			fileServer.ServeHTTP(w, r)
 			return
 		}
-		f.Close()
+		_ = f.Close()
 
 		// File exists, serve it
 		fileServer.ServeHTTP(w, r)
@@ -93,7 +93,9 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 		logger.Info("Shutting down server...")
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		server.Shutdown(shutdownCtx)
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			logger.Error("Error during server shutdown: ", err)
+		}
 	}()
 
 	logger.Info("Starting server on port ", cfg.Port)

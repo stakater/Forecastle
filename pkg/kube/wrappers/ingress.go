@@ -37,12 +37,12 @@ func (iw *IngressWrapper) GetName() string {
 	if nameFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleAppNameAnnotation); nameFromAnnotation != "" {
 		return nameFromAnnotation
 	}
-	return iw.ingress.ObjectMeta.Name
+	return iw.ingress.Name
 }
 
 // GetNamespace func extracts namespace of the ingress wrapped by the object
 func (iw *IngressWrapper) GetNamespace() string {
-	return iw.ingress.ObjectMeta.Namespace
+	return iw.ingress.Namespace
 }
 
 // GetGroup func extracts group name from the ingress

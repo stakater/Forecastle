@@ -27,7 +27,7 @@ func CreateRoute(name string) *routev1.Route {
 
 func CreateIngressWithNamespace(name string, namespace string) *v1.Ingress {
 	ingress := CreateIngress(name)
-	ingress.ObjectMeta.Namespace = namespace
+	ingress.Namespace = namespace
 
 	return ingress
 }

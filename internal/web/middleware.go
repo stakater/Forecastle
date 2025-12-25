@@ -104,7 +104,7 @@ func GzipMiddleware(next http.Handler) http.Handler {
 		}
 
 		gz := gzip.NewWriter(w)
-		defer gz.Close()
+		defer func() { _ = gz.Close() }()
 
 		w.Header().Set("Content-Encoding", "gzip")
 		w.Header().Del("Content-Length") // Length will change

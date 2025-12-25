@@ -20,7 +20,7 @@ import (
 func TestNewList(t *testing.T) {
 	clients := kube.Clients{
 		ForecastleAppsClient: fake.NewSimpleClientset(),
-		KubernetesClient:     kubefake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 	}
 
 	type args struct {
@@ -60,7 +60,7 @@ func TestList_Populate(t *testing.T) {
 
 	clients := kube.Clients{
 		ForecastleAppsClient: fake.NewSimpleClientset(),
-		KubernetesClient:     kubefake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 	}
 
 	forecastleApp := testutil.CreateForecastleApp("app-1", "https://google.com", "default", "https://google.com/icon.png")
@@ -113,7 +113,7 @@ func TestList_Populate(t *testing.T) {
 func TestList_Get(t *testing.T) {
 	clients := kube.Clients{
 		ForecastleAppsClient: fake.NewSimpleClientset(),
-		KubernetesClient:     kubefake.NewSimpleClientset(),
+		KubernetesClient:     kubefake.NewSimpleClientset(), //nolint:staticcheck // NewClientset requires generated apply configurations
 	}
 
 	tests := []struct {

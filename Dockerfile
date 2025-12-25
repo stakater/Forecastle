@@ -1,5 +1,5 @@
 # Stage 1: Build frontend
-FROM node:20 AS frontend-builder
+FROM node:22 AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/yarn.lock ./
 RUN yarn install --frozen-lockfile --network-timeout 1000000
@@ -7,7 +7,7 @@ COPY frontend/ ./
 RUN yarn build
 
 # Stage 2: Build Go binary
-FROM --platform=${BUILDPLATFORM} golang:1.24 AS builder
+FROM --platform=${BUILDPLATFORM} golang:1.25 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH

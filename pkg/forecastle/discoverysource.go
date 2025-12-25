@@ -6,6 +6,7 @@ const (
 	Ingress DiscoverySource = iota
 	Config
 	ForecastleAppCRD
+	HTTPRoute
 )
 
 func (ds DiscoverySource) String() string {
@@ -13,9 +14,10 @@ func (ds DiscoverySource) String() string {
 		"Ingress",
 		"Config",
 		"ForecastleAppCRD",
+		"HTTPRoute",
 	}
 
-	if ds < Ingress || ds > ForecastleAppCRD {
+	if ds < Ingress || ds > HTTPRoute {
 		return "Unknown"
 	}
 

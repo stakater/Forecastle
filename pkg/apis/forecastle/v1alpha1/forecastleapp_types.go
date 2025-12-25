@@ -28,6 +28,8 @@ type URLSource struct {
 	RouteRef *RouteURLSource `json:"routeRef,omitempty"`
 	// +optional
 	IngressRouteRef *IngressRouteURLSource `json:"ingressRouteRef,omitempty"`
+	// +optional
+	HTTPRouteRef *HTTPRouteURLSource `json:"httpRouteRef,omitempty"`
 }
 
 // IngressURLSource selects an Ingress to populate the URL with
@@ -42,6 +44,11 @@ type RouteURLSource struct {
 
 // IngressRouteURLSource selects an IngressRoute to populate the URL with
 type IngressRouteURLSource struct {
+	LocalObjectReference
+}
+
+// HTTPRouteURLSource selects a Gateway API HTTPRoute to populate the URL with
+type HTTPRouteURLSource struct {
 	LocalObjectReference
 }
 

@@ -65,6 +65,11 @@ spec:
                     properties:
                       name:
                         type: string
+                  httpRouteRef:
+                    type: object
+                    properties:
+                      name:
+                        type: string
                 type: object
             required:
             - name

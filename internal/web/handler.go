@@ -12,6 +12,7 @@ import (
 	"github.com/stakater/Forecastle/v1/pkg/forecastle"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle/crdapps"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle/customapps"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/httprouteapps"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle/ingressapps"
 	"github.com/stakater/Forecastle/v1/pkg/kube"
 	"github.com/stakater/Forecastle/v1/pkg/kube/util"
@@ -132,6 +133,17 @@ func (h *Handler) discoverApps(cfg *config.Config) ([]forecastle.App, error) {
 		logger.Error("Error discovering ingress apps: ", err)
 	} else {
 		allApps = append(allApps, ingressApps...)
+	}
+
+	// Discover from HTTPRoute resources (Gateway API)
+	if h.clients.GatewayClient != nil {
+		httpRouteAppsList := httprouteapps.NewList(h.clients.GatewayClient, *cfg)
+		httpRouteApps, err := httpRouteAppsList.Populate(namespaces...).Get()
+		if err != nil {
+			logger.Error("Error discovering HTTPRoute apps: ", err)
+		} else {
+			allApps = append(allApps, httpRouteApps...)
+		}
 	}
 
 	// Discover from custom apps config

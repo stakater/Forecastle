@@ -55,6 +55,7 @@ func main() {
 	cfg := web.ServerConfig{
 		Port:          *port,
 		CacheInterval: *cacheInterval,
+		BasePath:      viper.GetString("basePath"),
 	}
 
 	// Start server

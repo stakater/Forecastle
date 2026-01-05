@@ -22,7 +22,7 @@ import (
 )
 
 func TestHandler_DiscoverApps_IngressOnly(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 
 	// Create namespace
@@ -83,7 +83,7 @@ func TestHandler_DiscoverApps_IngressOnly(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_HTTPRouteOnly(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 	gatewayClient := gatewayfake.NewSimpleClientset()
 
@@ -141,7 +141,7 @@ func TestHandler_DiscoverApps_HTTPRouteOnly(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_CRDOnly(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 
 	// Create namespace
@@ -204,7 +204,7 @@ func TestHandler_DiscoverApps_CRDOnly(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_CustomAppsOnly(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 
 	// Create namespace
@@ -259,7 +259,7 @@ func TestHandler_DiscoverApps_CustomAppsOnly(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_AllSources(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 	gatewayClient := gatewayfake.NewSimpleClientset()
 
@@ -347,7 +347,7 @@ func TestHandler_DiscoverApps_AllSources(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_NamespaceFiltering(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 	gatewayClient := gatewayfake.NewSimpleClientset()
 
@@ -407,7 +407,7 @@ func TestHandler_DiscoverApps_NamespaceFiltering(t *testing.T) {
 }
 
 func TestHandler_DiscoverApps_InstanceFiltering(t *testing.T) {
-	kubeClient := fake.NewSimpleClientset()         //nolint:staticcheck // NewClientset requires generated apply configurations
+	kubeClient := fake.NewSimpleClientset() //nolint:staticcheck // NewClientset requires generated apply configurations
 	forecastleClient := forecastlefake.NewSimpleClientset()
 
 	// Create namespace

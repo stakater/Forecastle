@@ -1,8 +1,10 @@
 package web
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -14,6 +16,7 @@ import (
 type ServerConfig struct {
 	Port          int
 	CacheInterval time.Duration
+	BasePath      string
 }
 
 // DefaultServerConfig returns default server configuration
@@ -21,6 +24,7 @@ func DefaultServerConfig() ServerConfig {
 	return ServerConfig{
 		Port:          3000,
 		CacheInterval: 20 * time.Second,
+		BasePath:      "",
 	}
 }
 
@@ -45,6 +49,11 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 	frontendFS := GetFrontendFS()
 	fileServer := http.FileServer(frontendFS)
 
+	indexHTML, err := readIndexHTML(frontendFS)
+	if err != nil {
+		return fmt.Errorf("failed to read index.html: %w", err)
+	}
+
 	// SPA fallback: serve index.html for routes that don't match static files
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// Try to serve the file directly first
@@ -60,11 +69,15 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 		f, err := frontendFS.Open(path[1:]) // Remove leading slash
 		if err != nil {
 			// File doesn't exist, serve index.html for SPA routing
-			r.URL.Path = "/"
-			fileServer.ServeHTTP(w, r)
+			serveIndexWithBasePath(w, r, indexHTML)
 			return
 		}
 		_ = f.Close()
+
+		if path == "/" || path == "/index.html" {
+			serveIndexWithBasePath(w, r, indexHTML)
+			return
+		}
 
 		// File exists, serve it
 		fileServer.ServeHTTP(w, r)
@@ -72,6 +85,7 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 
 	// Apply middleware stack
 	wrapped := ChainMiddleware(mux,
+		BasePathMiddleware(cfg.BasePath),
 		LoggingMiddleware,
 		SecurityHeadersMiddleware,
 		CORSMiddleware,
@@ -100,4 +114,27 @@ func RunServer(ctx context.Context, clients *kube.Clients, cfg ServerConfig) err
 
 	logger.Info("Starting server on port ", cfg.Port)
 	return server.ListenAndServe()
+}
+
+// readIndexHTML reads the index.html template from the frontend filesystem
+func readIndexHTML(fs http.FileSystem) ([]byte, error) {
+	f, err := fs.Open("index.html")
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	return io.ReadAll(f)
+}
+
+// serveIndexWithBasePath serves index.html with the basePath injected as a JavaScript variable.
+// This allows the frontend to know what base path it's being served from for API calls.
+func serveIndexWithBasePath(w http.ResponseWriter, r *http.Request, indexHTML []byte) {
+	basePath := GetBasePath(r)
+
+	basePathScript := fmt.Sprintf(`<script>window.__BASE_PATH__ = %q;</script></head>`, basePath)
+
+	modified := bytes.Replace(indexHTML, []byte("</head>"), []byte(basePathScript), 1)
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	_, _ = w.Write(modified)
 }

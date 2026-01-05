@@ -2,11 +2,57 @@ package web
 
 import (
 	"compress/gzip"
+	"context"
 	"io"
 	"net/http"
 	"strings"
 	"time"
 )
+
+// contextKey is a custom type for context keys to avoid collisions
+type contextKey string
+
+const basePathContextKey contextKey = "basePath"
+
+// GetBasePath retrieves the base path from the request context
+func GetBasePath(r *http.Request) string {
+	if bp, ok := r.Context().Value(basePathContextKey).(string); ok {
+		return bp
+	}
+	return ""
+}
+
+// BasePathMiddleware detects and normalizes the base path from proxy headers.
+// It checks X-Forwarded-Prefix header (set by nginx-ingress, traefik, etc.)
+// and falls back to a configured base path. The middleware strips the prefix
+// from the request path so handlers see normalized paths (e.g., /api/apps).
+func BasePathMiddleware(configuredBasePath string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			basePath := ""
+
+			if prefix := r.Header.Get("X-Forwarded-Prefix"); prefix != "" {
+				basePath = strings.TrimSuffix(prefix, "/")
+			}
+
+			if basePath == "" && configuredBasePath != "" {
+				basePath = strings.TrimSuffix(configuredBasePath, "/")
+			}
+
+			ctx := context.WithValue(r.Context(), basePathContextKey, basePath)
+			r = r.WithContext(ctx)
+
+			if basePath != "" && strings.HasPrefix(r.URL.Path, basePath) {
+				r.URL.Path = strings.TrimPrefix(r.URL.Path, basePath)
+				if r.URL.Path == "" {
+					r.URL.Path = "/"
+				}
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
 
 // LoggingMiddleware logs all HTTP requests
 func LoggingMiddleware(next http.Handler) http.Handler {

@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const basePath = window.__BASE_PATH__ || '';
+
 // Basic configuration for HTTP calls
 const instance = axios.create({
-  baseURL: '/',
+  baseURL: `${basePath}/`,
   responseType: "json"
 });
 

@@ -82,7 +82,7 @@ const Header = () => {
           >
             <Box
               component="img"
-              src="/favicon.ico"
+              src="favicon.ico"
               alt="Forecastle"
               sx={{
                 width: 32,

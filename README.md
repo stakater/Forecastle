@@ -137,6 +137,7 @@ You can customize Forecastle using either a ConfigMap or the values.yaml file wh
 |   instanceName    |                                      Name of the forecastle instance                                       |           ""            | string            |
 |    customApps     |                A list of custom apps that you would like to add to the forecastle instance                 |           {}            | []CustomApp       |
 |    crdEnabled     |                                  Enables or disables `ForecastleApp` CRD                                   |          true           | bool              |
+|     basePath      |  Base path for subpath hosting (e.g., "/forecastle"). Auto-detected from X-Forwarded-Prefix if not set    |           ""            | string            |
 
 #### Detailed Configurations
 

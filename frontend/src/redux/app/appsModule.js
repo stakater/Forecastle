@@ -29,16 +29,14 @@ const appsSlice = createSlice({
       isLoaded: true,
       lastUpdated: Date.now()
     }),
-    // Silent update - only updates if data changed, no loading state
+    // Silent update - no loading state, always updates lastUpdated on successful sync
     refreshAppsSuccess: (state, action) => {
-      if (!isEqual(state.data, action.payload)) {
-        return {
-          ...state,
-          data: action.payload,
-          lastUpdated: Date.now()
-        };
-      }
-      return state;
+      const dataChanged = !isEqual(state.data, action.payload);
+      return {
+        ...state,
+        data: dataChanged ? action.payload : state.data,
+        lastUpdated: Date.now()
+      };
     },
     fail: (state, action) => ({
       ...state,

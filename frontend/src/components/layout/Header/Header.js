@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 
 import HeaderSearch from './HeaderSearch';
 import HeaderControls from './HeaderControls';
+import LastSyncedIndicator from './LastSyncedIndicator';
 import { setQuery } from '../../../redux/filters/filtersModule';
 
 const Header = () => {
@@ -112,6 +113,9 @@ const Header = () => {
 
           {/* Search */}
           <HeaderSearch value={query} onChange={handleSearch} />
+
+          {/* Last Synced Indicator */}
+          <LastSyncedIndicator />
 
           {/* Controls */}
           <HeaderControls />

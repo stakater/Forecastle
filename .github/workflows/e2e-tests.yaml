@@ -9,6 +9,7 @@ on:
       - reopened
       - labeled
       - synchronize
+  workflow_dispatch:
 
 env:
   FORECASTLE_URL: "http://localhost:3000"

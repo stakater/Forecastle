@@ -226,17 +226,14 @@ The e2e tests are configured to run in GitHub Actions via `.github/workflows/e2e
 ### Workflow Triggers
 - Pull requests to `master` branch
 
-### Jobs
+### Pipeline Steps
 
-The workflow runs two parallel jobs:
-
-#### Backend E2E Tests Job
-
-This job sets up a real Kubernetes cluster using Kind to test actual resource discovery:
+The workflow runs a single job that executes both backend and frontend tests:
 
 1. **Setup Environment**
    - Install Go, Node.js
    - Install kubectl and Kind CLI
+   - Install Playwright browsers (Chromium)
 
 2. **Create Kind Cluster**
    - Creates a single-node Kubernetes cluster
@@ -244,44 +241,29 @@ This job sets up a real Kubernetes cluster using Kind to test actual resource di
 
 3. **Build & Configure**
    - Builds Forecastle (`make build`)
+   - Installs frontend dependencies
    - Creates `config.yaml` with `customApps` to test Config discovery source
 
 4. **Start Server & Wait**
    - Starts Forecastle on port 3000
    - Waits for `/healthz` and `/readyz` endpoints
+   - Verifies API endpoints are responding
 
-5. **Run Tests**
+5. **Run Backend E2E Tests**
    - Runs `make test-e2e` with 10 minute timeout
-   - Tests include: API endpoints, Ingress discovery, CRD discovery, Config apps
+   - Tests: API endpoints, Ingress discovery, CRD discovery, Config apps
 
-6. **Cleanup**
-   - Stops Forecastle server
-   - Deletes Kind cluster
+6. **Run Frontend E2E Tests**
+   - Runs Playwright tests on Chromium with 10 minute timeout
+   - Tests: UI functionality, all discovery sources, view modes, accessibility
 
-#### Frontend E2E Tests Job
-
-This job runs Playwright tests against a Forecastle server (no Kubernetes needed as tests use mocked API responses):
-
-1. **Setup Environment**
-   - Install Go, Node.js
-   - Install Playwright browsers (Chromium only in CI)
-
-2. **Build & Configure**
-   - Builds Forecastle
-   - Creates `config.yaml` with test apps
-
-3. **Start Server & Wait**
-   - Starts Forecastle on port 3000
-   - Waits for cache to be ready
-   - Verifies `/api/apps` and `/api/config` endpoints
-
-4. **Run Tests**
-   - Runs Playwright tests on Chromium only (for CI speed)
-   - 10 minute timeout
-
-5. **Upload Artifacts**
+7. **Upload Artifacts**
    - Always uploads Playwright HTML report
    - Uploads screenshots on failure
+
+8. **Cleanup**
+   - Stops Forecastle server
+   - Deletes Kind cluster
 
 ### Environment Variables
 

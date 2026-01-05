@@ -1,4 +1,4 @@
-.PHONY: default build build-frontend test stop clean-images clean push apply deploy release release-all manifest push clean-image docker-build
+.PHONY: default build build-frontend test test-e2e test-e2e-frontend stop clean-images clean push apply deploy release release-all manifest push clean-image docker-build
 
 OS ?= linux
 ARCH ?= amd64
@@ -60,6 +60,20 @@ manifest:
 
 test:
 	"$(GOCMD)" test -timeout 1800s -v ./...
+
+# Run e2e tests against a running Forecastle instance
+# Requires: kubectl access to a cluster, FORECASTLE_URL env var (default: http://localhost:3000)
+test-e2e:
+	"$(GOCMD)" test -timeout 600s -v ./e2e/...
+
+# Run frontend e2e tests with Playwright
+# Requires: cd frontend && yarn install first
+test-e2e-frontend:
+	cd frontend && yarn test:e2e
+
+# Run frontend e2e tests in headed mode (for debugging)
+test-e2e-frontend-headed:
+	cd frontend && yarn test:e2e:headed
 
 stop:
 	@docker stop "${BINARY}"

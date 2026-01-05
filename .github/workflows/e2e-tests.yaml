@@ -3,17 +3,21 @@ name: E2E Tests
 on:
   pull_request:
     branches:
-    - master
+      - master
+    types:
+      - opened
+      - reopened
+      - labeled
+      - synchronize
 
 env:
-  KUBERNETES_VERSION: "1.30.0"
-  KIND_VERSION: "0.23.0"
   FORECASTLE_URL: "http://localhost:3000"
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
     name: E2E Tests
+    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -32,27 +36,10 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: frontend/yarn.lock
 
-      - name: Install kubectl
-        run: |
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-          sudo install ./kubectl /usr/local/bin/ && rm kubectl
-          kubectl version --client=true
-
-      - name: Install Kind
-        run: |
-          curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
-          sudo install ./kind /usr/local/bin && rm kind
-          kind version
-
       - name: Create Kind Cluster
-        run: |
-          kind create cluster --wait 60s
-          kubectl cluster-info
-          kubectl get nodes
-
-      - name: Wait for cluster to be ready
-        run: |
-          kubectl wait --for=condition=Ready nodes --all --timeout=120s
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: forecastle-e2e
 
       - name: Install Go Dependencies
         run: make install
@@ -61,18 +48,14 @@ jobs:
         run: make build
 
       - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          yarn install
+        run: cd frontend && yarn install
 
       - name: Install Playwright Browsers
-        run: |
-          cd frontend
-          npx playwright install --with-deps chromium
+        run: cd frontend && npx playwright install --with-deps chromium
 
       - name: Create test config
         run: |
-          cat > config.yaml << EOF
+          cat > config.yaml << 'EOF'
           crdEnabled: false
           namespaceSelector:
             any: true
@@ -84,10 +67,8 @@ jobs:
               group: "e2e-config"
               properties:
                 Version: "1.0.0"
-                Source: "config.yaml"
             - name: "Test App 2"
               url: "https://test2.example.com"
-              icon: "https://example.com/icon2.png"
               group: "test-group"
             - name: "Production App"
               url: "https://prod.example.com"
@@ -97,47 +78,16 @@ jobs:
       - name: Start Forecastle
         run: |
           ./forecastle --port 3000 --cache-interval 10s &
-          for i in {1..30}; do
-            if curl -sf http://localhost:3000/healthz; then
-              echo "Server is healthy"
-              break
-            fi
-            echo "Waiting for server to start..."
-            sleep 1
-          done
-
-      - name: Wait for cache to be ready
-        run: |
-          for i in {1..60}; do
-            if curl -sf http://localhost:3000/readyz; then
-              echo "Cache is ready"
-              break
-            fi
-            echo "Waiting for cache to be ready..."
-            sleep 1
-          done
-
-      - name: Verify server is serving apps
-        run: |
-          echo "Checking /api/apps endpoint..."
-          curl -sf http://localhost:3000/api/apps | head -c 500
-          echo ""
-          echo "Checking /api/config endpoint..."
-          curl -sf http://localhost:3000/api/config | head -c 500
+          timeout 30 bash -c 'until curl -sf http://localhost:3000/healthz; do sleep 1; done'
+          timeout 60 bash -c 'until curl -sf http://localhost:3000/readyz; do sleep 1; done'
 
       - name: Run Backend E2E Tests
         run: make test-e2e
         timeout-minutes: 10
-        env:
-          FORECASTLE_URL: http://localhost:3000
 
       - name: Run Frontend E2E Tests
-        run: |
-          cd frontend
-          yarn test:e2e --project=chromium
+        run: cd frontend && yarn test:e2e --project=chromium
         timeout-minutes: 10
-        env:
-          FORECASTLE_URL: http://localhost:3000
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
@@ -158,7 +108,3 @@ jobs:
       - name: Stop Forecastle
         if: always()
         run: pkill forecastle || true
-
-      - name: Delete Kind Cluster
-        if: always()
-        run: kind delete cluster || true

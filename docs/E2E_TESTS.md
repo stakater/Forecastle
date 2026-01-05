@@ -224,54 +224,26 @@ Tests run on multiple browsers and viewports:
 The e2e tests are configured to run in GitHub Actions via `.github/workflows/e2e-tests.yaml`.
 
 ### Workflow Triggers
-- Pull requests to `master` branch
+- Pull requests to `master` branch with `ok-to-test` label (same as `run-tests-on-pr`)
 
 ### Pipeline Steps
 
-The workflow runs a single job that executes both backend and frontend tests:
+1. **Setup** - Go, Node.js, Kind cluster (via `helm/kind-action`)
+2. **Build** - Forecastle binary, frontend dependencies, Playwright browsers
+3. **Configure** - Create `config.yaml` with test apps
+4. **Start** - Launch Forecastle, wait for health/readiness
+5. **Test Backend** - Run `make test-e2e` (API, Ingress, CRD, Config discovery)
+6. **Test Frontend** - Run Playwright on Chromium (UI, all discovery sources, accessibility)
+7. **Artifacts** - Upload Playwright report (always) and screenshots (on failure)
 
-1. **Setup Environment**
-   - Install Go, Node.js
-   - Install kubectl and Kind CLI
-   - Install Playwright browsers (Chromium)
+### Reusable Actions
 
-2. **Create Kind Cluster**
-   - Creates a single-node Kubernetes cluster
-   - Waits for all nodes to be Ready
-
-3. **Build & Configure**
-   - Builds Forecastle (`make build`)
-   - Installs frontend dependencies
-   - Creates `config.yaml` with `customApps` to test Config discovery source
-
-4. **Start Server & Wait**
-   - Starts Forecastle on port 3000
-   - Waits for `/healthz` and `/readyz` endpoints
-   - Verifies API endpoints are responding
-
-5. **Run Backend E2E Tests**
-   - Runs `make test-e2e` with 10 minute timeout
-   - Tests: API endpoints, Ingress discovery, CRD discovery, Config apps
-
-6. **Run Frontend E2E Tests**
-   - Runs Playwright tests on Chromium with 10 minute timeout
-   - Tests: UI functionality, all discovery sources, view modes, accessibility
-
-7. **Upload Artifacts**
-   - Always uploads Playwright HTML report
-   - Uploads screenshots on failure
-
-8. **Cleanup**
-   - Stops Forecastle server
-   - Deletes Kind cluster
-
-### Environment Variables
-
-| Variable | Value | Description |
-|----------|-------|-------------|
-| `KUBERNETES_VERSION` | 1.30.0 | kubectl version |
-| `KIND_VERSION` | 0.23.0 | Kind CLI version |
-| `FORECASTLE_URL` | http://localhost:3000 | Server URL for tests |
+| Action | Purpose |
+|--------|---------|
+| `helm/kind-action@v1` | Creates Kind cluster (replaces manual kubectl/kind install) |
+| `actions/setup-go@v5` | Go environment |
+| `actions/setup-node@v4` | Node.js with yarn cache |
+| `actions/upload-artifact@v4` | Test reports |
 
 ---
 

@@ -225,7 +225,6 @@ The e2e tests are configured to run in GitHub Actions via `.github/workflows/e2e
 
 ### Workflow Triggers
 - Pull requests to `master` branch
-- Requires `ok-to-test` label on the PR
 
 ### Jobs
 

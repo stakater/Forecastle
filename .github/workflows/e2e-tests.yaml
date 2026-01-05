@@ -3,13 +3,7 @@ name: E2E Tests
 on:
   pull_request:
     branches:
-      - master
-    types:
-      - opened
-      - reopened
-      - labeled
-      - synchronize
-
+    - master
 env:
   KUBERNETES_VERSION: "1.30.0"
   KIND_VERSION: "0.23.0"
@@ -19,12 +13,9 @@ jobs:
   e2e-backend:
     runs-on: ubuntu-latest
     name: Backend E2E Tests
-    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          ref: ${{github.event.pull_request.head.sha}}
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -124,12 +115,9 @@ jobs:
   e2e-frontend:
     runs-on: ubuntu-latest
     name: Frontend E2E Tests
-    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          ref: ${{github.event.pull_request.head.sha}}
 
       - name: Set up Go
         uses: actions/setup-go@v5

@@ -266,7 +266,8 @@ test.describe('View Mode Toggle', () => {
     });
 
     await page.goto('/');
-    await page.waitForSelector('.MuiCard-root', { timeout: 10000 });
+    // Wait for apps to load by checking for app names
+    await page.waitForSelector('text=App 1', { timeout: 10000 });
 
     // Click list button if available
     const listButton = page.getByRole('button', { name: /list/i });
@@ -275,10 +276,10 @@ test.describe('View Mode Toggle', () => {
       await page.waitForTimeout(200);
     }
 
-    // Verify cards are still displayed
-    const cards = page.locator('.MuiCard-root');
-    const cardCount = await cards.count();
-    expect(cardCount).toBeGreaterThanOrEqual(3);
+    // Verify all 3 apps are displayed (list view uses different DOM structure than grid)
+    await expect(page.getByText('App 1')).toBeVisible();
+    await expect(page.getByText('App 2')).toBeVisible();
+    await expect(page.getByText('App 3')).toBeVisible();
   });
 });
 
@@ -523,8 +524,8 @@ test.describe('Discovery Sources', () => {
     await page.goto('/');
     await page.waitForSelector('.MuiCard-root', { timeout: 10000 });
 
-    // Check for the app name in the card heading
-    await expect(page.locator('h3').filter({ hasText: 'CRD App' })).toBeVisible();
+    // Check for the app name in the card link (use exact match to avoid matching group "Crd Apps")
+    await expect(page.getByRole('link', { name: /CRD App/ })).toBeVisible();
     // Also verify discovery source indicator
     await expect(page.getByText('ForecastleAppCRD')).toBeVisible();
   });

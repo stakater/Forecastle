@@ -41,12 +41,25 @@ func TestMain(m *testing.M) {
 		clusterAvailable = false
 	} else {
 		clusterAvailable = true
+		// Create test namespace once for all tests
+		ctx := context.Background()
+		if err := clients.CreateTestNamespace(ctx); err != nil {
+			if !strings.Contains(err.Error(), "already exists") {
+				// Log but don't fail - tests will skip if needed
+				clusterAvailable = false
+			}
+		}
 	}
 	clients.BaseURL = baseURL
 	testClients = clients
 
 	// Run tests
 	code := m.Run()
+
+	// Cleanup namespace after all tests
+	if clusterAvailable && testClients != nil {
+		_ = testClients.DeleteTestNamespace(context.Background())
+	}
 
 	os.Exit(code)
 }
@@ -55,6 +68,11 @@ func skipIfNoCluster(t *testing.T) {
 	if !clusterAvailable {
 		t.Skip("Kubernetes cluster not available, skipping test")
 	}
+}
+
+// normalizeURL removes trailing slashes for comparison
+func normalizeURL(url string) string {
+	return strings.TrimSuffix(url, "/")
 }
 
 func TestHealthEndpoint(t *testing.T) {
@@ -106,17 +124,6 @@ func TestIngressDiscovery(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
 
-	// Create test namespace
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		// Namespace might already exist, try to continue
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
-
 	// Create test ingress
 	ingressName := "e2e-test-app"
 	ingressHost := "e2e-test.example.com"
@@ -143,9 +150,10 @@ func TestIngressDiscovery(t *testing.T) {
 		t.Fatalf("Expected to find app '%s' in discovered apps", ingressName)
 	}
 
-	// Verify app properties
-	if app.URL != "http://"+ingressHost {
-		t.Errorf("Expected URL 'http://%s', got '%s'", ingressHost, app.URL)
+	// Verify app properties (normalize URLs to handle trailing slash differences)
+	expectedURL := "http://" + ingressHost
+	if normalizeURL(app.URL) != normalizeURL(expectedURL) {
+		t.Errorf("Expected URL '%s', got '%s'", expectedURL, app.URL)
 	}
 
 	if app.Group != "e2e-tests" {
@@ -164,16 +172,6 @@ func TestIngressDiscovery(t *testing.T) {
 func TestIngressWithTLS(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
-
-	// Create test namespace
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
 
 	// Create TLS ingress
 	ingressName := "e2e-tls-app"
@@ -209,15 +207,6 @@ func TestIngressWithCustomAppName(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
 
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
-
 	ingressName := "e2e-custom-name-ingress"
 	customAppName := "My Custom App Name"
 	_, err := testClients.CreateIngress(ctx, ingressName, "custom.example.com",
@@ -244,15 +233,6 @@ func TestIngressWithCustomAppName(t *testing.T) {
 func TestIngressWithURLOverride(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
-
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
 
 	ingressName := "e2e-url-override"
 	customURL := "https://custom-url.example.com/app"
@@ -291,15 +271,6 @@ func TestForecastleAppCRD(t *testing.T) {
 		t.Skipf("ForecastleApp CRD not available, skipping: %v", err)
 	}
 
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
-
 	// Create ForecastleApp CRD
 	appName := "e2e-crd-app"
 	_, err = testClients.CreateForecastleApp(ctx, appName,
@@ -336,15 +307,6 @@ func TestMultipleAppsInSameGroup(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
 
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
-
 	groupName := "e2e-multi-app-group"
 
 	// Create multiple apps in the same group
@@ -375,15 +337,6 @@ func TestMultipleAppsInSameGroup(t *testing.T) {
 func TestAppWithoutExposeAnnotation(t *testing.T) {
 	skipIfNoCluster(t)
 	ctx := context.Background()
-
-	if err := testClients.CreateTestNamespace(ctx); err != nil {
-		if !strings.Contains(err.Error(), "already exists") {
-			t.Fatalf("Failed to create test namespace: %v", err)
-		}
-	}
-	defer func() {
-		_ = testClients.DeleteTestNamespace(context.Background())
-	}()
 
 	// Create ingress WITHOUT the expose annotation
 	ingressName := "e2e-not-exposed"

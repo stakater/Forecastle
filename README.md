@@ -84,12 +84,12 @@ You have the choice of deploying Forecastle using traditional manifests or throu
 
 You can get Forecastle by running the following command on your cluster:
 
-for Kubernetes:
+**For Kubernetes** (vanilla Kubernetes, EKS, GKE, AKS, etc.):
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
 ```
 
-for OpenShift:
+**For OpenShift** (includes OpenShift Route for external access):
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/openshift/forecastle.yaml
 ```

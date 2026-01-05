@@ -28,8 +28,13 @@ rules:
 - apiGroups: ["networking.k8s.io"]
   resources: ["ingresses"]
   verbs: ["get", "list"]
+{{- if .Values.forecastle.route.enabled }}
 - apiGroups: ["route.openshift.io"]
   resources: ["routes"]
+  verbs: ["get", "list"]
+{{- end }}
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["httproutes"]
   verbs: ["get", "list"]
 - apiGroups: ["traefik.containo.us"]
   resources: ["ingressroutes"]

@@ -23,6 +23,7 @@
 - [Developer Guide](#developer-guide)
   - [Bug Reports & Feature Requests](#bug-reports--feature-requests)
   - [Developing](#developing)
+- [Releasing](#releasing)
 - [Help](#help)
   - [Talk to us on Slack](#talk-to-us-on-slack)
 - [Changelog](#changelog)
@@ -86,12 +87,12 @@ You can get Forecastle by running the following command on your cluster:
 
 **For Kubernetes** (vanilla Kubernetes, EKS, GKE, AKS, etc.):
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
+kubectl apply -f https://github.com/stakater/Forecastle/releases/latest/download/forecastle-kubernetes.yaml
 ```
 
 **For OpenShift** (includes OpenShift Route for external access):
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/openshift/forecastle.yaml
+kubectl apply -f https://github.com/stakater/Forecastle/releases/latest/download/forecastle-openshift.yaml
 ```
 
 ##### Accessing the Dashboard
@@ -388,6 +389,35 @@ docker run -p 3000:3000 -v $(pwd)/config.yaml:/etc/forecastle/config.yaml foreca
 |------|---------|-------------|
 | `--port` | 3000 | Server port |
 | `--cache-interval` | 20s | Background cache refresh interval |
+
+## Releasing
+
+### App Release (Docker images, binaries, manifests)
+
+To release a new version of the application:
+
+1. Create and push a version tag:
+   ```bash
+   git tag v1.0.161
+   git push origin v1.0.161
+   ```
+
+2. The release workflow will automatically:
+   - Build and push multi-arch Docker images to ghcr.io and DockerHub
+   - Create GitHub release with Go binaries
+   - Attach Kubernetes and OpenShift manifests to the release
+
+### Helm Chart Release
+
+The Helm chart version is independent of the app version. To release a chart update:
+
+1. Create a PR that bumps the chart version in `deployments/kubernetes/chart/forecastle/Chart.yaml`:
+   ```yaml
+   version: 1.0.161           # Bump this for chart changes
+   appVersion: "v1.0.161"     # Update if app version changed
+   ```
+
+2. Once merged to master, the helm release workflow automatically publishes to stakater-charts
 
 ## Help
 

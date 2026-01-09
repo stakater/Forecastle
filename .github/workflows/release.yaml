@@ -7,7 +7,6 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  HELM_REGISTRY_URL: "https://stakater.github.io/stakater-charts"
   REGISTRY: ghcr.io
 
 jobs:
@@ -26,7 +25,7 @@ jobs:
           go-version-file: 'go.mod'
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@master
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
@@ -188,90 +187,57 @@ jobs:
             -t ${{ env.IMAGE_REPOSITORY }}:latest \
             $(printf '${{ env.IMAGE_REPOSITORY }}@sha256:%s ' *)
 
-  helm:
-    name: Publish Helm Chart
-    needs: manifest
+  manifests:
+    name: Generate and Upload Manifests
+    needs: goreleaser
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
-      - name: Get version without v prefix
-        id: version
-        run: |
-          TAG=${{ github.ref_name }}
-          echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
-
-      - name: Update Chart Version
-        env:
-          VERSION: ${{ steps.version.outputs.VERSION }}
-        run: make bump-chart
-
-      - name: Publish Helm chart
-        uses: stefanprodan/helm-gh-pages@master
-        with:
-          branch: master
-          repository: stakater-charts
-          target_dir: docs
-          token: ${{ secrets.GHCR_TOKEN }}
-          charts_dir: deployments/kubernetes/chart/
-          charts_url: ${{ env.HELM_REGISTRY_URL }}
-          owner: stakater
-          linting: on
-          commit_username: stakater-user
-          commit_email: stakater@gmail.com
-
       - name: Generate Kubernetes manifests
         run: |
           helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds \
+            --set forecastle.image.tag=${{ github.ref_name }} \
             --set forecastle.service.expose="true" \
             --set forecastle.route.enabled=false \
             --set forecastle.config.crdEnabled=true \
             --set forecastle.config.namespaceSelector.any=true \
-            > deployments/kubernetes/forecastle.yaml
-          helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds \
-            --output-dir deployments/kubernetes/manifests/ \
-            --set forecastle.service.expose="true" \
-            --set forecastle.route.enabled=false \
-            --set forecastle.config.crdEnabled=true \
-            --set forecastle.config.namespaceSelector.any=true
-          mv deployments/kubernetes/manifests/forecastle/templates/* deployments/kubernetes/manifests/
-          mv deployments/kubernetes/manifests/forecastle/crds/* deployments/kubernetes/manifests/
-          rm -r deployments/kubernetes/manifests/forecastle
+            > forecastle-kubernetes.yaml
 
       - name: Generate OpenShift manifests
         run: |
           helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds \
+            --set forecastle.image.tag=${{ github.ref_name }} \
             --set forecastle.service.expose="true" \
             --set forecastle.route.enabled=true \
             --set forecastle.route.tls.termination=reencrypt \
             --set forecastle.config.crdEnabled=true \
             --set forecastle.config.namespaceSelector.any=true \
-            > deployments/openshift/forecastle.yaml
+            > forecastle-openshift.yaml
 
-      - name: Commit updated manifests
-        run: |
-          git config --local user.email "stakater@gmail.com"
-          git config --local user.name "stakater-user"
-          git add .
-          git diff --staged --quiet || git commit -m "[skip-ci] Update manifests for ${{ github.ref_name }}"
-
-      - name: Push changes to master
-        uses: ad-m/github-push-action@master
+      - name: Upload manifests to release
+        uses: softprops/action-gh-release@v2
         with:
-          github_token: ${{ secrets.PUBLISH_TOKEN }}
-          branch: master
+          files: |
+            forecastle-kubernetes.yaml
+            forecastle-openshift.yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 
+  notify:
+    name: Notify
+    needs: [goreleaser, manifest, manifests]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
-        if: always()
         with:
-          status: ${{ job.status }}
+          status: ${{ (needs.goreleaser.result == 'success' && needs.manifest.result == 'success' && needs.manifests.result == 'success') && 'success' || 'failure' }}
           fields: repo,author,action,eventName,ref,workflow
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

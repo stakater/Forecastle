@@ -59,7 +59,7 @@ manifest:
 	docker manifest annotate --arch $(ARCH) $(REPOSITORY_GENERIC) $(REPOSITORY_ARCH)
 
 test:
-	"$(GOCMD)" test -timeout 1800s -v ./...
+	"$(GOCMD)" test -timeout 1800s -v ./cmd/... ./internal/... ./pkg/...
 
 # Run e2e tests against a running Forecastle instance
 # Requires: kubectl access to a cluster, FORECASTLE_URL env var (default: http://localhost:3000)

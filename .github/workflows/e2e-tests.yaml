@@ -18,12 +18,12 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     name: E2E Tests
-    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test')) }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Go
         uses: actions/setup-go@v5

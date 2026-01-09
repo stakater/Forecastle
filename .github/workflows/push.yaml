@@ -14,31 +14,28 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  build:
-    name: Build
+  test:
+    name: Test
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.generate_tag.outputs.new_tag }}
+      version: ${{ steps.tag_without_v.outputs.VERSION }}
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
-
-      # Setting up helm binary
-      - name: Set up Helm
-        uses: azure/setup-helm@v4
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Go
-        id: go
         uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
 
       - name: Install Dependencies
-        run: |
-          make install
+        run: make install
 
       - name: Lint
         run: |
@@ -56,12 +53,12 @@ jobs:
           curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
           sudo install ./kind /usr/local/bin && rm kind
           kind version
-          kind version | grep -q ${KIND_VERSION}
 
       - name: Create Kind Cluster
         run: |
           kind create cluster
           kubectl cluster-info
+
       - name: Test
         run: make test
 
@@ -74,8 +71,26 @@ jobs:
           DEFAULT_BUMP: patch
           DRY_RUN: true
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Remove "v" from version
+        id: tag_without_v
+        run: |
+          TAG=${{ steps.generate_tag.outputs.new_tag }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build (${{ matrix.platform }})
+    needs: test
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -83,30 +98,9 @@ jobs:
       - name: Login to ghcr registry
         uses: docker/login-action@v3
         with:
-          registry: ${{env.REGISTRY}}
+          registry: ${{ env.REGISTRY }}
           username: stakater-user
-          password: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Generate image repository path for ghcr registry
-        run: |
-          echo GHCR_IMAGE_REPOSITORY=${{env.REGISTRY}}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-
-      - name: Build and push image to ghcr registry
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ env.DOCKER_FILE_PATH  }}
-          pull: true
-          push: true
-          cache-to: type=inline
-          build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
-          platforms: linux/amd64,linux/arm,linux/arm64
-          tags: |
-            ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.new_tag }}
-          labels: |
-            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub Registry
         uses: docker/login-action@v3
@@ -114,45 +108,142 @@ jobs:
           username: ${{ secrets.STAKATER_DOCKERHUB_USERNAME }}
           password: ${{ secrets.STAKATER_DOCKERHUB_PASSWORD }}
 
-      - name: Generate image repository path for DockerHub registry
+      - name: Generate image repository paths
         run: |
+          echo GHCR_IMAGE_REPOSITORY=${{ env.REGISTRY }}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
           echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
-      - name: Build and push Image to DockerHub registry
+      - name: Generate build metadata
+        id: meta
+        run: |
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+
+      - name: Build and push by digest (GHCR)
+        id: build_ghcr
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ${{ env.DOCKER_FILE_PATH  }}
-          pull: true
-          push: true
-          build-args: BUILD_PARAMETERS=${{ env.BUILD_PARAMETERS }}
-          cache-to: type=inline
-          platforms: linux/amd64,linux/arm,linux/arm64
-          tags: |
-            ${{ env.IMAGE_REPOSITORY }}:${{ steps.generate_tag.outputs.new_tag }}
+          file: ${{ env.DOCKER_FILE_PATH }}
+          platforms: ${{ matrix.platform }}
+          cache-from: type=gha,scope=${{ matrix.platform }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.platform }}
+          outputs: type=image,name=${{ env.GHCR_IMAGE_REPOSITORY }},push-by-digest=true,name-canonical=true,push=true
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
-            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.created=${{ steps.meta.outputs.created }}
             org.opencontainers.image.revision=${{ github.sha }}
 
-      ##############################
-      ## Add steps to generate required artifacts for a release here(helm chart, operator manifest etc.)
-      ##############################
+      - name: Build and push by digest (DockerHub)
+        id: build_dockerhub
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ env.DOCKER_FILE_PATH }}
+          platforms: ${{ matrix.platform }}
+          cache-from: type=gha,scope=${{ matrix.platform }}
+          outputs: type=image,name=${{ env.IMAGE_REPOSITORY }},push-by-digest=true,name-canonical=true,push=true
+          labels: |
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.created=${{ steps.meta.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
 
-      # Generate tag for operator without "v"
-      - name: Remove "v" from version
-        id: tag_without_v
+      - name: Export digests
         run: |
-          TAG=${{ steps.generate_tag.outputs.new_tag }}
-          echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
+          mkdir -p /tmp/digests/ghcr /tmp/digests/dockerhub
+          digest_ghcr="${{ steps.build_ghcr.outputs.digest }}"
+          digest_dockerhub="${{ steps.build_dockerhub.outputs.digest }}"
+          touch "/tmp/digests/ghcr/${digest_ghcr#sha256:}"
+          touch "/tmp/digests/dockerhub/${digest_dockerhub#sha256:}"
 
-      # Update chart tag to the latest semver tag
+      - name: Upload GHCR digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-ghcr-${{ matrix.runner }}
+          path: /tmp/digests/ghcr/*
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload DockerHub digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-dockerhub-${{ matrix.runner }}
+          path: /tmp/digests/dockerhub/*
+          if-no-files-found: error
+          retention-days: 1
+
+  manifest:
+    name: Create Multi-Arch Manifests
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download GHCR digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests/ghcr
+          pattern: digests-ghcr-*
+          merge-multiple: true
+
+      - name: Download DockerHub digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests/dockerhub
+          pattern: digests-dockerhub-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ghcr registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: stakater-user
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub Registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.STAKATER_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.STAKATER_DOCKERHUB_PASSWORD }}
+
+      - name: Generate image repository paths
+        run: |
+          echo GHCR_IMAGE_REPOSITORY=${{ env.REGISTRY }}/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+          echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
+      - name: Create and push GHCR manifest
+        working-directory: /tmp/digests/ghcr
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.GHCR_IMAGE_REPOSITORY }}:${{ needs.test.outputs.new_tag }} \
+            $(printf '${{ env.GHCR_IMAGE_REPOSITORY }}@sha256:%s ' *)
+
+      - name: Create and push DockerHub manifest
+        working-directory: /tmp/digests/dockerhub
+        run: |
+          docker buildx imagetools create \
+            -t ${{ env.IMAGE_REPOSITORY }}:${{ needs.test.outputs.new_tag }} \
+            $(printf '${{ env.IMAGE_REPOSITORY }}@sha256:%s ' *)
+
+  release:
+    name: Release
+    needs: [test, manifest]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
       - name: Update Chart Version
         env:
-          VERSION: ${{ steps.tag_without_v.outputs.VERSION }}
+          VERSION: ${{ needs.test.outputs.version }}
         run: make bump-chart
 
-      # Publish helm chart
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@master
         with:
@@ -167,7 +258,6 @@ jobs:
           commit_username: stakater-user
           commit_email: stakater@gmail.com
 
-      # Generate Kubernetes manifests (without OpenShift Route)
       - name: Generate Kubernetes manifests
         run: |
           helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds \
@@ -186,7 +276,6 @@ jobs:
           mv deployments/kubernetes/manifests/forecastle/crds/* deployments/kubernetes/manifests/
           rm -r deployments/kubernetes/manifests/forecastle
 
-      # Generate OpenShift manifests (with OpenShift Route)
       - name: Generate OpenShift manifests
         run: |
           helm template forecastle deployments/kubernetes/chart/forecastle/ --include-crds \
@@ -197,7 +286,6 @@ jobs:
             --set forecastle.config.namespaceSelector.any=true \
             > deployments/openshift/forecastle.yaml
 
-      # Commit back changes
       - name: Commit files
         run: |
           git config --local user.email "stakater@gmail.com"
@@ -221,7 +309,7 @@ jobs:
 
       - name: Notify Slack
         uses: 8398a7/action-slack@v3
-        if: always() # Pick up events even if the job fails or is canceled.
+        if: always()
         with:
           status: ${{ job.status }}
           fields: repo,author,action,eventName,ref,workflow

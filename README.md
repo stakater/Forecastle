@@ -419,8 +419,6 @@ The Helm chart version is independent of the app version. To release a chart upd
 
 2. Once merged to master, the helm release workflow automatically publishes to stakater-charts
 
-You can release chart-only changes (values, templates, documentation) without a new app release.
-
 ## Help
 
 **Got a question?**

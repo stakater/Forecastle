@@ -1,7 +1,9 @@
 name: Push PR Image on Label
 
+# Use pull_request_target to run in base repo context (has secrets access)
+# This is safe because we only run after maintainer adds the label (implicit code review)
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - master
     types: [ labeled ]
@@ -19,7 +21,7 @@ jobs:
     name: Push PR Image
     if: ${{ github.event.label.name == 'build-push-image' }}
     steps:
-      - name: Remove the test label
+      - name: Remove the build label
         uses: actions-ecosystem/action-remove-labels@v1
         with:
           labels: build-push-image
@@ -70,4 +72,4 @@ jobs:
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.created=${{ steps.meta.outputs.created }}
-            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.revision=${{ github.event.pull_request.head.sha }}

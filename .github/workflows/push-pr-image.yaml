@@ -9,6 +9,10 @@ on:
 env:
   REGISTRY: ghcr.io
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   push-image:
     runs-on: ubuntu-latest

@@ -4,8 +4,8 @@ go 1.25.0
 
 require (
 	github.com/onrik/logrus v0.11.0
-	github.com/openshift/api v0.0.0-20251223163548-3f584b29ee4a
-	github.com/openshift/client-go v0.0.0-20251223102348-558b0eef16bc
+	github.com/openshift/api v0.0.0-20260107103503-6d35063ca179
+	github.com/openshift/client-go v0.0.0-20260108185524-48f4ccfc4e13
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.21.0
 	k8s.io/api v0.35.0

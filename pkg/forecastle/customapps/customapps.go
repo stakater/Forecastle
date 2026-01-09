@@ -1,6 +1,8 @@
 package customapps
 
 import (
+	"strings"
+
 	"github.com/stakater/Forecastle/v1/pkg/config"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle"
 )
@@ -42,7 +44,7 @@ func convertCustomAppsToForecastleApps(customApps []config.CustomApp) (apps []fo
 			Name:              customApp.Name,
 			URL:               customApp.URL,
 			Icon:              customApp.Icon,
-			Group:             customApp.Group,
+			Group:             strings.ToLower(customApp.Group),
 			DiscoverySource:   forecastle.Config,
 			NetworkRestricted: customApp.NetworkRestricted,
 			Properties:        customApp.Properties,

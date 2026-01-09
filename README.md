@@ -62,11 +62,15 @@ Forecastle boasts a range of functionalities designed to streamline the manageme
 
 6. **Custom Apps Integration**: Easily add non-Kubernetes or external applications to your dashboard for a more comprehensive overview of your tools and resources.
 
-7. **ForecastleApp CRD**: Utilize the ForecastleApp Custom Resource Definition to dynamically add custom applications, further enhancing the dashboard’s flexibility.
+7. **ForecastleApp CRD**: Utilize the ForecastleApp Custom Resource Definition to dynamically add custom applications, further enhancing the dashboard's flexibility.
 
 8. **Custom Grouping and URLs**: Organize your applications into custom groups and assign specific URLs for tailored navigation and accessibility.
 
 9. **Detailed App Information**: Each application comes with detailed information, offering insights and essential details at a glance.
+
+10. **Light/Dark Theme**: Switch between light and dark themes with automatic system preference detection.
+
+11. **Grid/List Views**: Toggle between grid and list views for different ways to visualize your applications.
 
 ## Admin Guide
 
@@ -80,12 +84,12 @@ You have the choice of deploying Forecastle using traditional manifests or throu
 
 You can get Forecastle by running the following command on your cluster:
 
-for Kubernetes:
+**For Kubernetes** (vanilla Kubernetes, EKS, GKE, AKS, etc.):
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/kubernetes/forecastle.yaml
 ```
 
-for OpenShift:
+**For OpenShift** (includes OpenShift Route for external access):
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/stakater/Forecastle/master/deployments/openshift/forecastle.yaml
 ```
@@ -133,6 +137,7 @@ You can customize Forecastle using either a ConfigMap or the values.yaml file wh
 |   instanceName    |                                      Name of the forecastle instance                                       |           ""            | string            |
 |    customApps     |                A list of custom apps that you would like to add to the forecastle instance                 |           {}            | []CustomApp       |
 |    crdEnabled     |                                  Enables or disables `ForecastleApp` CRD                                   |          true           | bool              |
+|     basePath      |  Base path for subpath hosting (e.g., "/forecastle"). Auto-detected from X-Forwarded-Prefix if not set    |           ""            | string            |
 
 #### Detailed Configurations
 
@@ -291,6 +296,46 @@ This configuration instructs Forecastle to fetch the app URL directly from the s
 
 Please use the [issue tracker](https://github.com/stakater/Forecastle/issues) to report any bugs or file feature requests.
 
+### Architecture
+
+Forecastle follows a modern Go application architecture:
+
+```
+/
+├── cmd/forecastle/          # Application entry point
+│   └── main.go
+├── internal/web/            # HTTP server (embedded, not importable)
+│   ├── embed.go            # Frontend embedding via go:embed
+│   ├── handler.go          # API handlers with background caching
+│   ├── middleware.go       # HTTP middleware stack
+│   └── server.go           # Server setup and routing
+├── pkg/                     # Public packages
+│   ├── apis/               # CRD type definitions
+│   ├── config/             # Configuration loading
+│   ├── forecastle/         # App discovery logic
+│   │   ├── crdapps/       # ForecastleApp CRD discovery
+│   │   ├── customapps/    # Custom apps from config
+│   │   └── ingressapps/   # Ingress annotation discovery
+│   └── kube/               # Kubernetes client setup
+└── frontend/               # React frontend application
+```
+
+**Key Features:**
+- **Background Caching**: Apps are discovered every 20 seconds in a background goroutine, reducing Kubernetes API load
+- **Go Embed**: Frontend is embedded using Go 1.16+ native `//go:embed` directive
+- **Health Endpoints**: `/healthz` (liveness) and `/readyz` (readiness) for Kubernetes probes
+- **Middleware Stack**: Logging, security headers, CORS, gzip compression, and cache control
+- **Auto-refresh**: Frontend automatically refreshes data every 30 seconds
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/apps` | GET | Returns discovered applications (cached) |
+| `/api/config` | GET | Returns Forecastle configuration |
+| `/healthz` | GET | Liveness probe - always returns 200 |
+| `/readyz` | GET | Readiness probe - returns 200 when cache is populated |
+
 ### Developing
 
 PRs are most welcome. In general, we follow the "fork-and-pull" Git workflow.
@@ -302,6 +347,47 @@ PRs are most welcome. In general, we follow the "fork-and-pull" Git workflow.
  5. Submit a **Pull request** so that we can review your changes.
 
 *NOTE: Be sure to merge the latest from "upstream" before making a pull request!*
+
+### Local Development
+
+**Prerequisites:**
+- Go 1.23+
+- Node.js 20+
+- Yarn
+
+**Frontend Development:**
+```bash
+cd frontend
+yarn install
+yarn start    # Starts dev server on port 3001
+```
+
+**Backend Development:**
+```bash
+# Build frontend first (required for embedding)
+cd frontend && yarn build && cd ..
+
+# Copy build contents to embed location
+mkdir -p internal/web/build
+cp -r frontend/build/* internal/web/build/
+
+# Build and run
+go build -o forecastle ./cmd/forecastle
+./forecastle --port 3000 --cache-interval 20s
+```
+
+**Docker Build:**
+```bash
+docker build -t forecastle .
+docker run -p 3000:3000 -v $(pwd)/config.yaml:/etc/forecastle/config.yaml forecastle
+```
+
+### Command Line Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--port` | 3000 | Server port |
+| `--cache-interval` | 20s | Background cache refresh interval |
 
 ## Help
 

@@ -1,9 +1,12 @@
 package crdapps
 
 import (
+	"strings"
+
 	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
 	"github.com/stakater/Forecastle/v1/pkg/config"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/filters"
 	"github.com/stakater/Forecastle/v1/pkg/kube"
 	"github.com/stakater/Forecastle/v1/pkg/kube/lists/forecastleapps"
 	"github.com/stakater/Forecastle/v1/pkg/log"
@@ -40,7 +43,9 @@ func (al *List) Populate(namespaces ...string) *List {
 	// Apply Instance filter
 	if len(al.appConfig.InstanceName) != 0 {
 		forecastleAppList, err = forecastleAppListObj.
-			Filter(byForecastleInstance).
+			Filter(func(app v1alpha1.ForecastleApp, cfg config.Config) bool {
+				return filters.ByInstance(app.Spec.Instance, cfg)
+			}).
 			Get()
 	} else {
 		forecastleAppList, err = forecastleAppListObj.Get()
@@ -74,7 +79,7 @@ func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, f
 
 		apps = append(apps, forecastle.App{
 			Name:              forecastleApp.Spec.Name,
-			Group:             forecastleApp.Spec.Group,
+			Group:             strings.ToLower(forecastleApp.Spec.Group),
 			Icon:              forecastleApp.Spec.Icon,
 			URL:               url,
 			DiscoverySource:   forecastle.ForecastleAppCRD,

@@ -2,23 +2,29 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@reduxjs/toolkit": "^2.3.0",
-    "axios": "^1.2.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
+    "@reduxjs/toolkit": "^2.11.2",
+    "axios": "^1.13.2",
+    "clsx": "^2.1.1",
     "prop-types": "^15.8.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-redux": "^9.1.2",
-    "react-scripts": "5.0.1",
-    "styled-components": "^6.1.13"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-redux": "^9.2.0",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,6 +42,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@playwright/test": "^1.49.0"
   }
 }

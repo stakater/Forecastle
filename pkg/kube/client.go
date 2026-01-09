@@ -10,6 +10,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
+	gatewayClient "sigs.k8s.io/gateway-api/pkg/client/clientset/versioned"
 )
 
 var (
@@ -22,42 +23,66 @@ type Clients struct {
 	ForecastleAppsClient forecastlev1alpha1.Interface
 	RoutesClient         routesClient.Interface
 	IngressRoutesClient  ingressroutesClient.Interface
+	GatewayClient        gatewayClient.Interface
 }
 
-// GetClients returns a `Clients` object containing all available interfaces
+// GetClients returns a Clients object with conditionally initialized clients based on API availability
 func GetClients() Clients {
-	return Clients{
-		KubernetesClient:     GetKubernetesClient(),
-		ForecastleAppsClient: GetForecastleClient(),
-		RoutesClient:         GetRoutesClient(),
-		IngressRoutesClient:  GetIngressRoutesClient(),
-	}
-}
-
-// GetRoutesClient resturns a routes clientset
-func GetRoutesClient() routesClient.Interface {
 	config := getClientConfig()
-	routesClient, err := routesClient.NewForConfig(config)
-	if err != nil {
-		logger.Fatalf("Can not create routes client: %v", err)
+	availability := DiscoverAPIs(config)
+
+	clients := Clients{
+		KubernetesClient:     getKubernetesClient(),
+		ForecastleAppsClient: getForecastleClient(),
 	}
 
-	return routesClient
-}
-
-// GetIngressRoutesClient resturns a ingressroute clientset
-func GetIngressRoutesClient() ingressroutesClient.Interface {
-	config := getClientConfig()
-	ingressroutesClient, err := ingressroutesClient.NewForConfig(config)
-	if err != nil {
-		logger.Fatalf("Can not create ingressroutes client: %v", err)
+	if availability.RoutesAvailable {
+		logger.Info("OpenShift Route API detected")
+		clients.RoutesClient = getRoutesClient(config)
 	}
 
-	return ingressroutesClient
+	if availability.IngressRoutesAvailable {
+		logger.Info("Traefik IngressRoute API detected")
+		clients.IngressRoutesClient = getIngressRoutesClient(config)
+	}
+
+	if availability.HTTPRoutesAvailable {
+		logger.Info("Gateway API HTTPRoute detected")
+		clients.GatewayClient = getGatewayClient(config)
+	}
+
+	return clients
 }
 
-// GetKubernetesClient returns a k8s clientset
-func GetKubernetesClient() kubernetes.Interface {
+func getRoutesClient(config *rest.Config) routesClient.Interface {
+	client, err := routesClient.NewForConfig(config)
+	if err != nil {
+		logger.Warnf("Failed to create routes client: %v", err)
+		return nil
+	}
+	return client
+}
+
+func getIngressRoutesClient(config *rest.Config) ingressroutesClient.Interface {
+	client, err := ingressroutesClient.NewForConfig(config)
+	if err != nil {
+		logger.Warnf("Failed to create ingressroutes client: %v", err)
+		return nil
+	}
+	return client
+}
+
+func getGatewayClient(config *rest.Config) gatewayClient.Interface {
+	client, err := gatewayClient.NewForConfig(config)
+	if err != nil {
+		logger.Warnf("Failed to create gateway client: %v", err)
+		return nil
+	}
+	return client
+}
+
+// getKubernetesClient returns a k8s clientset
+func getKubernetesClient() kubernetes.Interface {
 	config := getClientConfig()
 	kubeClient, err := kubernetes.NewForConfig(config)
 	if err != nil {
@@ -67,8 +92,8 @@ func GetKubernetesClient() kubernetes.Interface {
 	return kubeClient
 }
 
-// GetForecastleClient returns a forecastle resource clientset
-func GetForecastleClient() forecastlev1alpha1.Interface {
+// getForecastleClient returns a forecastle resource clientset
+func getForecastleClient() forecastlev1alpha1.Interface {
 	config := getClientConfig()
 	forecastleClient, err := forecastlev1alpha1.NewForConfig(config)
 	if err != nil {

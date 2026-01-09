@@ -15,6 +15,7 @@ metadata:
     heritage: "Helm"
 data:
   config.yaml: |-
+    basePath: null
     crdEnabled: true
     customApps: {}
     headerBackground: null

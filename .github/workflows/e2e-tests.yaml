@@ -1,0 +1,111 @@
+name: E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - labeled
+      - synchronize
+  workflow_dispatch:
+
+env:
+  FORECASTLE_URL: "http://localhost:3000"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    name: E2E Tests
+    if: ${{ github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test') }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Create Kind Cluster
+        uses: helm/kind-action@v1
+        with:
+          cluster_name: forecastle-e2e
+
+      - name: Install Go Dependencies
+        run: make install
+
+      - name: Build Forecastle
+        run: make build
+
+      - name: Install Frontend Dependencies
+        run: cd frontend && yarn install
+
+      - name: Install Playwright Browsers
+        run: cd frontend && npx playwright install --with-deps chromium
+
+      - name: Create test config
+        run: |
+          cat > config.yaml << 'EOF'
+          crdEnabled: false
+          namespaceSelector:
+            any: true
+          title: "Forecastle E2E"
+          customApps:
+            - name: "E2E Config App"
+              url: "https://config-app.example.com"
+              icon: "https://example.com/icon.png"
+              group: "e2e-config"
+              properties:
+                Version: "1.0.0"
+            - name: "Test App 2"
+              url: "https://test2.example.com"
+              group: "test-group"
+            - name: "Production App"
+              url: "https://prod.example.com"
+              group: "production"
+          EOF
+
+      - name: Start Forecastle
+        run: |
+          ./forecastle --port 3000 --cache-interval 10s &
+          timeout 30 bash -c 'until curl -sf http://localhost:3000/healthz; do sleep 1; done'
+          timeout 60 bash -c 'until curl -sf http://localhost:3000/readyz; do sleep 1; done'
+
+      - name: Run Backend E2E Tests
+        run: make test-e2e
+        timeout-minutes: 10
+
+      - name: Run Frontend E2E Tests
+        run: cd frontend && yarn test:e2e --project=chromium
+        timeout-minutes: 10
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 30
+
+      - name: Upload Playwright Screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-screenshots
+          path: frontend/test-results/
+          retention-days: 7
+
+      - name: Stop Forecastle
+        if: always()
+        run: pkill forecastle || true

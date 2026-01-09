@@ -1,4 +1,4 @@
-export default (groups = {}, { query }) => {
+const selectApps = (groups = {}, { query }) => {
   const keys = Object.keys(groups);
   let matchedGroups = {};
 
@@ -16,3 +16,5 @@ export default (groups = {}, { query }) => {
 
   return matchedGroups;
 };
+
+export default selectApps;

@@ -493,14 +493,21 @@ func TestIngressWrapper_GetGroup(t *testing.T) {
 			fields: fields{
 				ingress: testutil.CreateIngressWithNamespace("someIngress", "test"),
 			},
-			want: "test",
+			want: "test", // Namespace is normalized to lowercase
 		},
 		{
 			name: "IngressWithGroup",
 			fields: fields{
 				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithNamespace("someIngress", "test"), annotations.ForecastleGroupAnnotation, "My Group"),
 			},
-			want: "My Group",
+			want: "my group", // Group is normalized to lowercase for case-insensitive grouping
+		},
+		{
+			name: "IngressWithMixedCaseNamespace",
+			fields: fields{
+				ingress: testutil.CreateIngressWithNamespace("someIngress", "TestNamespace"),
+			},
+			want: "testnamespace", // Namespace is normalized to lowercase
 		},
 	}
 	for _, tt := range tests {

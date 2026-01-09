@@ -7,6 +7,7 @@ import (
 	v1alpha1 "github.com/stakater/Forecastle/v1/pkg/apis/forecastle/v1alpha1"
 	v1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	gatewayv1 "sigs.k8s.io/gateway-api/apis/v1"
 )
 
 func CreateIngress(name string) *v1.Ingress {
@@ -27,7 +28,7 @@ func CreateRoute(name string) *routev1.Route {
 
 func CreateIngressWithNamespace(name string, namespace string) *v1.Ingress {
 	ingress := CreateIngress(name)
-	ingress.ObjectMeta.Namespace = namespace
+	ingress.Namespace = namespace
 
 	return ingress
 }
@@ -178,4 +179,38 @@ func CreateForecastleAppWithURLFromIngress(name string, group string, icon strin
 	}
 
 	return forecastleApp
+}
+
+func CreateHTTPRoute(name string) *gatewayv1.HTTPRoute {
+	return &gatewayv1.HTTPRoute{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+	}
+}
+
+func CreateHTTPRouteWithNamespace(name string, namespace string) *gatewayv1.HTTPRoute {
+	httpRoute := CreateHTTPRoute(name)
+	httpRoute.Namespace = namespace
+	return httpRoute
+}
+
+func CreateHTTPRouteWithHostname(name string, hostname string) *gatewayv1.HTTPRoute {
+	httpRoute := CreateHTTPRoute(name)
+	httpRoute.Spec.Hostnames = []gatewayv1.Hostname{gatewayv1.Hostname(hostname)}
+	return httpRoute
+}
+
+func CreateHTTPRouteWithHostnameAndNamespace(name string, namespace string, hostname string) *gatewayv1.HTTPRoute {
+	httpRoute := CreateHTTPRouteWithHostname(name, hostname)
+	httpRoute.Namespace = namespace
+	return httpRoute
+}
+
+func AddAnnotationToHTTPRoute(httpRoute *gatewayv1.HTTPRoute, annotationKey string, annotationValue string) *gatewayv1.HTTPRoute {
+	if httpRoute.Annotations == nil {
+		httpRoute.Annotations = make(map[string]string)
+	}
+	httpRoute.Annotations[annotationKey] = annotationValue
+	return httpRoute
 }

@@ -11,6 +11,7 @@ import (
 	ingressroutes "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/generated/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	gateway "sigs.k8s.io/gateway-api/pkg/client/clientset/versioned"
 )
 
 func getURL(clients kube.Clients, forecastleApp v1alpha1.ForecastleApp) (string, error) {
@@ -40,7 +41,9 @@ func discoverURLFromRouteRef(routesClient routes.Interface, routeRef *v1alpha1.R
 	return wrappers.NewRouteWrapper(route).GetURL(), nil
 }
 
-func discoverURLFromIngressRouteRef(ingressroutesClient ingressroutes.Interface, ingressrouteRef *v1alpha1.IngressRouteURLSource, namespace string) (string, error) {
+func discoverURLFromIngressRouteRef(ingressroutesClient ingressroutes.Interface, ingressrouteRef *v1alpha1.IngressRouteURLSource, namespace string) (
+	string, error,
+) {
 	ingressroute, err := ingressroutesClient.TraefikV1alpha1().IngressRoutes(namespace).Get(context.TODO(), ingressrouteRef.Name, metav1.GetOptions{})
 	if err != nil {
 		logger.Warn("IngressRoute not found with name " + ingressrouteRef.Name)
@@ -50,11 +53,21 @@ func discoverURLFromIngressRouteRef(ingressroutesClient ingressroutes.Interface,
 	return wrappers.NewIngressRouteWrapper(ingressroute).GetURL(), nil
 }
 
+func discoverURLFromHTTPRouteRef(gatewayClient gateway.Interface, httpRouteRef *v1alpha1.HTTPRouteURLSource, namespace string) (string, error) {
+	httpRoute, err := gatewayClient.GatewayV1().HTTPRoutes(namespace).Get(context.TODO(), httpRouteRef.Name, metav1.GetOptions{})
+	if err != nil {
+		logger.Warn("HTTPRoute not found with name " + httpRouteRef.Name)
+		return "", err
+	}
+
+	return wrappers.NewHTTPRouteWrapper(httpRoute).GetURL(), nil
+}
+
 func discoverURLFromRefs(clients kube.Clients, forecastleApp v1alpha1.ForecastleApp) (string, error) {
 	urlFrom := forecastleApp.Spec.URLFrom
 	if urlFrom == nil {
 		logger.Warn("No URL sources set for ForecastleApp: " + forecastleApp.Name)
-		return "", errors.New("No URL sources set for ForecastleApp: " + forecastleApp.Name)
+		return "", errors.New("no URL sources set for ForecastleApp: " + forecastleApp.Name)
 	}
 
 	if urlFrom.IngressRef != nil {
@@ -62,13 +75,29 @@ func discoverURLFromRefs(clients kube.Clients, forecastleApp v1alpha1.Forecastle
 	}
 
 	if urlFrom.RouteRef != nil {
+		if clients.RoutesClient == nil {
+			logger.Warnf("RouteRef specified on '%s' but OpenShift Route API not available", forecastleApp.Name)
+			return "", errors.New("openShift Route API not available")
+		}
 		return discoverURLFromRouteRef(clients.RoutesClient, urlFrom.RouteRef, forecastleApp.Namespace)
 	}
 
 	if urlFrom.IngressRouteRef != nil {
+		if clients.IngressRoutesClient == nil {
+			logger.Warnf("IngressRouteRef specified on '%s' but Traefik API not available", forecastleApp.Name)
+			return "", errors.New("traefik IngressRoute API not available")
+		}
 		return discoverURLFromIngressRouteRef(clients.IngressRoutesClient, urlFrom.IngressRouteRef, forecastleApp.Namespace)
 	}
 
+	if urlFrom.HTTPRouteRef != nil {
+		if clients.GatewayClient == nil {
+			logger.Warnf("HTTPRouteRef specified on '%s' but Gateway API not available", forecastleApp.Name)
+			return "", errors.New("gateway API not available")
+		}
+		return discoverURLFromHTTPRouteRef(clients.GatewayClient, urlFrom.HTTPRouteRef, forecastleApp.Namespace)
+	}
+
 	logger.Warn("Unsupported Ref set on ForecastleApp: " + forecastleApp.Name)
-	return "", errors.New("Unsupported Ref set on ForecastleApp: " + forecastleApp.Name)
+	return "", errors.New("unsupported Ref set on ForecastleApp: " + forecastleApp.Name)
 }

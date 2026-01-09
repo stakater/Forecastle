@@ -6,4 +6,16 @@ config.yaml
 .vscode
 dist
 .local
-Forecastle
+# Compiled binary (at root only)
+/forecastle
+/Forecastle
+node_modules
+
+# Embedded frontend build (populated during Docker build)
+internal/web/build/*
+!internal/web/build/.gitkeep
+
+# Playwright
+frontend/playwright-report/
+frontend/test-results/
+frontend/playwright/.cache/

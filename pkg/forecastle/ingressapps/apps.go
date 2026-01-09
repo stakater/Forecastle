@@ -4,6 +4,7 @@ import (
 	"github.com/stakater/Forecastle/v1/pkg/annotations"
 	"github.com/stakater/Forecastle/v1/pkg/config"
 	"github.com/stakater/Forecastle/v1/pkg/forecastle"
+	"github.com/stakater/Forecastle/v1/pkg/forecastle/filters"
 	"github.com/stakater/Forecastle/v1/pkg/kube/lists/ingresses"
 	"github.com/stakater/Forecastle/v1/pkg/kube/wrappers"
 	"github.com/stakater/Forecastle/v1/pkg/log"
@@ -36,12 +37,16 @@ func NewList(kubeClient kubernetes.Interface, appConfig config.Config) *List {
 func (al *List) Populate(namespaces ...string) *List {
 	ingressList, err := ingresses.NewList(al.kubeClient, al.appConfig).
 		Populate(namespaces...).
-		Filter(byForecastleExposeAnnotation).Get()
+		Filter(func(ing v1.Ingress, cfg config.Config) bool {
+			return filters.ByForecastleExposeAnnotation(ing.Annotations, cfg)
+		}).Get()
 
 	// Apply Instance filter
 	if len(al.appConfig.InstanceName) != 0 {
 		ingressList, err = ingresses.NewList(al.kubeClient, al.appConfig, ingressList...).
-			Filter(byForecastleInstanceAnnotation).Get()
+			Filter(func(ing v1.Ingress, cfg config.Config) bool {
+				return filters.ByForecastleInstanceAnnotation(ing.Annotations, cfg)
+			}).Get()
 	}
 
 	if err != nil {

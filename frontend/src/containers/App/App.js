@@ -1,32 +1,36 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
-import AppList from "../AppList/AppList";
-import { SearchAppBar, Footer } from "../../components";
-import * as configStore from "../../redux/app/configModule";
+import AppList from '../AppList/AppList';
+import { Header, Footer } from '../../components';
+import { loadConfig } from '../../redux/app/configModule';
 
-const App = ({ loadConfig }) => {
+const App = () => {
+  const theme = useTheme();
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    loadConfig();
-  }, [loadConfig]);
+    dispatch(loadConfig());
+  }, [dispatch]);
 
   return (
-    <React.Fragment>
-      <SearchAppBar />
-      <AppList />
-
-      {/* Footer */}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: theme.palette.background.default,
+      }}
+    >
+      <Header />
+      <Box sx={{ flexGrow: 1 }}>
+        <AppList />
+      </Box>
       <Footer />
-      {/* End footer */}
-    </React.Fragment>
+    </Box>
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  loadConfig: () => dispatch(configStore.loadConfig())
-});
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(App);
+export default App;

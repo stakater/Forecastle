@@ -112,7 +112,7 @@ jobs:
           touch "/tmp/digests/dockerhub/${digest_dockerhub#sha256:}"
 
       - name: Upload GHCR digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: digests-ghcr-${{ matrix.runner }}
           path: /tmp/digests/ghcr/*
@@ -120,7 +120,7 @@ jobs:
           retention-days: 1
 
       - name: Upload DockerHub digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: digests-dockerhub-${{ matrix.runner }}
           path: /tmp/digests/dockerhub/*
@@ -133,14 +133,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download GHCR digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: /tmp/digests/ghcr
           pattern: digests-ghcr-*
           merge-multiple: true
 
       - name: Download DockerHub digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: /tmp/digests/dockerhub
           pattern: digests-dockerhub-*

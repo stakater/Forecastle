@@ -101,8 +101,10 @@ apply:
 deploy: binary-image push apply
 
 # Bump Chart
+# Chart version has no 'v' prefix (helm semver standard)
+# appVersion and image tag keep 'v' prefix (matches Docker tag)
 bump-chart:
-	sed -i "s/^version:.*/version: v$(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
-	sed -i "s/version:.*/version: v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml 
-	sed -i "s/^appVersion:.*/appVersion: v$(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
-	sed -i "s/tag:.*/tag: v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml
+	sed -i "s/^version:.*/version: $(VERSION)/" deployments/kubernetes/chart/forecastle/Chart.yaml
+	sed -i "s/^appVersion:.*/appVersion: \"v$(VERSION)\"/" deployments/kubernetes/chart/forecastle/Chart.yaml
+	sed -i "s/^    version:.*/    version: $(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml
+	sed -i "s/^    tag:.*/    tag: v$(VERSION)/" deployments/kubernetes/chart/forecastle/values.yaml

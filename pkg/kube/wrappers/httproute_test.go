@@ -35,6 +35,13 @@ func TestHTTPRouteWrapper_GetURL(t *testing.T) {
 			httpRoute: testutil.CreateHTTPRoute("test-route"),
 			want:      "",
 		},
+		{
+			name: "WithURLAnnotation",
+			httpRoute: testutil.AddAnnotationToHTTPRoute(
+				testutil.CreateHTTPRouteWithHostname("test-route", "app.example.com"),
+				annotations.ForecastleURLAnnotation, "https://logging.example.net/select/vmui/"),
+			want: "https://logging.example.net/select/vmui/",
+		},
 	}
 
 	for _, tt := range tests {

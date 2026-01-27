@@ -3,6 +3,7 @@ package wrappers
 import (
 	"mvdan.cc/xurls/v2"
 
+	"github.com/stakater/Forecastle/v1/pkg/annotations"
 	ingressroutev1 "github.com/traefik/traefik/v2/pkg/provider/kubernetes/crd/traefikio/v1alpha1"
 )
 
@@ -18,8 +19,17 @@ func NewIngressRouteWrapper(ingressroute *ingressroutev1.IngressRoute) *IngressR
 	}
 }
 
+// GetAnnotationValue extracts an annotation's value present on the ingressroute wrapped by the object
+func (irw *IngressRouteWrapper) GetAnnotationValue(annotationKey string) string {
+	return getAnnotationValue(irw.ingressroute.Annotations, annotationKey)
+}
+
 // GetURL func extracts URL of the route wrapped by the object
 func (irw *IngressRouteWrapper) GetURL() string {
+	if urlFromAnnotation := irw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+		return urlFromAnnotation
+	}
+
 	xurlsStrict := xurls.Relaxed()
 	parsedUrl := ""
 

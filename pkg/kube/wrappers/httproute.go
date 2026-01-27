@@ -19,12 +19,7 @@ func NewHTTPRouteWrapper(httpRoute *gatewayv1.HTTPRoute) *HTTPRouteWrapper {
 
 // GetAnnotationValue extracts an annotation value from the HTTPRoute
 func (hw *HTTPRouteWrapper) GetAnnotationValue(annotationKey string) string {
-	if hw.httpRoute.Annotations != nil {
-		if value, ok := hw.httpRoute.Annotations[annotationKey]; ok {
-			return value
-		}
-	}
-	return ""
+	return getAnnotationValue(hw.httpRoute.Annotations, annotationKey)
 }
 
 // GetName returns the name of the HTTPRoute (from annotation or resource name)
@@ -58,6 +53,10 @@ func (hw *HTTPRouteWrapper) GetProperties() map[string]string {
 
 // GetURL extracts the URL from the HTTPRoute
 func (hw *HTTPRouteWrapper) GetURL() string {
+	if urlFromAnnotation := hw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+		return urlFromAnnotation
+	}
+
 	if len(hw.httpRoute.Spec.Hostnames) == 0 {
 		logger.Warn("No hostnames defined for HTTPRoute: ", hw.httpRoute.Name)
 		return ""

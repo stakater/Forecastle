@@ -13,3 +13,12 @@ func makeMap(value string) map[string]string {
 
 	return propertiesMap
 }
+
+func getAnnotationValue(annotations map[string]string, key string) string {
+	if annotations != nil {
+		if value, ok := annotations[key]; ok {
+			return value
+		}
+	}
+	return ""
+}

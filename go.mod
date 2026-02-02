@@ -15,7 +15,8 @@ require (
 )
 
 require (
-	github.com/traefik/traefik/v2 v2.11.33
+	github.com/traefik/traefik/v2 v2.11.36
+	github.com/traefik/traefik/v3 v3.6.7
 	sigs.k8s.io/gateway-api v1.4.1
 )
 
@@ -26,7 +27,7 @@ require (
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
-	github.com/go-acme/lego/v4 v4.30.1 // indirect
+	github.com/go-acme/lego/v4 v4.31.0 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-openapi/jsonpointer v0.22.4 // indirect

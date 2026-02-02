@@ -27,10 +27,7 @@ func NewIngressWrapper(ingress *v1.Ingress) *IngressWrapper {
 
 // GetAnnotationValue extracts an annotation's value present on the ingress wrapped by the object
 func (iw *IngressWrapper) GetAnnotationValue(annotationKey string) string {
-	if value, ok := iw.ingress.Annotations[annotationKey]; ok {
-		return value
-	}
-	return ""
+	return getAnnotationValue(iw.ingress.Annotations, annotationKey)
 }
 
 // GetName func extracts name of the ingress wrapped by the object

@@ -35,6 +35,34 @@ func TestHTTPRouteWrapper_GetURL(t *testing.T) {
 			httpRoute: testutil.CreateHTTPRoute("test-route"),
 			want:      "",
 		},
+		{
+			name: "WithURLAnnotation",
+			httpRoute: testutil.AddAnnotationToHTTPRoute(
+				testutil.CreateHTTPRouteWithHostname("test-route", "app.example.com"),
+				annotations.ForecastleURLAnnotation, "https://logging.example.net/select/vmui/"),
+			want: "https://logging.example.net/select/vmui/",
+		},
+		{
+			name: "WithValidURLAnnotationWithPath",
+			httpRoute: testutil.AddAnnotationToHTTPRoute(
+				testutil.CreateHTTPRouteWithHostname("test-route", "app.example.com"),
+				annotations.ForecastleURLAnnotation, "https://example.com/path/to/app"),
+			want: "https://example.com/path/to/app",
+		},
+		{
+			name: "WithInvalidURLAnnotation",
+			httpRoute: testutil.AddAnnotationToHTTPRoute(
+				testutil.CreateHTTPRouteWithHostname("test-route", "app.example.com"),
+				annotations.ForecastleURLAnnotation, "not a valid url!!!"),
+			want: "https://app.example.com",
+		},
+		{
+			name: "WithURLAnnotationWithoutScheme",
+			httpRoute: testutil.AddAnnotationToHTTPRoute(
+				testutil.CreateHTTPRouteWithHostname("test-route", "app.example.com"),
+				annotations.ForecastleURLAnnotation, "example.com/path"),
+			want: "https://app.example.com",
+		},
 	}
 
 	for _, tt := range tests {
@@ -208,6 +236,73 @@ func TestHTTPRouteWrapper_GetProperties(t *testing.T) {
 				if got[k] != v {
 					t.Errorf("HTTPRouteWrapper.GetProperties()[%s] = %v, want %v", k, got[k], v)
 				}
+			}
+		})
+	}
+}
+
+func TestGetAndValidateURLAnnotation(t *testing.T) {
+	tests := []struct {
+		name        string
+		annotations map[string]string
+		key         string
+		want        string
+	}{
+		{
+			name:        "WithValidURL",
+			annotations: map[string]string{"forecastle.stakater.com/url": "https://example.com/path"},
+			key:         "forecastle.stakater.com/url",
+			want:        "https://example.com/path",
+		},
+		{
+			name:        "WithValidURLWithPort",
+			annotations: map[string]string{"forecastle.stakater.com/url": "https://example.com:8443/app"},
+			key:         "forecastle.stakater.com/url",
+			want:        "https://example.com:8443/app",
+		},
+		{
+			name:        "WithValidHTTPURL",
+			annotations: map[string]string{"forecastle.stakater.com/url": "http://example.com/app"},
+			key:         "forecastle.stakater.com/url",
+			want:        "http://example.com/app",
+		},
+		{
+			name:        "WithInvalidURL",
+			annotations: map[string]string{"forecastle.stakater.com/url": "not a valid url!!!"},
+			key:         "forecastle.stakater.com/url",
+			want:        "",
+		},
+		{
+			name:        "WithURLWithoutScheme",
+			annotations: map[string]string{"forecastle.stakater.com/url": "example.com/path"},
+			key:         "forecastle.stakater.com/url",
+			want:        "",
+		},
+		{
+			name:        "WithEmptyAnnotation",
+			annotations: map[string]string{"forecastle.stakater.com/url": ""},
+			key:         "forecastle.stakater.com/url",
+			want:        "",
+		},
+		{
+			name:        "WithMissingKey",
+			annotations: map[string]string{"other.annotation": "value"},
+			key:         "forecastle.stakater.com/url",
+			want:        "",
+		},
+		{
+			name:        "WithNilAnnotations",
+			annotations: nil,
+			key:         "forecastle.stakater.com/url",
+			want:        "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := getAndValidateURLAnnotation(tt.annotations, tt.key)
+			if got != tt.want {
+				t.Errorf("getAndValidateURLAnnotation() = %q, want %q", got, tt.want)
 			}
 		})
 	}

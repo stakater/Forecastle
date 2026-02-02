@@ -24,7 +24,7 @@ func (rw *RouteWrapper) GetAnnotationValue(annotationKey string) string {
 
 // GetURL func extracts URL of the route wrapped by the object
 func (rw *RouteWrapper) GetURL() string {
-	if urlFromAnnotation := rw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+	if urlFromAnnotation := getAndValidateURLAnnotation(rw.route.Annotations, annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
 		return urlFromAnnotation
 	}
 

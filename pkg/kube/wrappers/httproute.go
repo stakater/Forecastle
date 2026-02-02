@@ -53,7 +53,7 @@ func (hw *HTTPRouteWrapper) GetProperties() map[string]string {
 
 // GetURL extracts the URL from the HTTPRoute
 func (hw *HTTPRouteWrapper) GetURL() string {
-	if urlFromAnnotation := hw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+	if urlFromAnnotation := getAndValidateURLAnnotation(hw.httpRoute.Annotations, annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
 		return urlFromAnnotation
 	}
 

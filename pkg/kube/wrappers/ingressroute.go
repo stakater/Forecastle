@@ -26,7 +26,7 @@ func (irw *IngressRouteWrapper) GetAnnotationValue(annotationKey string) string 
 
 // GetURL func extracts URL of the route wrapped by the object
 func (irw *IngressRouteWrapper) GetURL() string {
-	if urlFromAnnotation := irw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
+	if urlFromAnnotation := getAndValidateURLAnnotation(irw.ingressroute.Annotations, annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
 		return urlFromAnnotation
 	}
 

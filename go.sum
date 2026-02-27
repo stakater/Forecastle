@@ -147,6 +147,8 @@ github.com/traefik/paerser v0.2.2 h1:cpzW/ZrQrBh3mdwD/jnp6aXASiUFKOVr6ldP+keJTcQ
 github.com/traefik/paerser v0.2.2/go.mod h1:7BBDd4FANoVgaTZG+yh26jI6CA2nds7D/4VTEdIsh24=
 github.com/traefik/traefik/v2 v2.11.33 h1:MPqN5W6Ui65lP2f/uCDH9TV8SvRPulp/7S/P2ESFDbI=
 github.com/traefik/traefik/v2 v2.11.33/go.mod h1:4IsMkzOastNmRZoIvVSKTGFcJ8arGaOkYuenYDOlDM8=
+github.com/traefik/traefik/v2 v2.11.37 h1:rsIHAb4KvgHA52eLbK8VO2BwbU8ASKc09n/vO5jiEBM=
+github.com/traefik/traefik/v2 v2.11.37/go.mod h1:19sRX1gJDnFJvR1SZmGTPQQgJ+/8SVmpSFF3TQrl4mU=
 github.com/x448/float16 v0.8.4 h1:qLwI1I70+NjRFUR3zs1JPUCgaCXSh3SW62uAKT1mSBM=
 github.com/x448/float16 v0.8.4/go.mod h1:14CWIYCyZA/cWjXOioeEpHeN/83MdbZDRQHoFcYsOfg=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=

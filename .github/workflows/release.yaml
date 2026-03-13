@@ -74,7 +74,7 @@ jobs:
 
       - name: Build and push by digest (GHCR)
         id: build_ghcr
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH }}
@@ -90,7 +90,7 @@ jobs:
 
       - name: Build and push by digest (DockerHub)
         id: build_dockerhub
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH }}

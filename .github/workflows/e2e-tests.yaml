@@ -21,7 +21,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || (github.event.pull_request.state == 'open' && contains(github.event.pull_request.labels.*.name, 'ok-to-test')) }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
 

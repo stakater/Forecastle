@@ -7,7 +7,7 @@ COPY frontend/ ./
 RUN yarn build
 
 # Stage 2: Build Go binary
-FROM --platform=${BUILDPLATFORM} golang:1.25 AS builder
+FROM --platform=${BUILDPLATFORM} golang:1.26 AS builder
 
 ARG TARGETOS
 ARG TARGETARCH

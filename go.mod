@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/traefik/traefik/v2 v2.11.40
+	github.com/traefik/traefik/v2 v2.11.41
 	sigs.k8s.io/gateway-api v1.4.1
 )
 

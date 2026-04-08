@@ -100,6 +100,21 @@ forecastle:
     #     memory: 64Mi
     # image: stakater/oauth-proxy:v0.0.2
     securityContext: {}
+  oidcProxy:
+    enabled: false
+    image: ""
+    issuerUrl: ""
+    clientId: ""
+    redirectUrl: ""
+    scopes: "openid email profile"
+    clientSecretRef:
+      name: ""
+      key: ""
+    cookieSecretRef:
+      name: ""
+      key: ""
+    resources: {}
+    securityContext: {}
   service:
     annotations: {}
     expose: "false"

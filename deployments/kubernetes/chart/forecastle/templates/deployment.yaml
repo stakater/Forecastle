@@ -76,6 +76,47 @@ spec:
 {{ toYaml .Values.forecastle.openshiftOauthProxy.resources | indent 10 }}
       {{- end }}
       {{- end }}
+      {{- if .Values.forecastle.oidcProxy.enabled }}
+      - name: oauth-proxy
+        image: "{{ .Values.forecastle.oidcProxy.image }}"
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8443
+            name: public
+        args:
+          - --https-address=:8443
+          - --provider=oidc
+          - --oidc-issuer-url={{ .Values.forecastle.oidcProxy.issuerUrl }}
+          - --client-id={{ .Values.forecastle.oidcProxy.clientId }}
+          - --redirect-url={{ .Values.forecastle.oidcProxy.redirectUrl }}
+          - --upstream=http://localhost:3000
+          - --tls-cert=/etc/tls/private/tls.crt
+          - --tls-key=/etc/tls/private/tls.key
+          - --email-domain=*
+          - --scope={{ .Values.forecastle.oidcProxy.scopes }}
+        env:
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.forecastle.oidcProxy.clientSecretRef.name }}
+                key: {{ .Values.forecastle.oidcProxy.clientSecretRef.key }}
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.forecastle.oidcProxy.cookieSecretRef.name }}
+                key: {{ .Values.forecastle.oidcProxy.cookieSecretRef.key }}
+        volumeMounts:
+          - mountPath: /etc/tls/private
+            name: oauth-proxy-tls
+      {{- with .Values.forecastle.oidcProxy.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.forecastle.oidcProxy.resources }}
+        resources:
+{{ toYaml .Values.forecastle.oidcProxy.resources | indent 10 }}
+      {{- end }}
+      {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config
         configMap:
@@ -84,6 +125,11 @@ spec:
       - name: openshift-oauth-proxy-tls
         secret:
           secretName: openshift-oauth-proxy-tls
+      {{- end }}
+      {{- if .Values.forecastle.oidcProxy.enabled }}
+      - name: oauth-proxy-tls
+        secret:
+          secretName: oauth-proxy-tls
       {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}
       {{- with .Values.forecastle.deployment.podSecurityContext }}

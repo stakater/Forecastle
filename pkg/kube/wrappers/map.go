@@ -32,8 +32,8 @@ func getAndValidateURLAnnotation(annotations map[string]string, key string) stri
 		return ""
 	}
 
-	parsedURL, err := url.ParseRequestURI(urlValue)
-	if err != nil {
+	parsedURL, err := url.Parse(urlValue)
+	if err != nil || parsedURL.Scheme == "" {
 		logger.Warn(err)
 		return ""
 	}

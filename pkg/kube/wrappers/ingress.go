@@ -62,9 +62,13 @@ func (iw *IngressWrapper) GetProperties() map[string]string {
 func (iw *IngressWrapper) GetURL() string {
 
 	if urlFromAnnotation := iw.GetAnnotationValue(annotations.ForecastleURLAnnotation); urlFromAnnotation != "" {
-		parsedURL, err := url.ParseRequestURI(urlFromAnnotation)
+		parsedURL, err := url.Parse(urlFromAnnotation)
 		if err != nil {
 			logger.Warn(err)
+			return ""
+		}
+		if parsedURL.Scheme == "" {
+			logger.Warnf("URL %q is missing a scheme", urlFromAnnotation)
 			return ""
 		}
 		return parsedURL.String()

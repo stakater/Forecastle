@@ -33,8 +33,12 @@ func getAndValidateURLAnnotation(annotations map[string]string, key string) stri
 	}
 
 	parsedURL, err := url.Parse(urlValue)
-	if err != nil || parsedURL.Scheme == "" {
+	if err != nil {
 		logger.Warn(err)
+		return ""
+	}
+	if parsedURL.Scheme == "" {
+		logger.Warnf("URL %q is missing a scheme", urlValue)
 		return ""
 	}
 

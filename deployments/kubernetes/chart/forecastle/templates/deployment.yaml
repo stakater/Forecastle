@@ -76,6 +76,50 @@ spec:
 {{ toYaml .Values.forecastle.openshiftOauthProxy.resources | indent 10 }}
       {{- end }}
       {{- end }}
+      {{- if .Values.forecastle.oidcProxy.enabled }}
+      {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
+      {{- fail "openshiftOauthProxy and oidcProxy cannot both be enabled" }}
+      {{- end }}
+      - name: oidc-proxy
+        image: {{ required "oidcProxy.image is required when oidcProxy is enabled" .Values.forecastle.oidcProxy.image | quote }}
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8443
+            name: public
+        args:
+          - --https-address=:8443
+          - --provider=oidc
+          - --oidc-issuer-url={{ required "oidcProxy.issuerUrl is required" .Values.forecastle.oidcProxy.issuerUrl }}
+          - --client-id={{ required "oidcProxy.clientId is required" .Values.forecastle.oidcProxy.clientId }}
+          - --redirect-url={{ required "oidcProxy.redirectUrl is required" .Values.forecastle.oidcProxy.redirectUrl }}
+          - --upstream=http://localhost:3000
+          - --tls-cert=/etc/tls/private/tls.crt
+          - --tls-key=/etc/tls/private/tls.key
+          - --email-domain=*
+          - --scope={{ .Values.forecastle.oidcProxy.scopes }}
+        env:
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ required "oidcProxy.clientSecretRef.name is required" .Values.forecastle.oidcProxy.clientSecretRef.name }}
+                key: {{ required "oidcProxy.clientSecretRef.key is required" .Values.forecastle.oidcProxy.clientSecretRef.key }}
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ required "oidcProxy.cookieSecretRef.name is required" .Values.forecastle.oidcProxy.cookieSecretRef.name }}
+                key: {{ required "oidcProxy.cookieSecretRef.key is required" .Values.forecastle.oidcProxy.cookieSecretRef.key }}
+        volumeMounts:
+          - mountPath: /etc/tls/private
+            name: oauth-proxy-tls
+      {{- with .Values.forecastle.oidcProxy.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{- if .Values.forecastle.oidcProxy.resources }}
+        resources:
+{{ toYaml .Values.forecastle.oidcProxy.resources | indent 10 }}
+      {{- end }}
+      {{- end }}
       volumes:
       - name: {{ template "forecastle.name" . }}-config
         configMap:
@@ -84,6 +128,11 @@ spec:
       - name: openshift-oauth-proxy-tls
         secret:
           secretName: openshift-oauth-proxy-tls
+      {{- end }}
+      {{- if .Values.forecastle.oidcProxy.enabled }}
+      - name: oauth-proxy-tls
+        secret:
+          secretName: oauth-proxy-tls
       {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}
       {{- with .Values.forecastle.deployment.podSecurityContext }}

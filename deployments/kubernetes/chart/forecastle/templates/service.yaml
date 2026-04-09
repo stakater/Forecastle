@@ -13,7 +13,7 @@ metadata:
   namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   ports:
-  {{- if .Values.forecastle.openshiftOauthProxy.enabled }}
+  {{- if or .Values.forecastle.openshiftOauthProxy.enabled .Values.forecastle.oidcProxy.enabled }}
   - name: http
     port: 443
     protocol: TCP

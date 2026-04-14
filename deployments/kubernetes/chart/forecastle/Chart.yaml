@@ -2,7 +2,7 @@ apiVersion: v2
 name: forecastle
 description: forecastle chart that runs on kubernetes
 icon: https://github.com/stakater/Forecastle/raw/master/assets/web/forecastle-round-100px.png
-version: 1.3.0
+version: 1.4.0
 appVersion: "v2.0.0"
 keywords:
   - forecastle

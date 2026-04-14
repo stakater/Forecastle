@@ -93,10 +93,13 @@ spec:
           - --client-id={{ required "oidcProxy.clientId is required" .Values.forecastle.oidcProxy.clientId }}
           - --redirect-url={{ required "oidcProxy.redirectUrl is required" .Values.forecastle.oidcProxy.redirectUrl }}
           - --upstream=http://localhost:3000
-          - --tls-cert=/etc/tls/private/tls.crt
-          - --tls-key=/etc/tls/private/tls.key
+          - --tls-cert-file=/etc/tls/private/tls.crt
+          - --tls-key-file=/etc/tls/private/tls.key
           - --email-domain=*
           - --scope={{ .Values.forecastle.oidcProxy.scopes }}
+          {{- range .Values.forecastle.oidcProxy.extraArgs }}
+          - {{ . }}
+          {{- end }}
         env:
           - name: OAUTH2_PROXY_CLIENT_SECRET
             valueFrom:

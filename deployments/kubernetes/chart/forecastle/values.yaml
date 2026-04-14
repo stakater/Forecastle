@@ -102,11 +102,13 @@ forecastle:
     securityContext: {}
   oidcProxy:
     enabled: false
-    image: ""
+    image: "quay.io/oauth2-proxy/oauth2-proxy:v7.6.0"
     issuerUrl: ""
     clientId: ""
     redirectUrl: ""
     scopes: "openid email profile"
+    extraArgs:
+      - --skip-provider-button=true
     clientSecretRef:
       name: ""
       key: ""

@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  HELM_VERSION: "3.16.3"
+  HELM_VERSION: "3.20.2"
   REGISTRY: ghcr.io
 
 jobs:

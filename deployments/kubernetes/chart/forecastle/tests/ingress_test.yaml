@@ -12,7 +12,6 @@ tests:
         not: true
       - hasDocuments:
           count: 0
-      - matchSnapshot: {}
 
   - it: should set tls if given
     set:

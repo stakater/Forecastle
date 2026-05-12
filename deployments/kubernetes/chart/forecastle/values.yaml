@@ -13,6 +13,8 @@ forecastle:
     annotations: {}
     affinity: {}
     nodeSelector: {}
+    # Pod security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     podSecurityContext:
       {}
       # runAsNonRoot: true
@@ -20,6 +22,8 @@ forecastle:
       # fsGroup: 10001
       # seccompProfile:
       #   type: RuntimeDefault
+    # Container security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     securityContext:
       {}
       # runAsNonRoot: true

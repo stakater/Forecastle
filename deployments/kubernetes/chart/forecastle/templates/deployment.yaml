@@ -31,17 +31,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-      - {{- $containerSecurityContext := mustMergeOverwrite ((.Values.forecastle.container).securityContext | default dict) ((.Values.forecastle.deployment).securityContext | default dict) }}
-        {{- if $containerSecurityContext }}
-        securityContext: {{- toYaml $containerSecurityContext | nindent 12 }}
+      - name: {{ template "forecastle.name" . }}
+        image: "{{ .Values.forecastle.image.name }}:{{ .Values.forecastle.image.tag }}"
+        {{- with .Values.forecastle.deployment.securityContext }}
+        securityContext: {{- toYaml . | nindent 10 }}
         {{- end }}
         env:
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: "{{ .Values.forecastle.image.name }}:{{ .Values.forecastle.image.tag }}"
-        name: {{ template "forecastle.name" . }}
       {{- if .Values.forecastle.deployment.resources }}
         resources:
 {{ toYaml .Values.forecastle.deployment.resources | indent 10 }}

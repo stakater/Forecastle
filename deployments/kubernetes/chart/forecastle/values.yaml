@@ -43,6 +43,7 @@ forecastle:
       # limits:
       #   cpu: 200m
       #   memory: 64Mi
+    imagePullSecrets: []
   pod:
     annotations: {}
   podDisruptionBudget: {}

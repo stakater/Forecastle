@@ -94,15 +94,15 @@ forecastle:
     enabled: false
   openshiftOauthProxy:
     enabled: false
+    image: stakater/oauth-proxy:v0.0.2
     serviceAccountAnnotations: {}
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
-    # image: stakater/oauth-proxy:v0.0.2
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
     securityContext: {}
   oidcProxy:
     enabled: false

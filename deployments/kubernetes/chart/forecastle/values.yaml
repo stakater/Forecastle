@@ -15,8 +15,7 @@ forecastle:
     nodeSelector: {}
     # Pod security context
     # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    podSecurityContext:
-      {}
+    podSecurityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10001
       # fsGroup: 10001
@@ -24,8 +23,7 @@ forecastle:
       #   type: RuntimeDefault
     # Container security context
     # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    securityContext:
-      {}
+    securityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10002
       # runAsGroup: 10002
@@ -39,18 +37,17 @@ forecastle:
       #   type: RuntimeDefault
     tolerations: {}
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
   pod:
     annotations: {}
-  podDisruptionBudget:
-    {}
-    #minAvailable: 90%
-    #maxUnavailable: 10%
+  podDisruptionBudget: {}
+    # minAvailable: 90%
+    # maxUnavailable: 10%
   networkPolicy:
     enabled: false
     ingress:

@@ -1,3 +1,4 @@
+nameOverride:
 forecastle:
   labels:
     group: com.stakater.platform

@@ -90,8 +90,6 @@ forecastle:
     # Auto-detected from X-Forwarded-Prefix header if not set.
     # Leave empty for root path hosting.
     basePath:
-  proxy:
-    enabled: false
   openshiftOauthProxy:
     enabled: false
     image: stakater/oauth-proxy:v0.0.2

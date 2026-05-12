@@ -128,10 +128,10 @@ forecastle:
         paths:
           - path: /
             pathType: Prefix
-    #tls:
-    #- hosts:
-    #  - forecastle.example.com
-    #  secretName: ~
+    tls: []
+      # - hosts:
+      #     - forecastle.example.com
+      #   secretName: ~
 
   route:
     enabled: false

@@ -1,0 +1,24 @@
+suite: Deployment
+
+templates:
+  - ingress.yaml
+
+tests:
+  - it: should render nothing if not enabled
+    asserts:
+      - containsDocument:
+          kind: Ingress
+          apiVersion: networking.k8s.io/v1
+        not: true
+      - hasDocuments:
+          count: 0
+
+  - it: should set tls if given
+    set:
+      forecastle.ingress.enabled: true
+      forecastle.ingress.tls:
+        - secretName: my-tls-secret
+    asserts:
+      - equal:
+          path: spec.tls[0].secretName
+          value: my-tls-secret

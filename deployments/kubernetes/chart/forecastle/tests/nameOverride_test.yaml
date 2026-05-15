@@ -1,0 +1,27 @@
+suite: Override Resource Names
+
+templates:
+  - "templates/*.yaml"
+
+tests:
+  - it: should generate resource names based on Helm chart name by default
+    documentSelector:
+      path: metadata.name
+      matchMany: true
+      skipEmptyTemplates: true
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^forecastle
+
+  - it: should generate resource names based on nameOverride value when specified
+    set:
+      nameOverride: custom-forecastle
+    documentSelector:
+      path: metadata.name
+      matchMany: true
+      skipEmptyTemplates: true
+    asserts:
+      - matchRegex:
+          path: metadata.name
+          pattern: ^custom-forecastle

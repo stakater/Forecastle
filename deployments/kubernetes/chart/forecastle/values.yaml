@@ -1,9 +1,11 @@
+nameOverride:
+namespace:
+
 forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
     version: 1.5.0
-  namespace: default
   image:
     name: stakater/forecastle
     tag: v2.0.1
@@ -13,15 +15,17 @@ forecastle:
     annotations: {}
     affinity: {}
     nodeSelector: {}
-    podSecurityContext:
-      {}
+    # Pod security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    podSecurityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10001
       # fsGroup: 10001
       # seccompProfile:
       #   type: RuntimeDefault
-    securityContext:
-      {}
+    # Container security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    securityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10002
       # runAsGroup: 10002
@@ -35,18 +39,18 @@ forecastle:
       #   type: RuntimeDefault
     tolerations: {}
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
+    imagePullSecrets: []
   pod:
     annotations: {}
-  podDisruptionBudget:
-    {}
-    #minAvailable: 90%
-    #maxUnavailable: 10%
+  podDisruptionBudget: {}
+    # minAvailable: 90%
+    # maxUnavailable: 10%
   networkPolicy:
     enabled: false
     ingress:
@@ -86,19 +90,17 @@ forecastle:
     # Auto-detected from X-Forwarded-Prefix header if not set.
     # Leave empty for root path hosting.
     basePath:
-  proxy:
-    enabled: false
   openshiftOauthProxy:
     enabled: false
+    image: stakater/oauth-proxy:v0.0.2
     serviceAccountAnnotations: {}
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
-    # image: stakater/oauth-proxy:v0.0.2
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
     securityContext: {}
   oidcProxy:
     enabled: false
@@ -139,10 +141,10 @@ forecastle:
         paths:
           - path: /
             pathType: Prefix
-    #tls:
-    #- hosts:
-    #  - forecastle.example.com
-    #  secretName: ~
+    tls: []
+      # - hosts:
+      #     - forecastle.example.com
+      #   secretName: ~
   route:
     enabled: false
     annotations: {}

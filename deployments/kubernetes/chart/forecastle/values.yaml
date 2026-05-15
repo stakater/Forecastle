@@ -8,7 +8,7 @@ forecastle:
     version: 1.5.0
   image:
     name: stakater/forecastle
-    tag: v2.0.0
+    tag: v2.0.1
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
@@ -122,6 +122,16 @@ forecastle:
   service:
     annotations: {}
     expose: "false"
+  httpRoute:
+    enabled: false
+    annotations: {}
+    parentRefs: []
+    hostnames: []
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
   ingress:
     enabled: false
     annotations: {}
@@ -135,7 +145,6 @@ forecastle:
       # - hosts:
       #     - forecastle.example.com
       #   secretName: ~
-
   route:
     enabled: false
     annotations: {}

@@ -296,6 +296,18 @@ func TestGetAndValidateURLAnnotation(t *testing.T) {
 			key:         "forecastle.stakater.com/url",
 			want:        "",
 		},
+		{
+			name:        "WithURLContainingFragment",
+			annotations: map[string]string{"forecastle.stakater.com/url": "http://localhost/select/vmui/#/?accountID=1&projectID=0"},
+			key:         "forecastle.stakater.com/url",
+			want:        "http://localhost/select/vmui/#/?accountID=1&projectID=0",
+		},
+		{
+			name:        "WithURLContainingSimpleFragment",
+			annotations: map[string]string{"forecastle.stakater.com/url": "https://example.com/app#section"},
+			key:         "forecastle.stakater.com/url",
+			want:        "https://example.com/app#section",
+		},
 	}
 
 	for _, tt := range tests {

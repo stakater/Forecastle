@@ -1,0 +1,30 @@
+suite: Override Namespace
+
+templates:
+  - "templates/*.yaml"
+
+release:
+  namespace: my-namespace
+
+tests:
+  - it: should use Helm release namespace by default
+    documentSelector:
+      path: metadata.namespace
+      matchMany: true
+      skipEmptyTemplates: true
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: my-namespace
+
+  - it: should use namespace value when specified
+    set:
+      namespace: custom-namespace
+    documentSelector:
+      path: metadata.namespace
+      matchMany: true
+      skipEmptyTemplates: true
+    asserts:
+      - equal:
+          path: metadata.namespace
+          value: custom-namespace

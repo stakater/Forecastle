@@ -193,6 +193,13 @@ func TestIngressWrapper_GetURL(t *testing.T) {
 			want: "https://someotherurl.com",
 		},
 		{
+			name: "IngressWithURLContainingFragment",
+			fields: fields{
+				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "http://localhost/select/vmui/#/?accountID=1&projectID=0"),
+			},
+			want: "http://localhost/select/vmui/#/?accountID=1&projectID=0",
+		},
+		{
 			name: "IngressWithValidHostWithOverridenInvalidURL",
 			fields: fields{
 				ingress: testutil.AddAnnotationToIngress(testutil.CreateIngressWithHost("someIngress1", "google.com"), annotations.ForecastleURLAnnotation, "someotherurl42"),

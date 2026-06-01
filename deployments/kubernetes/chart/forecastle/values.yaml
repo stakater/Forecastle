@@ -1,27 +1,31 @@
+nameOverride:
+namespace:
+
 forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: 1.2.0
-  namespace: default
+    version: 2.0.0
   image:
     name: stakater/forecastle
-    tag: v2.0.0
+    tag: v2.0.1
   deployment:
     replicas: 1
     revisionHistoryLimit: 2
     annotations: {}
     affinity: {}
     nodeSelector: {}
-    podSecurityContext:
-      {}
+    # Pod security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    podSecurityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10001
       # fsGroup: 10001
       # seccompProfile:
       #   type: RuntimeDefault
-    securityContext:
-      {}
+    # Container security context
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    securityContext: {}
       # runAsNonRoot: true
       # runAsUser: 10002
       # runAsGroup: 10002
@@ -40,18 +44,18 @@ forecastle:
       enabled: false
       port: 6060
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
+    imagePullSecrets: []
   pod:
     annotations: {}
-  podDisruptionBudget:
-    {}
-    #minAvailable: 90%
-    #maxUnavailable: 10%
+  podDisruptionBudget: {}
+    # minAvailable: 90%
+    # maxUnavailable: 10%
   networkPolicy:
     enabled: false
     ingress:
@@ -91,23 +95,48 @@ forecastle:
     # Auto-detected from X-Forwarded-Prefix header if not set.
     # Leave empty for root path hosting.
     basePath:
-  proxy:
-    enabled: false
   openshiftOauthProxy:
     enabled: false
+    image: stakater/oauth-proxy:v0.0.2
     serviceAccountAnnotations: {}
     resources: {}
-    #   requests:
-    #     cpu: 100m
-    #     memory: 32Mi
-    #   limits:
-    #     cpu: 200m
-    #     memory: 64Mi
-    # image: stakater/oauth-proxy:v0.0.2
+      # requests:
+      #   cpu: 100m
+      #   memory: 32Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 64Mi
+    securityContext: {}
+  oidcProxy:
+    enabled: false
+    image: "quay.io/oauth2-proxy/oauth2-proxy:v7.6.0"
+    issuerUrl: ""
+    clientId: ""
+    redirectUrl: ""
+    scopes: "openid email profile"
+    extraArgs:
+      - --skip-provider-button=true
+    clientSecretRef:
+      name: ""
+      key: ""
+    cookieSecretRef:
+      name: ""
+      key: ""
+    resources: {}
     securityContext: {}
   service:
     annotations: {}
     expose: "false"
+  httpRoute:
+    enabled: false
+    annotations: {}
+    parentRefs: []
+    hostnames: []
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
   ingress:
     enabled: false
     annotations: {}
@@ -117,11 +146,10 @@ forecastle:
         paths:
           - path: /
             pathType: Prefix
-    #tls:
-    #- hosts:
-    #  - forecastle.example.com
-    #  secretName: ~
-
+    tls: []
+      # - hosts:
+      #     - forecastle.example.com
+      #   secretName: ~
   route:
     enabled: false
     annotations: {}

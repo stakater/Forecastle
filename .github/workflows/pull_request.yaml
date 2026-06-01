@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_FILE_PATH: Dockerfile
-  HELM_VERSION: "3.16.3"
+  HELM_VERSION: "3.20.2"
   REGISTRY: ghcr.io
 
 jobs:
@@ -17,13 +17,13 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Go
         id: go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
 
@@ -36,7 +36,7 @@ jobs:
           golangci-lint run --timeout=10m ./...
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Generate image repository path
         run: |
@@ -44,7 +44,7 @@ jobs:
 
       # Build amd64 only for fast PR validation (full multi-arch on push)
       - name: Build image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH }}
@@ -62,7 +62,7 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip-ci]')"
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 

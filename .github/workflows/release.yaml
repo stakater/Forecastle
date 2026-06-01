@@ -15,17 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           version: latest
           args: release --clean
@@ -44,20 +44,20 @@ jobs:
             runner: ubuntu-24.04-arm
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to ghcr registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: stakater-user
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.STAKATER_DOCKERHUB_USERNAME }}
           password: ${{ secrets.STAKATER_DOCKERHUB_PASSWORD }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: Build and push by digest (GHCR)
         id: build_ghcr
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH }}
@@ -90,7 +90,7 @@ jobs:
 
       - name: Build and push by digest (DockerHub)
         id: build_dockerhub
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ env.DOCKER_FILE_PATH }}
@@ -112,7 +112,7 @@ jobs:
           touch "/tmp/digests/dockerhub/${digest_dockerhub#sha256:}"
 
       - name: Upload GHCR digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: digests-ghcr-${{ matrix.runner }}
           path: /tmp/digests/ghcr/*
@@ -120,7 +120,7 @@ jobs:
           retention-days: 1
 
       - name: Upload DockerHub digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: digests-dockerhub-${{ matrix.runner }}
           path: /tmp/digests/dockerhub/*
@@ -133,31 +133,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download GHCR digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: /tmp/digests/ghcr
           pattern: digests-ghcr-*
           merge-multiple: true
 
       - name: Download DockerHub digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: /tmp/digests/dockerhub
           pattern: digests-dockerhub-*
           merge-multiple: true
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to ghcr registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: stakater-user
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.STAKATER_DOCKERHUB_USERNAME }}
           password: ${{ secrets.STAKATER_DOCKERHUB_PASSWORD }}
@@ -193,10 +193,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Helm
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
 
       - name: Generate Kubernetes manifests
         run: |

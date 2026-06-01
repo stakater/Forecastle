@@ -2,6 +2,7 @@ package kube
 
 import (
 	"os"
+	"time"
 
 	routesClient "github.com/openshift/client-go/route/clientset/versioned"
 	forecastlev1alpha1 "github.com/stakater/Forecastle/v1/pkg/client/clientset/versioned"
@@ -12,6 +13,12 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	gatewayClient "sigs.k8s.io/gateway-api/pkg/client/clientset/versioned"
 )
+
+// requestTimeout bounds every Kubernetes API request. Without it, a request
+// issued on a silently-dead connection (API server rollover, leader change,
+// idle/NAT timeout) blocks forever — leaking a goroutine on every background
+// refresh cycle and slowly driving up CPU and memory over days.
+const requestTimeout = 30 * time.Second
 
 var (
 	logger = log.New()
@@ -108,6 +115,11 @@ func getClientConfig() *rest.Config {
 	if err != nil {
 		config = getOutOfClusterConfig()
 	}
+
+	// Bound every request so a dead connection can never block a goroutine
+	// indefinitely. This is the safety net that stops the slow goroutine
+	// build-up (and the resulting CPU/memory creep) when API connections die.
+	config.Timeout = requestTimeout
 
 	return config
 }

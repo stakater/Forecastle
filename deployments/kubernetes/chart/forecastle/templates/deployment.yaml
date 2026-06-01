@@ -41,6 +41,14 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+      {{- if .Values.forecastle.deployment.pprof.enabled }}
+        args:
+        - --enable-pprof
+        - --pprof-port={{ .Values.forecastle.deployment.pprof.port }}
+        ports:
+        - name: pprof
+          containerPort: {{ .Values.forecastle.deployment.pprof.port }}
+      {{- end }}
       {{- if .Values.forecastle.deployment.resources }}
         resources:
 {{ toYaml .Values.forecastle.deployment.resources | indent 10 }}

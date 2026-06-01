@@ -33,11 +33,18 @@ func main() {
 	// Parse command line flags
 	port := flag.Int("port", 3000, "Server port")
 	cacheInterval := flag.Duration("cache-interval", 20*time.Second, "Background cache refresh interval")
+	enablePprof := flag.Bool("enable-pprof", false, "Enable the pprof debug server")
+	pprofPort := flag.Int("pprof-port", 6060, "Port for the pprof debug server (used when --enable-pprof is set)")
 	flag.Parse()
 
 	// Create context that cancels on interrupt
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	// Start the pprof debug server if enabled
+	if *enablePprof {
+		startPprofServer(ctx, *pprofPort)
+	}
 
 	// Handle shutdown signals
 	sigChan := make(chan os.Signal, 1)

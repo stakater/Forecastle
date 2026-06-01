@@ -67,7 +67,7 @@ func (al *List) Get() ([]forecastle.App, error) {
 
 func convertForecastleAppCustomResourcesToForecastleApps(clients kube.Clients, forecastleApps []v1alpha1.ForecastleApp) (apps []forecastle.App, err error) {
 	for _, forecastleApp := range forecastleApps {
-		logger.Infof("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
+		logger.Debugf("Found forecastleApp with Name '%v' in Namespace '%v'", forecastleApp.Name, forecastleApp.Namespace)
 
 		url, err := getURL(clients, forecastleApp)
 

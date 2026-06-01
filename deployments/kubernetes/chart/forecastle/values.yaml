@@ -34,6 +34,11 @@ forecastle:
       # seccompProfile:
       #   type: RuntimeDefault
     tolerations: {}
+    # pprof debug server for live profiling (CPU/heap/goroutine dumps).
+    # Disabled by default; reach it via `kubectl port-forward` on pprof.port.
+    pprof:
+      enabled: false
+      port: 6060
     resources: {}
     #   requests:
     #     cpu: 100m

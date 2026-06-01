@@ -24,3 +24,53 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation
           value: false
+
+  - it: includes forecastle container arg and specifies port when pprof is enabled
+    template: deployment.yaml
+    set:
+      forecastle.deployment.pprof.enabled: true
+      forecastle.deployment.pprof.port: 7070
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args[0]
+          value: --enable-pprof
+      - equal:
+          path: spec.template.spec.containers[0].args[1]
+          value: --pprof-port=7070
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].name
+          value: pprof
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 7070
+
+  - it: includes forecastle container args when specified
+    template: deployment.yaml
+    set:
+      forecastle.deployment.args:
+        - --cache-interval=45s
+        - --port=8080
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args[0]
+          value: --cache-interval=45s
+      - equal:
+          path: spec.template.spec.containers[0].args[1]
+          value: --port=8080
+
+  - it: includes both custom args and pprof arg when specified together
+    template: deployment.yaml
+    set:
+      forecastle.deployment.args:
+        - --cache-interval=45s
+      forecastle.deployment.pprof.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args[0]
+          value: --cache-interval=45s
+      - equal:
+          path: spec.template.spec.containers[0].args[1]
+          value: --enable-pprof
+      - equal:
+          path: spec.template.spec.containers[0].args[2]
+          value: --pprof-port=6060

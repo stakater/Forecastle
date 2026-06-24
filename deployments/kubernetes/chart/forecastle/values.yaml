@@ -5,7 +5,7 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: 2.0.0
+    version: 2.1.0
   image:
     name: stakater/forecastle
     tag: v2.0.1
@@ -37,6 +37,9 @@ forecastle:
       # allowPrivilegeEscalation: false
       # seccompProfile:
       #   type: RuntimeDefault
+    # CLI flags for the main Forecastle container
+    # ref: https://github.com/stakater/Forecastle#command-line-flags
+    args: []
     tolerations: {}
     # pprof debug server for live profiling (CPU/heap/goroutine dumps).
     # Disabled by default; reach it via `kubectl port-forward` on pprof.port.

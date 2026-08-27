@@ -33,42 +33,86 @@ spec:
           spec:
             properties:
               group:
+                description: Heading the app is listed under. Lowercased before
+                  grouping, so groups differing only in casing are one group.
                 type: string
               icon:
+                description: URL of the icon shown on the app's tile. An empty
+                  string leaves the dashboard to draw a generated tile, which
+                  also happens when the URL fails to load.
                 type: string
               instance:
+                description: Comma separated list of Forecastle instance names
+                  this app appears on, matched against the instanceName in each
+                  instance's config. An instance that sets instanceName lists
+                  only apps naming it, so leaving this empty hides the app from
+                  every such instance. Instances with no instanceName list all
+                  apps regardless of this field.
                 type: string
               name:
+                description: Display name of the app.
                 type: string
               networkRestricted:
+                description: Marks an app that is only reachable from inside the
+                  network. The dashboard badges it; it stays listed and
+                  clickable.
                 type: boolean
               properties:
                 additionalProperties:
                   type: string
+                description: Arbitrary key/value pairs shown as an expandable
+                  list on the app's tile.
                 type: object
               url:
+                description: URL the app's tile links to. Takes precedence over
+                  urlFrom, which is only read when this is empty.
                 type: string
               urlFrom:
+                description: Reads the URL from a routing resource in this
+                  namespace instead of hardcoding it. Set one reference. They are
+                  tried in the order ingressRef, routeRef, ingressRouteRef,
+                  httpRouteRef, and the first one set wins. A reference that
+                  cannot be resolved leaves the app out of the dashboard, with
+                  the reason only in Forecastle's log.
                 properties:
                   ingressRef:
+                    description: Ingress in this namespace to read the URL from.
+                      Only spec.rules[0] is read, plus its first path, so an
+                      Ingress serving several hosts yields one app. https is used
+                      when spec.tls names a host, otherwise http.
                     type: object
                     properties:
                       name:
+                        description: Name of the Ingress.
                         type: string
                   routeRef:
+                    description: OpenShift Route in this namespace to read the
+                      URL from. Requires the route.openshift.io API. https is
+                      used when spec.tls is set, otherwise http.
                     type: object
                     properties:
                       name:
+                        description: Name of the Route.
                         type: string
                   ingressRouteRef:
+                    description: Traefik IngressRoute in this namespace to read
+                      the URL from. Requires the traefik.io API. The host is
+                      taken from the routes' match expressions; https is used
+                      when spec.tls is set, otherwise http.
                     type: object
                     properties:
                       name:
+                        description: Name of the IngressRoute.
                         type: string
                   httpRouteRef:
+                    description: Gateway API HTTPRoute in this namespace to read
+                      the URL from. Requires the gateway.networking.k8s.io API.
+                      spec.hostnames[0] is used, always as https, since TLS is
+                      configured on the Gateway listener.
                     type: object
                     properties:
                       name:
+                        description: Name of the HTTPRoute.
                         type: string
                 type: object
             required:

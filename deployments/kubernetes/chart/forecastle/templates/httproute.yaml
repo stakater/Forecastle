@@ -40,7 +40,7 @@ spec:
         {{- toYaml .backendRefs | nindent 4 }}
       {{- else }}
         - name: {{ $name }}
-          port: http
+          port: 8080
           weight: 1
       {{- end }}
     {{- end }}

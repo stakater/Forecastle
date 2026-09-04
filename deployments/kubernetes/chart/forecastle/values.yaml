@@ -5,7 +5,7 @@ forecastle:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: 2.1.1
+    version: 2.1.2
   image:
     name: stakater/forecastle
     tag: v2.0.2

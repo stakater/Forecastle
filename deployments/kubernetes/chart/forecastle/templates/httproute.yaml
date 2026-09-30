@@ -37,7 +37,7 @@ spec:
       {{- end }}
       backendRefs:
       {{- if .backendRefs }}
-        {{- toYaml .backendRefs | nindent 4 }}
+        {{- toYaml .backendRefs | nindent 8 }}
       {{- else }}
         - name: {{ $name }}
           port: 80

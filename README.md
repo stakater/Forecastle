@@ -215,6 +215,8 @@ Forecastle's design allows for running multiple instances, providing scalability
 
 *Multiple Instance Display*: It's possible for a single application (ingress) to appear in multiple Forecastle dashboards. For instance, if you have two instances named dev-dashboard and prod-dashboard, adding `dev-dashboard,prod-dashboard` in the ingress's instance annotation will ensure the application is visible on both dashboards.
 
+*Naming an Instance Makes the Annotation Required*: An instance configured with `instanceName` lists **only** apps that name it. An ingress or HTTPRoute without the `forecastle.stakater.com/instance` annotation, or a ForecastleApp with an empty `instance`, does not appear on that instance. Instances left without an `instanceName` list every app they can see, whatever its instance value.
+
 #### Helm Deployment Considerations
 
 *Unique Naming in Helm*: When deploying Forecastle instances via Helm, ensure each instance has a unique `nameOverride` value (default is forecastle). This step is crucial to avoid conflicts between global resources like ClusterRole and ClusterRoleBinding.
@@ -265,12 +267,15 @@ spec:
 
 #### Automatically discover URL's from Kubernetes Resources
 
-ForecastleApp CRD supports automatic URL discovery from certain Kubernetes resources, such as:
+Instead of hardcoding `url`, a ForecastleApp can point at a routing resource and
+let Forecastle read the URL from it. Set exactly one reference under `urlFrom`:
 
-- Ingress: Ensures the application's URL is automatically retrieved from the Ingress resource in the same namespace.
-
-To utilize this feature, add the urlFrom field to your ForecastleApp specification like so:
-*Please note that the type of resource that you want to discover has to be in the same namespace as the `ForecastleApp` CR.*
+| Field | Resource | Available since |
+| --- | --- | --- |
+| `ingressRef` | `networking.k8s.io/v1` `Ingress` | v1.x |
+| `routeRef` | `route.openshift.io/v1` `Route` (OpenShift) | v1.x |
+| `ingressRouteRef` | `traefik.io/v1alpha1` `IngressRoute` (Traefik) | v1.x |
+| `httpRouteRef` | `gateway.networking.k8s.io/v1` `HTTPRoute` (Gateway API) | v2.0.0 |
 
 ```yaml
 apiVersion: forecastle.stakater.com/v1alpha1
@@ -286,9 +291,56 @@ spec:
       name: my-app-ingress
 ```
 
-This configuration instructs Forecastle to fetch the app URL directly from the specified Ingress resource, simplifying deployment and configuration.
+Swap `ingressRef` for `httpRouteRef` to read the URL from a Gateway API
+HTTPRoute instead:
+
+```yaml
+  urlFrom:
+    httpRouteRef:
+      name: my-app-route
+```
+
+##### How the URL is built
+
+Every source honours a `forecastle.stakater.com/url` annotation **on the
+referenced resource**, which overrides everything below. Otherwise:
+
+- **Ingress**: the host from `spec.tls[0].hosts[0]` as `https://`, falling back
+  to `spec.rules[0].host` as `http://`, then to the load balancer hostname in
+  `status`. The path of `spec.rules[0].http.paths[0]` is appended. Only the
+  first rule is ever read, so an Ingress serving several hosts yields one app,
+  and which one depends on rule order. Give such hosts their own Ingress, or set
+  the `url` annotation, or write `spec.url` on the ForecastleApp.
+- **Route**: `spec.host`, as `https://` when `spec.tls` is set, otherwise
+  `http://`.
+- **IngressRoute**: the first hostname found in the routes' `match`
+  expressions, as `https://` when `spec.tls` is set, otherwise `http://`.
+- **HTTPRoute**: `spec.hostnames[0]`, always as `https://`, since TLS is
+  configured on the Gateway listener rather than on the route.
+
+##### Rules and limits
+
+- `spec.url` wins. `urlFrom` is only consulted when `url` is empty.
+- References are resolved by name in the ForecastleApp's own namespace. There is
+  no cross-namespace or cross-cluster lookup: Forecastle only ever reads the
+  cluster it runs in.
+- References are tried in the order `ingressRef`, `routeRef`,
+  `ingressRouteRef`, `httpRouteRef`, and the first one set wins. Setting two
+  silently uses one.
+- `routeRef`, `ingressRouteRef` and `httpRouteRef` need their API group present
+  in the cluster. Forecastle detects the groups at startup and logs which ones
+  it found.
+- If a reference cannot be resolved, the app is left out of the dashboard and
+  the reason appears only in Forecastle's log. Nothing is shown in the UI.
 
 *Note: To use the CRD feature, ensure it's enabled by setting `crdEnabled: true` in the Forecastle configuration or by enabling it in the Helm chart.*
+
+*Note: `helm upgrade` does not update CRDs that ship in a chart's `crds/`
+directory. If the installed `forecastleapps` CRD predates the `urlFrom` field
+you are using, the API server prunes that field on apply, leaving no error
+behind and no URL for Forecastle to read. Check with
+`kubectl explain forecastleapp.spec.urlFrom --recursive` and apply the CRD from
+the current chart if a field is missing.*
 
 
 ## Developer Guide

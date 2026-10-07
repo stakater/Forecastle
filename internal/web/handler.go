@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/stakater/Forecastle/v1/pkg/config"
@@ -34,6 +35,10 @@ type Handler struct {
 	clients       *kube.Clients
 	configFunc    func() (*config.Config, error)
 	cacheInterval time.Duration
+	refreshFunc   func(context.Context)
+
+	backgroundStart sync.Once
+	refreshRunning  atomic.Bool
 
 	// Cached apps data
 	appsCache     []forecastle.App
@@ -47,33 +52,47 @@ type Handler struct {
 
 // NewHandler creates a new Handler instance
 func NewHandler(clients *kube.Clients, configFunc func() (*config.Config, error), cacheInterval time.Duration) *Handler {
-	return &Handler{
+	h := &Handler{
 		clients:       clients,
 		configFunc:    configFunc,
 		cacheInterval: cacheInterval,
 	}
+	h.refreshFunc = h.refreshCache
+	return h
 }
 
 // StartBackgroundCache starts the background cache refresh goroutine
 func (h *Handler) StartBackgroundCache(ctx context.Context) {
-	// Initial load
-	h.refreshCache(ctx)
+	h.backgroundStart.Do(func() {
+		// Initial load
+		h.refreshCacheIfIdle(ctx)
 
-	// Periodic refresh
-	ticker := time.NewTicker(h.cacheInterval)
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				ticker.Stop()
-				return
-			case <-ticker.C:
-				h.refreshCache(ctx)
+		// Periodic refresh
+		go func() {
+			ticker := time.NewTicker(h.cacheInterval)
+			defer ticker.Stop()
+
+			for {
+				select {
+				case <-ctx.Done():
+					return
+				case <-ticker.C:
+					h.refreshCacheIfIdle(ctx)
+				}
 			}
-		}
-	}()
+		}()
 
-	logger.Info("Background cache started with interval: ", h.cacheInterval)
+		logger.Info("Background cache started with interval: ", h.cacheInterval)
+	})
+}
+
+func (h *Handler) refreshCacheIfIdle(ctx context.Context) {
+	if !h.refreshRunning.CompareAndSwap(false, true) {
+		return
+	}
+	defer h.refreshRunning.Store(false)
+
+	h.refreshFunc(ctx)
 }
 
 func (h *Handler) refreshCache(ctx context.Context) {
@@ -99,7 +118,7 @@ func (h *Handler) refreshCache(ctx context.Context) {
 	h.appsCacheTime = time.Now()
 	h.appsCacheMu.Unlock()
 
-	logger.Info("Cache refreshed with ", len(apps), " apps")
+	logger.Debug("Cache refreshed with ", len(apps), " apps")
 }
 
 func (h *Handler) discoverApps(cfg *config.Config) ([]forecastle.App, error) {
@@ -122,7 +141,7 @@ func (h *Handler) discoverApps(cfg *config.Config) ([]forecastle.App, error) {
 	} else {
 		namespacesString = strings.Join(namespaces, ",")
 	}
-	logger.Info("Looking for forecastle apps in namespaces: " + namespacesString)
+	logger.Debug("Looking for forecastle apps in namespaces: " + namespacesString)
 
 	var allApps []forecastle.App
 

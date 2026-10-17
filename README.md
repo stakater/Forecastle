@@ -4,32 +4,48 @@
 
 ## Table of Contents:
 
-- [Introduction](#introduction)
-  - [Problem](#problem)
-  - [Solution](#solution)
-- [Features](#features)
-- [Admin Guide](#admin-guide)
-  - [Vanilla Manifests](#vanilla-manifests)
-  - [Helm Charts](#helm-charts)
-  - [Configuration](#configuration)
-    - [NamespaceSelector](#namespaceselector)
-    - [Custom Apps](#custom-apps)
-    - [Example Config](#example-configuration)
-  - [Scaling with Multiple Instances](#scaling-with-multiple-instances)
-- [User Guide](#user-guide)
-  - [Ingresses](#ingresses)
-  - [ForecastleApp CRD](#forecastleapp-crd)
-  - [Automatically discover URL's from Kubernetes Resources](#automatically-discover-urls-from-kubernetes-resources)
-- [Developer Guide](#developer-guide)
-  - [Bug Reports & Feature Requests](#bug-reports--feature-requests)
-  - [Developing](#developing)
-- [Releasing](#releasing)
-- [Help](#help)
-  - [Talk to us on Slack](#talk-to-us-on-slack)
-- [Changelog](#changelog)
-- [License](#license)
-- [About](#about)
-  - [Why name Forecastle](#why-the-name-forecastle)
+- [ Forecastle](#-forecastle)
+  - [Table of Contents:](#table-of-contents)
+  - [Introduction](#introduction)
+    - [Problem](#problem)
+    - [Solution](#solution)
+  - [Features](#features)
+  - [Admin Guide](#admin-guide)
+    - [Vanilla Manifests](#vanilla-manifests)
+      - [Step 1: Apply manifests](#step-1-apply-manifests)
+        - [Accessing the Dashboard](#accessing-the-dashboard)
+      - [Step 2: Update configmap](#step-2-update-configmap)
+    - [Helm Charts](#helm-charts)
+    - [Configuration](#configuration)
+      - [Detailed Configurations](#detailed-configurations)
+        - [NamespaceSelector](#namespaceselector)
+        - [Custom Apps](#custom-apps)
+      - [Example Configuration](#example-configuration)
+    - [Scaling with Multiple Instances](#scaling-with-multiple-instances)
+      - [Deploying Multiple Instances](#deploying-multiple-instances)
+      - [Configuring Named Instances for Enhanced Flexibility](#configuring-named-instances-for-enhanced-flexibility)
+      - [Controlling Application Display Across Instances](#controlling-application-display-across-instances)
+      - [Helm Deployment Considerations](#helm-deployment-considerations)
+  - [User Guide](#user-guide)
+    - [Ingresses](#ingresses)
+    - [ForecastleApp CRD](#forecastleapp-crd)
+      - [Automatically discover URL's from Kubernetes Resources](#automatically-discover-urls-from-kubernetes-resources)
+  - [Developer Guide](#developer-guide)
+    - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
+    - [Architecture](#architecture)
+    - [API Endpoints](#api-endpoints)
+    - [Developing](#developing)
+    - [Local Development](#local-development)
+    - [Command Line Flags](#command-line-flags)
+  - [Releasing](#releasing)
+    - [App Release (Docker images, binaries, manifests)](#app-release-docker-images-binaries-manifests)
+    - [Helm Chart Release](#helm-chart-release)
+  - [Help](#help)
+    - [Talk to us on Slack](#talk-to-us-on-slack)
+  - [Changelog](#changelog)
+  - [License](#license)
+  - [About](#about)
+    - [Why the name "Forecastle"?](#why-the-name-forecastle)
 
 
 ## Introduction
@@ -97,7 +113,7 @@ kubectl apply -f https://github.com/stakater/Forecastle/releases/latest/download
 
 ##### Accessing the Dashboard
 
-For Kubernetes environments, you can use the following port-foward command to access the Forecastle dashboard: 
+For Kubernetes environments, you can use the following port-foward command to access the Forecastle dashboard:
 ```bash
 kubectl port-forward svc/forecastle 8080:8080
 ```
@@ -217,11 +233,31 @@ Forecastle's design allows for running multiple instances, providing scalability
 
 #### Helm Deployment Considerations
 
-*Unique Naming in Helm*: When deploying Forecastle instances via Helm, ensure each instance has a unique `nameOverride` value (default is forecastle). This step is crucial to avoid conflicts between global resources like ClusterRole and ClusterRoleBinding.
+Forecastle Helm chart supports two RBAC patterns, selected via `forecastle.rbac.scope`:
+
+1. **Cluster scope (default)** - a `ClusterRole`/`ClusterRoleBinding` lets a single Forecastle instance watch resources across any namespace.
+
+    ```yaml
+    forecastle:
+      rbac:
+        scope: cluster
+    ```
+
+    > [!important]
+    > When running **multiple** cluster-scoped instances, give each Helm release a unique `nameOverride` value to avoid collisions on the `ClusterRole`/`ClusterRoleBinding` resources naming.
+2. **Namespace scope** - a `Role`/`RoleBinding` limited to resources in the same namespace. No cluster-wide permissions are granted, and the discovery scope is forced to the release namespace (any `config.namespaceSelector` value is ignored).
+
+    ```yaml
+    forecastle:
+      rbac:
+        scope: namespace
+    ```
+
+Alternatively, set `forecastle.rbac.create: false` to manage RBAC resources yourself.
 
 ## User Guide
 
-This section is intended for Users aiming to use Forecastle in their Kubernetes environments.  
+This section is intended for Users aiming to use Forecastle in their Kubernetes environments.
 
 ### Ingresses
 
@@ -241,7 +277,7 @@ Forecastle identifies applications through annotations added to Kubernetes ingre
 
 ### ForecastleApp CRD
 
-Another way Forecastle enhances your ability to dynamically integrate applications is by using ForecastleApp Custom Resource Definition (CRD). This feature adds a layer of flexibility, allowing you to separate the application configuration from the Ingress settings and Forecastle's own configuration.  
+Another way Forecastle enhances your ability to dynamically integrate applications is by using ForecastleApp Custom Resource Definition (CRD). This feature adds a layer of flexibility, allowing you to separate the application configuration from the Ingress settings and Forecastle's own configuration.
 
 **Creating a ForecastleApp:**
 

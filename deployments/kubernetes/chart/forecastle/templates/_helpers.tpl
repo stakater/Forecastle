@@ -7,6 +7,13 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Allow the release namespace to be overridden
+*/}}
+{{- define "forecastle.namespace" -}}
+{{- default .Release.Namespace .Values.namespace -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -70,4 +77,40 @@ Returns oauth redirection annotation according to the release name
 */}}
 {{- define "serviceaccount.redirectreference" -}}
 serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"{{ template "forecastle.name" . }}"}}'
+{{- end -}}
+
+{{/*
+Validate the RBAC scope value
+*/}}
+{{- define "forecastle.rbac.validate" -}}
+{{- $scope := .Values.forecastle.rbac.scope -}}
+{{- if not (or (eq $scope "cluster") (eq $scope "namespace")) -}}
+{{- fail (printf "forecastle.rbac.scope must be either \"cluster\" or \"namespace\", got %q" $scope) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Shared RBAC rules for the resources Forecastle discovers
+*/}}
+{{- define "forecastle.rbac.rules" -}}
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list"]
+{{- if .Values.forecastle.route.enabled }}
+- apiGroups: ["route.openshift.io"]
+  resources: ["routes"]
+  verbs: ["get", "list"]
+{{- end }}
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["httproutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["traefik.containo.us"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["traefik.io"]
+  resources: ["ingressroutes"]
+  verbs: ["get", "list"]
+- apiGroups: ["forecastle.stakater.com"]
+  resources: ["forecastleapps"]
+  verbs: ["get", "list"]
 {{- end -}}

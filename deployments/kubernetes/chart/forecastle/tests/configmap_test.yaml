@@ -1,0 +1,49 @@
+suite: ConfigMap
+
+templates:
+  - templates/configmap.yaml
+
+release:
+  namespace: my-namespace
+
+tests:
+  - it: should pass the namespaceSelector if RBAC scope is "cluster"
+    set:
+      forecastle.config.namespaceSelector:
+        matchNames:
+          - foo
+          - bar
+    asserts:
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "matchNames:"
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "- foo"
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "- bar"
+
+  - it: should enforce the namespaceSelector to the Helm release namespace if RBAC scope is "namespace"
+    set:
+      forecastle.rbac.scope: namespace
+      forecastle.config.namespaceSelector:
+        any: true
+        labelSelector:
+          matchLabels:
+            team: platform
+        matchNames:
+          - foo
+    asserts:
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "- my-namespace"
+      - notMatchRegex:
+          path: data["config.yaml"]
+          pattern: "- foo"
+      - notMatchRegex:
+          path: data["config.yaml"]
+          pattern: "any:"
+      - notMatchRegex:
+          path: data["config.yaml"]
+          pattern: "labelSelector:"

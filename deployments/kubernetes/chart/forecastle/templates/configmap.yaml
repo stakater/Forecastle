@@ -8,4 +8,10 @@ metadata:
 {{ include "forecastle.labels.chart" . | indent 4 }}
 data:
   config.yaml: |-
+{{- if eq .Values.forecastle.rbac.scope "namespace" }}
+{{- $config := omit .Values.forecastle.config "namespaceSelector" }}
+{{- $config = merge (dict "namespaceSelector" (dict "matchNames" (list (include "forecastle.namespace" .)))) $config }}
+{{ toYaml $config | indent 4 -}}
+{{- else }}
 {{ toYaml .Values.forecastle.config | indent 4 -}}
+{{- end }}

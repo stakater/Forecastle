@@ -1,0 +1,64 @@
+suite: RBAC
+
+templates:
+  - templates/rbac.yaml
+
+release:
+  name: forecastle
+  namespace: my-namespace
+
+tests:
+  - it: should always render the ServiceAccount
+    documentSelector:
+      path: kind
+      value: ServiceAccount
+    asserts:
+      - isKind:
+          of: ServiceAccount
+      - equal:
+          path: metadata.name
+          value: forecastle
+      - equal:
+          path: metadata.namespace
+          value: my-namespace
+
+  - it: should render only the ServiceAccount when rbac.create is false
+    set:
+      forecastle.rbac.create: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - containsDocument:
+          kind: ServiceAccount
+          apiVersion: v1
+
+  - it: should fail if RBAC scope is set to unsupported value
+    set:
+      forecastle.rbac.scope: invalid
+    asserts:
+      - failedTemplate:
+          errorMessage: forecastle.rbac.scope must be either "cluster" or "namespace", got "invalid"
+
+  - it: should render ClusterRole and ClusterRoleBinding by default
+    asserts:
+      - containsDocument:
+          kind: ClusterRole
+          apiVersion: rbac.authorization.k8s.io/v1
+          any: true
+      - containsDocument:
+          kind: ClusterRoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          any: true
+
+  - it: should render a Role and RoleBinding if RBAC scope is "namespace"
+    set:
+      forecastle.rbac.scope: namespace
+    asserts:
+      - containsDocument:
+          kind: Role
+          apiVersion: rbac.authorization.k8s.io/v1
+          any: true
+      - containsDocument:
+          kind: RoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          any: true

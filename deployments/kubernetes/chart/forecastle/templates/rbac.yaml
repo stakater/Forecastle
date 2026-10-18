@@ -12,7 +12,39 @@ metadata:
     {{- end }}
   {{- end }}
   name: {{ template "forecastle.name" . }}
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  namespace: {{ include "forecastle.namespace" . }}
+{{- if .Values.forecastle.rbac.create }}
+{{- include "forecastle.rbac.validate" . }}
+{{- if eq .Values.forecastle.rbac.scope "namespace" }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "forecastle.fullname" . }}-ingress-role
+  namespace: {{ include "forecastle.namespace" . }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+rules:
+{{ include "forecastle.rbac.rules" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "forecastle.fullname" . }}-ingress-role-binding
+  namespace: {{ include "forecastle.namespace" . }}
+  labels:
+{{ include "forecastle.labels.stakater" . | indent 4 }}
+{{ include "forecastle.labels.chart" . | indent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "forecastle.fullname" . }}-ingress-role
+subjects:
+- kind: ServiceAccount
+  name: {{ template "forecastle.name" . }}
+  namespace: {{ include "forecastle.namespace" . }}
+{{- else }}
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -25,26 +57,7 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces"]
   verbs: ["get", "list"]
-- apiGroups: ["networking.k8s.io"]
-  resources: ["ingresses"]
-  verbs: ["get", "list"]
-{{- if .Values.forecastle.route.enabled }}
-- apiGroups: ["route.openshift.io"]
-  resources: ["routes"]
-  verbs: ["get", "list"]
-{{- end }}
-- apiGroups: ["gateway.networking.k8s.io"]
-  resources: ["httproutes"]
-  verbs: ["get", "list"]
-- apiGroups: ["traefik.containo.us"]
-  resources: ["ingressroutes"]
-  verbs: ["get", "list"]
-- apiGroups: ["traefik.io"]
-  resources: ["ingressroutes"]
-  verbs: ["get", "list"]
-- apiGroups: ["forecastle.stakater.com"]
-  resources: ["forecastleapps"]
-  verbs: ["get", "list"]
+{{ include "forecastle.rbac.rules" . }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -60,4 +73,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "forecastle.name" . }}
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  namespace: {{ include "forecastle.namespace" . }}
+{{- end }}
+{{- end }}

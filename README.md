@@ -31,7 +31,6 @@
 - [About](#about)
   - [Why name Forecastle](#why-the-name-forecastle)
 
-
 ## Introduction
 ### Problem
 
@@ -97,7 +96,7 @@ kubectl apply -f https://github.com/stakater/Forecastle/releases/latest/download
 
 ##### Accessing the Dashboard
 
-For Kubernetes environments, you can use the following port-foward command to access the Forecastle dashboard: 
+For Kubernetes environments, you can use the following port-foward command to access the Forecastle dashboard:
 ```bash
 kubectl port-forward svc/forecastle 8080:8080
 ```
@@ -217,11 +216,31 @@ Forecastle's design allows for running multiple instances, providing scalability
 
 #### Helm Deployment Considerations
 
-*Unique Naming in Helm*: When deploying Forecastle instances via Helm, ensure each instance has a unique `nameOverride` value (default is forecastle). This step is crucial to avoid conflicts between global resources like ClusterRole and ClusterRoleBinding.
+Forecastle Helm chart supports two RBAC patterns, selected via `forecastle.rbac.scope`:
+
+1. **Cluster scope (default)** - a `ClusterRole`/`ClusterRoleBinding` lets a single Forecastle instance watch resources across any namespace.
+
+    ```yaml
+    forecastle:
+      rbac:
+        scope: cluster
+    ```
+
+    > [!important]
+    > When running **multiple** cluster-scoped instances, give each Helm release a unique `nameOverride` value to avoid collisions on the `ClusterRole`/`ClusterRoleBinding` resources naming.
+2. **Namespace scope** - a `Role`/`RoleBinding` limited to resources in the same namespace. No cluster-wide permissions are granted, and the discovery scope is forced to the release namespace (any `config.namespaceSelector` value is ignored).
+
+    ```yaml
+    forecastle:
+      rbac:
+        scope: namespace
+    ```
+
+Alternatively, set `forecastle.rbac.create: false` to manage RBAC resources yourself.
 
 ## User Guide
 
-This section is intended for Users aiming to use Forecastle in their Kubernetes environments.  
+This section is intended for Users aiming to use Forecastle in their Kubernetes environments.
 
 ### Ingresses
 
@@ -241,7 +260,7 @@ Forecastle identifies applications through annotations added to Kubernetes ingre
 
 ### ForecastleApp CRD
 
-Another way Forecastle enhances your ability to dynamically integrate applications is by using ForecastleApp Custom Resource Definition (CRD). This feature adds a layer of flexibility, allowing you to separate the application configuration from the Ingress settings and Forecastle's own configuration.  
+Another way Forecastle enhances your ability to dynamically integrate applications is by using ForecastleApp Custom Resource Definition (CRD). This feature adds a layer of flexibility, allowing you to separate the application configuration from the Ingress settings and Forecastle's own configuration.
 
 **Creating a ForecastleApp:**
 

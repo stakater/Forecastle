@@ -74,3 +74,82 @@ tests:
       - equal:
           path: spec.template.spec.containers[0].args[2]
           value: --pprof-port=6060
+
+  - it: renders startupProbe when enabled
+    template: deployment.yaml
+    set:
+      forecastle.deployment.startupProbe:
+        enabled: true
+        failureThreshold: 60
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 4
+        initialDelaySeconds: 7
+        httpGet:
+          path: /startup
+          port: 8080
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            failureThreshold: 60
+            periodSeconds: 3
+            successThreshold: 1
+            timeoutSeconds: 4
+            initialDelaySeconds: 7
+            httpGet:
+              path: /startup
+              port: 8080
+
+  - it: renders livenessProbe when enabled
+    template: deployment.yaml
+    set:
+      forecastle.deployment.livenessProbe:
+        enabled: true
+        failureThreshold: 5
+        periodSeconds: 20
+        successThreshold: 1
+        timeoutSeconds: 6
+        initialDelaySeconds: 15
+        httpGet:
+          path: /live
+          port: 8080
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 5
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 6
+            initialDelaySeconds: 15
+            httpGet:
+              path: /live
+              port: 8080
+
+  - it: renders readinessProbe when enabled
+    template: deployment.yaml
+    set:
+      forecastle.deployment.readinessProbe:
+        enabled: true
+        failureThreshold: 4
+        periodSeconds: 8
+        successThreshold: 2
+        timeoutSeconds: 3
+        initialDelaySeconds: 10
+        httpGet:
+          path: /ready
+          port: 8080
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 4
+            periodSeconds: 8
+            successThreshold: 2
+            timeoutSeconds: 3
+            initialDelaySeconds: 10
+            httpGet:
+              path: /ready
+              port: 8080
+

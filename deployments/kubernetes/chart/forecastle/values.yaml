@@ -15,6 +15,9 @@ forecastle:
     annotations: {}
     affinity: {}
     nodeSelector: {}
+    # Name of the PriorityClass assigned to the Forecastle pods
+    # ref: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass
+    priorityClassName: ""
     # Pod security context
     # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     podSecurityContext: {}

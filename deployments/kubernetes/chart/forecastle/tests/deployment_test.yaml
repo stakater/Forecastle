@@ -15,6 +15,15 @@ tests:
           path: spec.template.spec.securityContext.runAsNonRoot
           value: true
 
+  - it: sets priorityClassName when specified
+    template: deployment.yaml
+    set:
+      forecastle.deployment.priorityClassName: high-priority
+    asserts:
+      - equal:
+          path: spec.template.spec.priorityClassName
+          value: high-priority
+
   - it: includes forecastle container security context when specified
     template: deployment.yaml
     set:

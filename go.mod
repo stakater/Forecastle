@@ -1,6 +1,6 @@
 module github.com/stakater/Forecastle/v1
 
-go 1.25.0
+go 1.26.10
 
 require (
 	github.com/onrik/logrus v0.11.0

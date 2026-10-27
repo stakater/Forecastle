@@ -8,7 +8,7 @@ forecastle:
     version: 2.1.3
   image:
     name: stakater/forecastle
-    tag: v2.0.2
+    tag: v2.0.3
   deployment:
     replicas: 1
     revisionHistoryLimit: 2

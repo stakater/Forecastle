@@ -152,6 +152,9 @@ spec:
           secretName: oauth-proxy-tls
       {{- end }}
       serviceAccountName: {{ template "forecastle.name" . }}
+      {{- with .Values.forecastle.deployment.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
       {{- with .Values.forecastle.deployment.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

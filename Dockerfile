@@ -1,5 +1,5 @@
 # Stage 1: Build frontend
-FROM node:22 AS frontend-builder
+FROM node:24 AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/yarn.lock ./
 RUN yarn install --frozen-lockfile --network-timeout 1000000

@@ -3,8 +3,10 @@ package web
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -627,4 +629,126 @@ func TestHandler_ReadyzHandler_Ready(t *testing.T) {
 	if rec.Code != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", rec.Code)
 	}
+}
+
+func TestHandler_StartBackgroundCache_Idempotent(t *testing.T) {
+	handler := NewHandler(nil, func() (*config.Config, error) {
+		return nil, errors.New("config unavailable")
+	}, time.Hour)
+
+	var refreshCalls atomic.Int32
+	blockRefresh := make(chan struct{})
+	handler.refreshFunc = func(context.Context) {
+		refreshCalls.Add(1)
+		<-blockRefresh
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	doneFirst := make(chan struct{})
+	go func() {
+		handler.StartBackgroundCache(ctx)
+		close(doneFirst)
+	}()
+
+	if !waitForCondition(100*time.Millisecond, func() bool { return refreshCalls.Load() == 1 }) {
+		t.Fatalf("expected first refresh to start")
+	}
+
+	doneSecond := make(chan struct{})
+	go func() {
+		handler.StartBackgroundCache(ctx)
+		close(doneSecond)
+	}()
+
+	time.Sleep(20 * time.Millisecond)
+	if got := refreshCalls.Load(); got != 1 {
+		t.Fatalf("expected exactly one refresh call, got %d", got)
+	}
+
+	close(blockRefresh)
+	cancel()
+
+	select {
+	case <-doneFirst:
+	case <-time.After(100 * time.Millisecond):
+		t.Fatal("first StartBackgroundCache did not return")
+	}
+
+	select {
+	case <-doneSecond:
+	case <-time.After(100 * time.Millisecond):
+		t.Fatal("second StartBackgroundCache did not return")
+	}
+}
+
+func TestHandler_StartBackgroundCache_StopsAfterCancel(t *testing.T) {
+	handler := NewHandler(nil, func() (*config.Config, error) {
+		return nil, errors.New("config unavailable")
+	}, 5*time.Millisecond)
+
+	var refreshCalls atomic.Int32
+	handler.refreshFunc = func(context.Context) {
+		refreshCalls.Add(1)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	handler.StartBackgroundCache(ctx)
+
+	if !waitForCondition(100*time.Millisecond, func() bool { return refreshCalls.Load() >= 2 }) {
+		t.Fatalf("expected refresh loop to run at least twice")
+	}
+
+	cancel()
+	time.Sleep(20 * time.Millisecond)
+	callsAfterCancel := refreshCalls.Load()
+	time.Sleep(20 * time.Millisecond)
+	if got := refreshCalls.Load(); got != callsAfterCancel {
+		t.Fatalf("expected refresh loop to stop after cancel, calls changed from %d to %d", callsAfterCancel, got)
+	}
+}
+
+func TestHandler_RefreshCacheIfIdle_DoesNotOverlap(t *testing.T) {
+	handler := NewHandler(nil, nil, time.Second)
+
+	var refreshCalls atomic.Int32
+	blockRefresh := make(chan struct{})
+	handler.refreshFunc = func(context.Context) {
+		refreshCalls.Add(1)
+		<-blockRefresh
+	}
+
+	doneFirst := make(chan struct{})
+	go func() {
+		handler.refreshCacheIfIdle(context.Background())
+		close(doneFirst)
+	}()
+
+	if !waitForCondition(100*time.Millisecond, func() bool { return refreshCalls.Load() == 1 }) {
+		t.Fatalf("expected first refresh to start")
+	}
+
+	handler.refreshCacheIfIdle(context.Background())
+	if got := refreshCalls.Load(); got != 1 {
+		t.Fatalf("expected second refresh to be skipped while first is running, got %d calls", got)
+	}
+
+	close(blockRefresh)
+	select {
+	case <-doneFirst:
+	case <-time.After(100 * time.Millisecond):
+		t.Fatal("first refresh did not finish")
+	}
+}
+
+func waitForCondition(timeout time.Duration, cond func() bool) bool {
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		if cond() {
+			return true
+		}
+		time.Sleep(time.Millisecond)
+	}
+	return cond()
 }

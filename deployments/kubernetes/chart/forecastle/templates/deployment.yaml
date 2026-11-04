@@ -56,6 +56,18 @@ spec:
         - name: pprof
           containerPort: {{ .Values.forecastle.deployment.pprof.port }}
       {{- end }}
+      {{- if .Values.forecastle.deployment.startupProbe.enabled }}
+        startupProbe:
+          {{- omit .Values.forecastle.deployment.startupProbe "enabled" | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.forecastle.deployment.livenessProbe.enabled }}
+        livenessProbe:
+          {{- omit .Values.forecastle.deployment.livenessProbe "enabled" | toYaml | nindent 10 }}
+      {{- end }}
+      {{- if .Values.forecastle.deployment.readinessProbe.enabled }}
+        readinessProbe:
+          {{- omit .Values.forecastle.deployment.readinessProbe "enabled" | toYaml | nindent 10 }}
+      {{- end }}
       {{- if .Values.forecastle.deployment.resources }}
         resources:
 {{ toYaml .Values.forecastle.deployment.resources | indent 10 }}

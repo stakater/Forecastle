@@ -53,6 +53,42 @@ forecastle:
       # limits:
       #   cpu: 200m
       #   memory: 64Mi
+    # Startup Probe configuration
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+    startupProbe:
+      enabled: true
+      failureThreshold: 30
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 2
+      # initialDelaySeconds: 0
+      httpGet:
+        path: /healthz
+        port: 3000
+    # Liveness Probe configuration
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 2
+      # initialDelaySeconds: 0
+      httpGet:
+        path: /healthz
+        port: 3000
+    # Readiness Probe configuration
+    # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 2
+      # initialDelaySeconds: 0
+      httpGet:
+        path: /readyz
+        port: 3000
     imagePullSecrets: []
   pod:
     annotations: {}

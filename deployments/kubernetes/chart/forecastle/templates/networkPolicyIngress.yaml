@@ -6,7 +6,7 @@ metadata:
   labels:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   policyTypes:
     - Ingress

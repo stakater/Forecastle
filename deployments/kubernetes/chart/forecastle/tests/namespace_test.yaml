@@ -28,3 +28,30 @@ tests:
       - equal:
           path: metadata.namespace
           value: custom-namespace
+
+  - it: should use namespace value for NetworkPolicies and PodDisruptionBudget
+    templates:
+      - templates/networkPolicyEgress.yaml
+      - templates/networkPolicyIngress.yaml
+      - templates/podDisruptionBudget.yaml
+    set:
+      namespace: custom-namespace
+      forecastle:
+        deployment:
+          replicas: 2
+        podDisruptionBudget:
+          minAvailable: 1
+        networkPolicy:
+          enabled: true
+          egress:
+            denyExternalTraffic: true
+          ingress:
+            enabled: true
+            podSelector:
+              app: ingress-nginx
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata.namespace
+          value: custom-namespace

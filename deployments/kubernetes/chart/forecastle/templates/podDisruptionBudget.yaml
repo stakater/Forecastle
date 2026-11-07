@@ -3,7 +3,7 @@ kind: PodDisruptionBudget
 apiVersion: {{ include "podDisruptionBudget.apiVersion" . }}
 metadata:
   name: {{ include "forecastle.name" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   labels:
 {{ include "forecastle.labels.stakater" . | indent 4 }}
 {{ include "forecastle.labels.chart" . | indent 4 }}

@@ -33,39 +33,66 @@ spec:
           spec:
             properties:
               group:
+                description: Heading the app is listed under. Grouping is not
+                  case sensitive.
                 type: string
               icon:
+                description: URL of the icon shown on the app's tile. If it is
+                  empty or cannot be loaded, a generated tile is shown instead.
                 type: string
               instance:
+                description: Comma separated list of Forecastle instances this
+                  app appears on. An instance configured with a name shows only
+                  the apps that name it; an instance without a name shows every
+                  app it can see.
                 type: string
               name:
+                description: Display name of the app.
                 type: string
               networkRestricted:
+                description: Marks the app as reachable only from inside the
+                  network. It is badged as such and stays listed.
                 type: boolean
               properties:
                 additionalProperties:
                   type: string
+                description: Extra key/value details shown on the app's tile.
                 type: object
               url:
+                description: URL the app links to. Takes precedence over
+                  urlFrom.
                 type: string
               urlFrom:
+                description: Takes the URL from a routing resource in the same
+                  namespace instead of setting url. Set one reference. An app
+                  whose reference cannot be resolved is not listed.
                 properties:
                   ingressRef:
+                    description: Ingress to take the URL from. Only its first
+                      host is used, so an Ingress serving several hosts is
+                      listed once.
                     type: object
                     properties:
                       name:
                         type: string
                   routeRef:
+                    description: OpenShift Route to take the URL from. Requires
+                      the OpenShift Route API.
                     type: object
                     properties:
                       name:
                         type: string
                   ingressRouteRef:
+                    description: Traefik IngressRoute to take the URL from.
+                      Requires the Traefik API.
                     type: object
                     properties:
                       name:
                         type: string
                   httpRouteRef:
+                    description: Gateway API HTTPRoute to take the URL from.
+                      Requires the Gateway API. The URL is always https, since
+                      TLS is configured on the Gateway rather than the route.
                     type: object
                     properties:
                       name:
